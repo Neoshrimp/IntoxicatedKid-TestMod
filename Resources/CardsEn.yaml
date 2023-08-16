@@ -1,0 +1,67 @@
+
+DayuuAttack:
+  Description: "Deal {Damage} damage to a random enemy.\nPlace {SelfName} from the hand on top of the draw pile.\n|When {SelfName} enters the hand or leaves the hand|: Deal {Damage} damage to a random enemy."
+  UpgradedDescription: "Deal {Damage} damage to a random enemy.\nPlace {SelfName} from the hand on top of the draw pile.\n|When {SelfName} enters the hand or leaves the hand|: Deal {Damage} damage to a random enemy."
+  Name: Dayuu Attack
+  FlavorText: ":knife:"
+DayuuDefense:
+  Description: "Gain {Value1} |Firepower|.\nAdd 1 |Tipsy| to the hand.\n|Choose|: Enemies also gain {Value2} |Temporary Firepower|,\nor add a |Drunk| to the discard pile. It has |Ethereal|."
+  UpgradedDescription: "Gain {Value1} |Firepower|.\nAdd 1 |Tipsy+| to the hand.\n|Choose|: Enemies also gain {Value2} |Temporary Firepower|,\nor add a |Drunk| to the discard pile. It has |Ethereal|."
+  Name: Dayuu Defense
+  FlavorText: ":beers:"
+DayuuSkill:
+  Description: "Gain {Value1} |Temporary Firepower|. Enemies also gain 3 |Temporary Firepower|.\nDraw {Value2} card. If it's a |Misfortune| or Status card, |Exile| it. Otherwise, play this card."
+  UpgradedDescription: "Gain {Value1} |Temporary Firepower|. Enemies also gain 2 |Temporary Firepower|.\nDraw {Value2} cards. If it's a |Misfortune| or Status card, |Exile| it. Otherwise, play this card."
+  Name: Dayuu Skill
+  FlavorText: ":beers:"
+DayuuPower:
+  Description: "Gain {Value1} |Firepower|.\nAdd 1 |Tipsy| to the hand.\nEnemies also gain {Value2} |Temporary Firepower|."
+  UpgradedDescription: "Gain {Value1} |Firepower|.\nAdd 1 |Tipsy+| to the hand.\nEnemies also gain {Value2} |Temporary Firepower|."
+  Name: Dayuu Skill
+  FlavorText: ":handshake:"
+DayuuFriend:
+  Description: '{FriendP}|Sobbing Cries|: Apply {Value1} |Temporary Firepower Down| to each enemy.'
+  UpgradedDescription: '{FriendP}|Sobbing Cries|: Apply {Value1} |Temporary Firepower Down| to each enemy.'
+  ExtraDescription1: "{FriendA}|The Song of Sobs|: Apply 1 |Firepower Down| and |Weak| to each enemy. Return {SelfName} from the discard pile to the hand."
+  UpgradedExtraDescription1: "{FriendA}|The Song of Sobs|: Apply 1 |Firepower Down| and |Weak| to each enemy. Return {SelfName} from the discard pile to the hand."
+  ExtraDescription2: "{FriendU}|The Song of Skulls|: If any enemy's life is less than 25%, defeat it. Then, apply {Value2} |Firepower Down|, |Weak| and |Vulnerable| to each enemy."
+  UpgradedExtraDescription2: "{FriendU}|The Song of Skulls|: If any enemy's life is less than 25%, defeat it. Then, apply {Value2} |Firepower Down|, |Weak| and |Vulnerable| to each enemy."
+  Name: Dayuu, Sparrow of Sobs and Skulls
+  FlavorText: ":sob:"
+DayuuExodia:
+  Description: '{FriendP}Deal {Value1} damage to each enemy.'
+  UpgradedDescription: '{FriendP}Deal {Value1} damage to each enemy.'
+  ExtraDescription1: "{FriendA}Deal {Value1} damage to each enemy."
+  UpgradedExtraDescription1: "{FriendA}Deal {Value1} damage to each enemy."
+  Name: Dayuu
+  FlavorText: ":skull:"
+Entrench:
+  Description: Double the current |Block|.
+  UpgradedDescription: Double the current |Block| and |Barrier|.
+  Name: Entrench
+Alchemize:
+  Description: Add a random |Tool| card to the deck.
+  UpgradedDescription: Add a random |Tool| card to the deck.
+  Name: Alchemize
+LimitBreak:
+  Description: Double the current |Firepower| and |Temporary Firepower|.
+  UpgradedDescription: Double the current |Firepower| and |Temporary Firepower|.
+  Name: Limit Break
+MindBlast:
+  Description: |-
+    Deal {Damage} damage.
+    Deal additional damage equal to the number of cards in the draw pile. ({AdditionalDamage})
+  UpgradedDescription: |-
+    Deal {Damage} damage.
+    Deal additional damage equal to the number of cards in the draw pile. ({AdditionalDamage})
+  NonbattleDescription: |-
+    Deal {Damage} damage.
+    Deal additional damage equal to the number of cards in the draw pile.
+  UpgradedNonbattleDescription: |-
+    Deal {Damage} damage.
+    Deal additional damage equal to the number of cards in the draw pile.
+  Name: Mind Blast
+DramaticEntrence:
+  Description: "|At the start of combat|: |Exile| {SelfName}, Deal {Value1} damage to each enemy."
+  UpgradedDescription: "|At the start of combat|: |Exile| {SelfName}, Deal {Value1} damage to each enemy."
+  Name: Dramatic Entrence
