@@ -29,6 +29,9 @@ using LBoL.EntityLib.JadeBoxes;
 using static UnityEngine.GraphicsBuffer;
 using static MonoMod.Cil.RuntimeILReferenceBag.FastDelegateInvokers;
 using LBoL.EntityLib.Cards.Character.Sakuya;
+using static test.BepinexPlugin;
+using LBoL.EntityLib.Cards.Character.Marisa;
+using Mono.Cecil;
 
 namespace test
 {
@@ -41,22 +44,22 @@ namespace test
 
         public override CardImages LoadCardImages()
         {
-            var imgs = new CardImages(BepinexPlugin.embeddedSource);
-            imgs.AutoLoad(this, extension: ".png");
+            var imgs = new CardImages(embeddedSource);
+            imgs.AutoLoad(this, ".png", relativePath: "Resources.");
             return imgs;
         }
 
         public override LocalizationOption LoadLocalization()
         {
-            var loc = new GlobalLocalization(BepinexPlugin.embeddedSource);
-            loc.LocalizationFiles.AddLocaleFile(LBoL.Core.Locale.En, "CardsEn.yaml");
-            return loc;
+            var locFiles = new LocalizationFiles(embeddedSource);
+            locFiles.AddLocaleFile(Locale.En, "Resources.CardsEn.yaml");
+            return locFiles;
         }
 
         public override CardConfig MakeConfig()
         {
             var cardConfig = new CardConfig(
-               Index: 12006,
+               Index: sequenceTable.Next(typeof(CardConfig)),
                Id: "",
                Order: 10,
                AutoPerform: true,
@@ -65,9 +68,9 @@ namespace test
                GunNameBurst: "Simple1",
                DebugLevel: 0,
                Revealable: false,
-               IsPooled: true,
-               HideMesuem: false,
-               IsUpgradable: true,
+               IsPooled: false,
+               HideMesuem: true,
+               IsUpgradable: false,
                Rarity: Rarity.Rare,
                Type: CardType.Friend,
                TargetType: TargetType.Nobody,
@@ -76,7 +79,7 @@ namespace test
                Cost: new ManaGroup() { Any = 0 },
                UpgradedCost: null,
                MoneyCost: null,
-               Damage: 0,
+               Damage: null,
                UpgradedDamage: null,
                Block: null,
                UpgradedBlock: null,
@@ -122,6 +125,48 @@ namespace test
     [EntityLogic(typeof(DayuuExodiaDef))]
     public sealed class DayuuExodia : Card
     {
+        public override IEnumerable<BattleAction> OnDiscard(CardZone srcZone)
+        {
+            if (base.Battle.BattleShouldEnd)
+            {
+                return null;
+            }
+            return this.GetPassiveActions();
+        }
+        public override IEnumerable<BattleAction> OnExile(CardZone srcZone)
+        {
+            if (base.Battle.BattleShouldEnd)
+            {
+                return null;
+            }
+            return this.GetPassiveActions();
+        }
+        public override IEnumerable<BattleAction> OnMove(CardZone srcZone, CardZone dstZone)
+        {
+            if (base.Battle.BattleShouldEnd)
+            {
+                return null;
+            }
+            return this.GetPassiveActions();
+        }
+        protected override void OnEnterBattle(BattleController battle)
+        {
+            if (base.Zone == CardZone.Hand)
+            {
+                base.React(new LazySequencedReactor(this.AddToHandReactor));
+            }
+        }
+        private IEnumerable<BattleAction> AddToHandReactor()
+        {
+            yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0f, "BirdSing", 0f, PerformAction.EffectBehavior.PlayOneShot, 2f);
+            yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 2f);
+            yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 2f);
+            yield return PerformAction.Effect(base.Battle.Player, "JunkoNightmare", 0f, "JunkoNightmare", 0f, PerformAction.EffectBehavior.PlayOneShot, 2f);
+            yield return PerformAction.Effect(base.Battle.Player, "JunkoNightmare", 0f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 2f);
+            yield return PerformAction.Effect(base.Battle.Player, "JunkoNightmare", 0f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 2f);
+            yield return base.BuffAction<DayuuExodiaSeDef.DayuuExodiaSe>(0, 0, 0, 0, 0f);
+            yield break;
+        }
         public override IEnumerable<BattleAction> OnTurnEndingInHand()
         {
             return this.GetPassiveActions();
@@ -141,24 +186,22 @@ namespace test
                 {
                     yield break;
                 }
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 2.75f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 2.6f);
                 foreach (EnemyUnit enemyUnit in base.Battle.AllAliveEnemies)
                 {
                     enemyUnit.ClearBlockShield();
                     enemyUnit.ClearStatusEffects();
                 }
-                yield return new DamageAction(base.Battle.Player, base.Battle.AllAliveEnemies, DamageInfo.Attack(9999f), "Instant", GunType.Single);
+                yield return new DamageAction(base.Battle.Player, base.Battle.AllAliveEnemies, DamageInfo.Reaction(base.Value1), "Instant", GunType.Single);
                 num = i;
             }
             yield break;
@@ -177,41 +220,104 @@ namespace test
             if (precondition == null || ((MiniSelectCardInteraction)precondition).SelectedCard.FriendToken == FriendToken.Active)
             {
                 base.Loyalty += base.ActiveCost;
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0f);
-                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 2.75f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 0.01f);
+                yield return PerformAction.Gun(base.Battle.Player, base.Battle.AllAliveEnemies.FirstOrDefault<EnemyUnit>(), "究极火花B", 2.6f);
                 foreach (EnemyUnit enemyUnit in base.Battle.AllAliveEnemies)
                 {
                     enemyUnit.ClearBlockShield();
                     enemyUnit.ClearStatusEffects();
                 }
-                yield return new DamageAction(base.Battle.Player, base.Battle.AllAliveEnemies, this.Damage, "Instant", GunType.Single);
+                yield return new DamageAction(base.Battle.Player, base.Battle.AllAliveEnemies, DamageInfo.Reaction(base.Value1), "Instant", GunType.Single);
             }
             yield break;
         }
-        //        }
-        //        public override IEnumerable<BattleAction> AfterUseAction()
-        //        {
-        //            if (!base.Summoned || base.Battle.BattleShouldEnd)
-        //            {
-        //                yield break;
-        //            }
-        //            if (base.Loyalty <= 0 || base.UltimateUsed == true)
-        //            {
-        //                yield return new RemoveCardAction(this);
-        //                yield break;
-        //            }
-        //            yield return new MoveCardAction(this, CardZone.Hand);
-        //            yield break;
-        //        }
+        public override IEnumerable<BattleAction> AfterUseAction()
+        {
+            if (!base.Summoned || base.Battle.BattleShouldEnd)
+            {
+                yield break;
+            }
+            if (base.Loyalty <= 0 || base.UltimateUsed == true)
+            {
+                yield return new RemoveCardAction(this);
+                yield break;
+            }
+            yield return new MoveCardAction(this, CardZone.Hand);
+            yield break;
+        }
+    }
+    public sealed class DayuuExodiaSeDef : StatusEffectTemplate
+    {
+        public override IdContainer GetId()
+        {
+            return nameof(DayuuExodiaSe);
+        }
+
+        public override LocalizationOption LoadLocalization()
+        {
+            var locFiles = new LocalizationFiles(embeddedSource);
+            locFiles.AddLocaleFile(Locale.En, "Resources.StatusEffectsEn.yaml");
+            return locFiles;
+        }
+
+        public override Sprite LoadSprite()
+        {
+            return ResourceLoader.LoadSprite("Resources.DayuuExodiaSe.png", embeddedSource);
+        }
+        public override StatusEffectConfig MakeConfig()
+        {
+            var statusEffectConfig = new StatusEffectConfig(
+                Id: "",
+                Order: 30,
+                Type: StatusEffectType.Special,
+                IsVerbose: false,
+                IsStackable: false,
+                StackActionTriggerLevel: null,
+                HasLevel: false,
+                LevelStackType: StackType.Add,
+                HasDuration: false,
+                DurationStackType: StackType.Add,
+                DurationDecreaseTiming: DurationDecreaseTiming.Custom,
+                HasCount: false,
+                CountStackType: StackType.Keep,
+                LimitStackType: StackType.Keep,
+                ShowPlusByLimit: false,
+                Keywords: Keyword.None,
+                RelativeEffects: new List<string>() { },
+                VFX: "Invincible",
+                VFXloop: "Default",
+                SFX: "Invincible"
+            );
+            return statusEffectConfig;
+        }
+
+
+
+        [EntityLogic(typeof(DayuuExodiaSeDef))]
+        public sealed class DayuuExodiaSe : StatusEffect
+        {
+            protected override void OnAdded(Unit unit)
+            {
+                base.HandleOwnerEvent<DamageEventArgs>(unit.DamageTaking, new GameEventHandler<DamageEventArgs>(this.OnDamageTaking));
+            }
+            private void OnDamageTaking(DamageEventArgs args)
+            {
+                int num = args.DamageInfo.Damage.RoundToInt();
+                if (num > 0)
+                {
+                    base.NotifyActivating();
+                    args.DamageInfo = args.DamageInfo.ReduceActualDamageBy(num);
+                    args.AddModifier(this);
+                }
+            }
+        }
     }
 }

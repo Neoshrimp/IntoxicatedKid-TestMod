@@ -296,7 +296,6 @@
 
 
     <ItemGroup>
-      <None Remove="Resources\Alchemize.png" />
       <None Remove="resources\CardsEn.yaml" />
       <None Remove="Resources\DayuuAttack.png" />
       <None Remove="Resources\DayuuAttackMIO.png" />
@@ -304,16 +303,26 @@
       <None Remove="Resources\DayuuDefenseMIO.png" />
       <None Remove="Resources\DayuuExodia.png" />
       <None Remove="Resources\DayuuExodiaMIO.png" />
+      <None Remove="Resources\DayuuExodiaSe.png" />
       <None Remove="Resources\DayuuFriend.png" />
       <None Remove="Resources\DayuuFriendMIO.png" />
       <None Remove="Resources\DayuuPower.png" />
       <None Remove="Resources\DayuuPowerMIO.png" />
+      <None Remove="Resources\DayuuPowerSe.png" />
       <None Remove="Resources\DayuuSkill.png" />
       <None Remove="Resources\DayuuSkillMIO.png" />
-      <None Remove="Resources\DramaticEntrence.png" />
-      <None Remove="Resources\Entrench.png" />
-      <None Remove="Resources\LimitBreak.png" />
-      <None Remove="Resources\MindBlast.png" />
+      <None Remove="Resources\StatusEffectsEn.yaml" />
+      <None Remove="Resources\StSAlchemize.png" />
+      <None Remove="Resources\StSDramaticEntrance.png" />
+      <None Remove="Resources\StSEntrench.png" />
+      <None Remove="Resources\StSLimitBreak.png" />
+      <None Remove="Resources\StSMindBlast.png" />
+      <None Remove="Resources\StSPanacea.png" />
+      <None Remove="Resources\StSPanicButton.png" />
+      <None Remove="Resources\StSPanicButtonSe.png" />
+      <None Remove="Resources\StSPerfectedStrike.png" />
+      <None Remove="Resources\ZunBeerHat.png" />
+      <None Remove="Resources\ZunBeerHatSe.png" />
     </ItemGroup>
 
 

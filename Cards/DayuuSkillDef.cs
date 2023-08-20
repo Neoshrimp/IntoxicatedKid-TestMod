@@ -22,6 +22,8 @@ using LBoL.Base.Extensions;
 using LBoL.EntityLib.Exhibits.Common;
 using System.Linq;
 using LBoL.Presentation.UI.Panels;
+using static test.BepinexPlugin;
+using Mono.Cecil;
 
 namespace test
 {
@@ -34,22 +36,22 @@ namespace test
 
         public override CardImages LoadCardImages()
         {
-            var imgs = new CardImages(BepinexPlugin.embeddedSource);
-            imgs.AutoLoad(this, extension: ".png");
+            var imgs = new CardImages(embeddedSource);
+            imgs.AutoLoad(this, ".png", relativePath: "Resources.");
             return imgs;
         }
 
         public override LocalizationOption LoadLocalization()
         {
-            var loc = new GlobalLocalization(BepinexPlugin.embeddedSource);
-            loc.LocalizationFiles.AddLocaleFile(LBoL.Core.Locale.En, "CardsEn.yaml");
-            return loc;
+            var locFiles = new LocalizationFiles(embeddedSource);
+            locFiles.AddLocaleFile(Locale.En, "Resources.CardsEn.yaml");
+            return locFiles;
         }
 
         public override CardConfig MakeConfig()
         {
             var cardConfig = new CardConfig(
-               Index: 12003,
+               Index: sequenceTable.Next(typeof(CardConfig)),
                Id: "",
                Order: 10,
                AutoPerform: true,
@@ -77,8 +79,8 @@ namespace test
                UpgradedShield: null,
                Value1: 3,
                UpgradedValue1: 5,
-               Value2: 1,
-               UpgradedValue2: 2,
+               Value2: 2,
+               UpgradedValue2: null,
                Mana: new ManaGroup() { Any = 0 },
                UpgradedMana: null,
                Scry: null,
@@ -96,13 +98,13 @@ namespace test
                Keywords: Keyword.None,
                UpgradedKeywords: Keyword.None,
                EmptyDescription: false,
-               RelativeKeyword: Keyword.Misfortune | Keyword.Ethereal,
-               UpgradedRelativeKeyword: Keyword.Misfortune | Keyword.Ethereal,
+               RelativeKeyword: Keyword.TempMorph,
+               UpgradedRelativeKeyword: Keyword.TempMorph,
 
-               RelativeEffects: new List<string>() { "TempFirepower" },
-               UpgradedRelativeEffects: new List<string>() { "TempFirepower" },
-               RelativeCards: new List<string>() { },
-               UpgradedRelativeCards: new List<string>() { },
+               RelativeEffects: new List<string>() { "TempFirepower", "DayuuExodiaSe" },
+               UpgradedRelativeEffects: new List<string>() { "TempFirepower", "DayuuExodiaSe" },
+               RelativeCards: new List<string>() { "DayuuExodia" },
+               UpgradedRelativeCards: new List<string>() { "DayuuExodia" },
                Owner: null,
                Unfinished: false,
                Illustrator: "Moja4192",
@@ -117,49 +119,28 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            yield return base.BuffAction<TempFirepower>(Value1, 0, 0, 0, 0.2f);
+            yield return base.HealAction(base.Value2);
+            yield return base.BuffAction<TempFirepower>(base.Value1, 0, 0, 0, 0.2f);
             foreach (EnemyUnit enemyUnit in base.Battle.AllAliveEnemies)
             {
-                if (this.IsUpgraded)
-                {
-                    yield return base.BuffAction<TempFirepower>(2, 0, 0, 0, 0.2f);
-                }
-                else
-                {
-                    yield return base.BuffAction<TempFirepower>(3, 0, 0, 0, 0.2f);
-                }
+                yield return new ApplyStatusEffectAction<TempFirepower>(enemyUnit, this.IsUpgraded ? base.Value2 : base.Value1, null, null, null, 0.2f, true);
             }
-            List<Card> playable = null;
+            List<Card> attack = null;
             DrawManyCardAction drawAction = new DrawManyCardAction(base.Value2);
             yield return drawAction;
             IReadOnlyList<Card> drawnCards = drawAction.DrawnCards;
             if (drawnCards != null && drawnCards.Count > 0)
             {
-                List<Card> negative = drawnCards.Where((Card card) => (card.CardType == CardType.Status) || (card.CardType == CardType.Misfortune)).ToList<Card>();
-                if (negative.Count > 0)
+                //List<Card> negative = drawnCards.Where((Card card) => (card.CardType == CardType.Status) || (card.CardType == CardType.Misfortune)).ToList<Card>();
+                //if (negative.Count > 0)
+                //{
+                //    yield return new ExileManyCardAction(negative);
+                //}
+                attack = drawnCards.Where((Card card) => (card.CardType == CardType.Attack) && !card.IsForbidden).ToList<Card>();
+                foreach (Card card in attack)
                 {
-                    yield return new ExileManyCardAction(negative);
-                }
-                playable = drawnCards.Where((Card card) => !card.IsForbidden).ToList<Card>();
-                foreach (Card card in playable)
-                {
-                    //if (card.TargetType == TargetType.SingleEnemy)
-                    //{
-                    //    yield return new UseCardAction(card, TargetType.RandomEnemy, consumingMana);
-                    //}
-                    //if (card.TargetType == TargetType.RandomEnemy)
-                    //{
-                    //    yield return new UseCardAction(card, TargetType.RandomEnemy, consumingMana);
-                    //}
-                    //if (card.TargetType == TargetType.AllEnemies)
-                    //{
-                    //    yield return new UseCardAction(card, TargetType.AllEnemies, consumingMana);
-                    //}
-                    //if (card.TargetType == TargetType.Nobody)
-                    //{
-                    //    yield return new UseCardAction(card, TargetType.Nobody, consumingMana);
-                    //}
-                    yield return new UseCardAction(card, selector, consumingMana);
+                    card.SetTurnCost(base.Mana);
+                    //yield return new UseCardAction(card, selector, consumingMana);
                 }
             }
             yield break;

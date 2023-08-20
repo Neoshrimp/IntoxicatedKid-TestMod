@@ -26,6 +26,18 @@ using System.Linq;
 using UnityEngine;
 using System.Security.Cryptography;
 using LBoL.EntityLib.JadeBoxes;
+using static test.BepinexPlugin;
+using static test.DayuuPowerDef;
+using UnityEngine.Playables;
+using LBoL.EntityLib.Cards.Neutral.NoColor;
+using LBoL.EntityLib.Cards.Character.Cirno.Friend;
+using LBoL.EntityLib.Cards.Character.Reimu;
+using LBoL.EntityLib.Cards.Character.Sakuya;
+using LBoL.EntityLib.Cards.Neutral.MultiColor;
+using LBoL.Presentation.UI.Panels;
+using LBoL.Core.GapOptions;
+using Mono.Cecil;
+using test;
 
 namespace test
 {
@@ -38,22 +50,22 @@ namespace test
 
         public override CardImages LoadCardImages()
         {
-            var imgs = new CardImages(BepinexPlugin.embeddedSource);
-            imgs.AutoLoad(this, extension: ".png");
+            var imgs = new CardImages(embeddedSource);
+            imgs.AutoLoad(this, ".png", relativePath: "Resources.");
             return imgs;
         }
 
         public override LocalizationOption LoadLocalization()
         {
-            var loc = new GlobalLocalization(BepinexPlugin.embeddedSource);
-            loc.LocalizationFiles.AddLocaleFile(LBoL.Core.Locale.En, "CardsEn.yaml");
-            return loc;
+            var locFiles = new LocalizationFiles(embeddedSource);
+            locFiles.AddLocaleFile(Locale.En, "Resources.CardsEn.yaml");
+            return locFiles;
         }
 
         public override CardConfig MakeConfig()
         {
             var cardConfig = new CardConfig(
-               Index: 12005,
+               Index: sequenceTable.Next(typeof(CardConfig)),
                Id: "",
                Order: 10,
                AutoPerform: true,
@@ -70,7 +82,7 @@ namespace test
                TargetType: TargetType.Nobody,
                Colors: new List<ManaColor>() { ManaColor.Black },
                IsXCost: false,
-               Cost: new ManaGroup() { Any = 2, Black = 1},
+               Cost: new ManaGroup() { Any = 2, Black = 1 },
                UpgradedCost: null,
                MoneyCost: null,
                Damage: null,
@@ -81,14 +93,14 @@ namespace test
                UpgradedShield: null,
                Value1: 2,
                UpgradedValue1: 2,
-               Value2: 3,
-               UpgradedValue2: 3,
+               Value2: 1,
+               UpgradedValue2: 1,
                Mana: null,
                UpgradedMana: null,
                Scry: null,
                UpgradedScry: null,
                ToolPlayableTimes: null,
-               Loyalty: 9,
+               Loyalty: 8,
                UpgradedLoyalty: 9,
                PassiveCost: -1,
                UpgradedPassiveCost: 0,
@@ -103,10 +115,10 @@ namespace test
                RelativeKeyword: Keyword.None,
                UpgradedRelativeKeyword: Keyword.None,
 
-               RelativeEffects: new List<string>() { "TempFirepowerNegative", "FirepowerNegative", "Weak", "Vulnerable" },
-               UpgradedRelativeEffects: new List<string>() { "TempFirepowerNegative", "FirepowerNegative", "Weak", "Vulnerable" },
-               RelativeCards: new List<string>() { },
-               UpgradedRelativeCards: new List<string>() { },
+               RelativeEffects: new List<string>() { "TempFirepowerNegative", "FirepowerNegative", "Weak", "Vulnerable", "DayuuExodiaSe" },
+               UpgradedRelativeEffects: new List<string>() { "TempFirepowerNegative", "FirepowerNegative", "Weak", "Vulnerable", "DayuuExodiaSe" },
+               RelativeCards: new List<string>() { "DayuuExodia" },
+               UpgradedRelativeCards: new List<string>() { "DayuuExodia" },
                Owner: null,
                Unfinished: false,
                Illustrator: "Liz Triangle",
@@ -116,9 +128,58 @@ namespace test
             return cardConfig;
         }
     }
+    //
+    //
+    // Warning: Terrible code
+    //
+    //
     [EntityLogic(typeof(DayuuFriendDef))]
     public sealed class DayuuFriend : Card
     {
+        protected override void OnEnterBattle(BattleController battle)
+        {
+            base.ReactBattleEvent<CardUsingEventArgs>(base.Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsed));
+        }
+        private IEnumerable<BattleAction> OnCardUsed(CardUsingEventArgs args)
+        {
+            if (!base.Battle.BattleShouldEnd && base.Battle.Player.IsInTurn && base.Zone == CardZone.Hand && base.Summoned)
+            {
+                List<Card> DayuuA = base.Battle.HandZone.Where((Card card) => (card is DayuuAttack)).ToList<Card>();
+                List<Card> DayuuD = base.Battle.HandZone.Where((Card card) => (card is DayuuDefense)).ToList<Card>();
+                List<Card> DayuuS = base.Battle.HandZone.Where((Card card) => (card is DayuuSkill)).ToList<Card>();
+                List<Card> DayuuP = base.Battle.HandZone.Where((Card card) => (card is DayuuPower)).ToList<Card>();
+                List<Card> DayuuF = base.Battle.HandZone.Where((Card card) => (card is DayuuFriend) && card.Summoned).ToList<Card>();
+                if (DayuuA.Count > 0 && DayuuD.Count > 0 && DayuuS.Count > 0 && DayuuP.Count > 0 && DayuuF.Count > 0)
+                {
+                    foreach (Card card in DayuuA)
+                    {
+                        yield return new RemoveCardAction(card);
+                    }
+                    foreach (Card card in DayuuD)
+                    {
+                        yield return new RemoveCardAction(card);
+                    }
+                    foreach (Card card in DayuuS)
+                    {
+                        yield return new RemoveCardAction(card);
+                    }
+                    foreach (Card card in DayuuP)
+                    {
+                        yield return new RemoveCardAction(card);
+                    }
+                    foreach (Card card in DayuuF)
+                    {
+                        yield return new RemoveCardAction(card);
+                    }
+                    List<Card> Exodia = new List<Card> { Library.CreateCard<DayuuExodia>() }.ToList<Card>();
+                    foreach (Card card in Exodia)
+                    {
+                        card.Summon();
+                        yield return new AddCardsToHandAction(new Card[] { card });
+                    }
+                }
+            }
+        }
         public override IEnumerable<BattleAction> OnTurnEndingInHand()
         {
             return this.GetPassiveActions();
@@ -166,11 +227,11 @@ namespace test
             {
                 base.Loyalty += base.ActiveCost;
                 yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0f, "BirdSing", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
-                foreach (BattleAction battleAction in base.DebuffAction<FirepowerNegative>(base.Battle.AllAliveEnemies, 1, 0, 0, 0, true, 0.2f))
+                foreach (BattleAction battleAction in base.DebuffAction<FirepowerNegative>(base.Battle.AllAliveEnemies, base.Value2, 0, 0, 0, true, 0.2f))
                 {
                     yield return battleAction;
                 }
-                foreach (BattleAction battleAction2 in base.DebuffAction<Weak>(base.Battle.AllAliveEnemies, 0, 1, 0, 0, true, 0.2f))
+                foreach (BattleAction battleAction2 in base.DebuffAction<Weak>(base.Battle.AllAliveEnemies, 0, base.Value2, 0, 0, true, 0.2f))
                 {
                     yield return battleAction2;
                 }
@@ -182,20 +243,20 @@ namespace test
                 yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0f, "BirdSing", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
                 foreach (EnemyUnit enemyUnit in base.Battle.AllAliveEnemies)
                 {
-                    if (enemyUnit.Hp <= (enemyUnit.MaxHp) / 4)
+                    if (enemyUnit.Hp <= (enemyUnit.MaxHp + 1) / 4)
                     {
                         yield return new ForceKillAction(base.Battle.Player, enemyUnit);
                     }
                 }
-                foreach (BattleAction battleAction in base.DebuffAction<FirepowerNegative>(base.Battle.AllAliveEnemies, base.Value2, 0, 0, 0, true, 0.2f))
+                foreach (BattleAction battleAction in base.DebuffAction<FirepowerNegative>(base.Battle.AllAliveEnemies, 3, 0, 0, 0, true, 0.2f))
                 {
                     yield return battleAction;
                 }
-                foreach (BattleAction battleAction2 in base.DebuffAction<Weak>(base.Battle.AllAliveEnemies, 0, base.Value2, 0, 0, true, 0.2f))
+                foreach (BattleAction battleAction2 in base.DebuffAction<Weak>(base.Battle.AllAliveEnemies, 0, 3, 0, 0, true, 0.2f))
                 {
                     yield return battleAction2;
                 }
-                foreach (BattleAction battleAction3 in base.DebuffAction<Vulnerable>(base.Battle.AllAliveEnemies, 0, base.Value2, 0, 0, true, 0.2f))
+                foreach (BattleAction battleAction3 in base.DebuffAction<Vulnerable>(base.Battle.AllAliveEnemies, 0, 3, 0, 0, true, 0.2f))
                 {
                     yield return battleAction3;
                 }
