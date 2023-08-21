@@ -311,6 +311,7 @@
       <None Remove="Resources\DayuuPowerSe.png" />
       <None Remove="Resources\DayuuSkill.png" />
       <None Remove="Resources\DayuuSkillMIO.png" />
+      <None Remove="resources\ExhibitsEn.yaml" />
       <None Remove="Resources\StatusEffectsEn.yaml" />
       <None Remove="Resources\StSAlchemize.png" />
       <None Remove="Resources\StSDramaticEntrance.png" />
@@ -321,13 +322,9 @@
       <None Remove="Resources\StSPanicButton.png" />
       <None Remove="Resources\StSPanicButtonSe.png" />
       <None Remove="Resources\StSPerfectedStrike.png" />
+      <None Remove="Resources\Th18BlankCard.png" />
       <None Remove="Resources\ZunBeerHat.png" />
       <None Remove="Resources\ZunBeerHatSe.png" />
-    </ItemGroup>
-
-
-    <ItemGroup>
-      <Folder Include="Exhibits\" />
     </ItemGroup>
 
 

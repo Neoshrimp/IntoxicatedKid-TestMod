@@ -97,8 +97,8 @@ namespace test
                UltimateCost: null,
                UpgradedUltimateCost: null,
 
-               Keywords: Keyword.None,
-               UpgradedKeywords: Keyword.None,
+               Keywords: Keyword.Ethereal,
+               UpgradedKeywords: Keyword.Ethereal,
                EmptyDescription: false,
                RelativeKeyword: Keyword.None,
                UpgradedRelativeKeyword: Keyword.Upgrade,
@@ -106,7 +106,7 @@ namespace test
                RelativeEffects: new List<string>() { },
                UpgradedRelativeEffects: new List<string>() { },
                RelativeCards: new List<string>() { "Drunk" },
-               UpgradedRelativeCards: new List<string>() { "Drunk" },
+               UpgradedRelativeCards: new List<string>() { },
                Owner: null,
                Unfinished: false,
                Illustrator: "ZUN",
@@ -121,9 +121,12 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            yield return new AddCardsToHandAction(Library.CreateCards<Drunk>(base.Value1, false));
-            yield return new AddCardsToDrawZoneAction(Library.CreateCards<Drunk>(base.Value1, false), DrawZoneTarget.Random);
-            yield return new AddCardsToDiscardAction(Library.CreateCards<Drunk>(base.Value1, false));
+            if (!this.IsUpgraded)
+            {
+                yield return new AddCardsToHandAction(Library.CreateCards<Drunk>(base.Value1, false));
+                yield return new AddCardsToDrawZoneAction(Library.CreateCards<Drunk>(base.Value1, false), DrawZoneTarget.Random);
+                yield return new AddCardsToDiscardAction(Library.CreateCards<Drunk>(base.Value1, false));
+            }
             yield return base.BuffAction<ZUNBeerHatSeDef.ZUNBeerHatSe>(0, base.Value2, 0, 0, 0.2f);
             yield break;
         }
@@ -177,7 +180,7 @@ namespace test
         {
             protected override void OnAdded(Unit unit)
             {
-                base.ReactOwnerEvent<UnitEventArgs>(base.Owner.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnStarted));
+                base.ReactOwnerEvent<GameEventArgs>(base.Battle.RoundStarted, new EventSequencedReactor<GameEventArgs>(this.OnRoundStarted));
                 foreach (var enemy in base.Battle.AllAliveEnemies)
                 {
                     enemy._turnMoves.Clear();
@@ -189,7 +192,7 @@ namespace test
                     enemy.NotifyIntentionsChanged();
                 }
             }
-            private IEnumerable<BattleAction> OnPlayerTurnStarted(UnitEventArgs args)
+            private IEnumerable<BattleAction> OnRoundStarted(GameEventArgs args)
             {
                 foreach (var enemy in base.Battle.AllAliveEnemies)
                 {

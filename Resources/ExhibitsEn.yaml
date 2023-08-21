@@ -1,0 +1,4 @@
+Th18BlankCard:
+  Description: "At the start of {PlayerName}'s first turn each combat, |Exile| each card from the hand. Then, add that many random cards to the hand.\nThose cards inherit the Type and Rarity from |Exiled| cards."
+  Name: Old Blank Card
+  FlavorText: "This Blank Card was said to have the ability of Chimata Tenkyuu."

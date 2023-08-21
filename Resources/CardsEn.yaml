@@ -67,5 +67,5 @@ StSPerfectedStrike:
   Name: Perfected Strike
 ZUNBeerHat:
   Description: "Add {Value1} |Drunk| to the hand, draw and discard pile.\nEnemies cannot act for {Value2} turns."
-  UpgradedDescription: "Add {Value1} |Drunk| to the hand, draw and discard pile.\nEnemies cannot act for {Value2} turns.\n|Upgrade| doesn't change anything but {PlayerName} feels satisfied to improve the picture of ZUN."
+  UpgradedDescription: "Enemies cannot act for {Value2} turns."
   Name: Intoxication
