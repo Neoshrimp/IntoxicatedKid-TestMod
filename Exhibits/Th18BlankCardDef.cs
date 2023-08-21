@@ -199,6 +199,12 @@ namespace test
                         misfortuneu = hand.Where((Card card) => (card.CardType == CardType.Misfortune) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
                         misfortuner = hand.Where((Card card) => (card.CardType == CardType.Misfortune) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
                         yield return new ExileManyCardAction(hand);
+
+
+                        var newCards = new List<Card>();
+
+                        
+
                         if (attackc.Count > 0)
                         {
                             foreach (Card card in attackc)
@@ -208,7 +214,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(attackC);
                                 }
-                                yield return new AddCardsToHandAction(attackC);
+                                newCards.AddRange(attackC);
                             }
                         }
                         if (attacku.Count > 0)
@@ -220,7 +226,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(attackU);
                                 }
-                                yield return new AddCardsToHandAction(attackU);
+                                newCards.AddRange(attackU);
                             }
                         }
                         if (attackr.Count > 0)
@@ -232,7 +238,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(attackR);
                                 }
-                                yield return new AddCardsToHandAction(attackR);
+                                newCards.AddRange(attackR);
                             }
                         }
                         if (defensec.Count > 0)
@@ -244,7 +250,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(defenseC);
                                 }
-                                yield return new AddCardsToHandAction(defenseC);
+                                newCards.AddRange(defenseC);
                             }
                         }
                         if (defenseu.Count > 0)
@@ -256,7 +262,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(defenseU);
                                 }
-                                yield return new AddCardsToHandAction(defenseU);
+                                newCards.AddRange(defenseU);
                             }
                         }
                         if (defenser.Count > 0)
@@ -268,7 +274,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(defenseR);
                                 }
-                                yield return new AddCardsToHandAction(defenseR);
+                                newCards.AddRange(defenseR);
                             }
                         }
                         if (skillc.Count > 0)
@@ -280,7 +286,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(skillC);
                                 }
-                                yield return new AddCardsToHandAction(skillC);
+                                newCards.AddRange(skillC);
                             }
                         }
                         if (skillu.Count > 0)
@@ -292,7 +298,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(skillU);
                                 }
-                                yield return new AddCardsToHandAction(skillU);
+                                newCards.AddRange(skillU);
                             }
                         }
                         if (skillr.Count > 0)
@@ -304,7 +310,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(skillR);
                                 }
-                                yield return new AddCardsToHandAction(skillR);
+                                newCards.AddRange(skillR);
                             }
                         }
                         if (abilityc.Count > 0)
@@ -316,7 +322,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(abilityC);
                                 }
-                                yield return new AddCardsToHandAction(abilityC);
+                                newCards.AddRange(abilityC);
                             }
                         }
                         if (abilityu.Count > 0)
@@ -328,7 +334,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(abilityU);
                                 }
-                                yield return new AddCardsToHandAction(abilityU);
+                                newCards.AddRange(abilityU);
                             }
                         }
                         if (abilityr.Count > 0)
@@ -340,7 +346,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(abilityR);
                                 }
-                                yield return new AddCardsToHandAction(abilityR);
+                                newCards.AddRange(abilityR);
                             }
                         }
                         if (friendc.Count > 0)
@@ -352,7 +358,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(friendC);
                                 }
-                                yield return new AddCardsToHandAction(friendC);
+                                newCards.AddRange(friendC);
                             }
                         }
                         if (friendu.Count > 0)
@@ -364,7 +370,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(friendU);
                                 }
-                                yield return new AddCardsToHandAction(friendU);
+                                newCards.AddRange(friendU);
                             }
                         }
                         if (friendr.Count > 0)
@@ -376,7 +382,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(friendR);
                                 }
-                                yield return new AddCardsToHandAction(friendR);
+                                newCards.AddRange(friendR);
                             }
                         }
                         if (statusc.Count > 0)
@@ -388,7 +394,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(statusC);
                                 }
-                                yield return new AddCardsToHandAction(statusC);
+                                newCards.AddRange(statusC);
                             }
                         }
                         if (statusu.Count > 0)
@@ -400,7 +406,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(statusU);
                                 }
-                                yield return new AddCardsToHandAction(statusU);
+                                newCards.AddRange(statusU);
                             }
                         }
                         if (statusr.Count > 0)
@@ -412,7 +418,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(statusR);
                                 }
-                                yield return new AddCardsToHandAction(statusR);
+                                newCards.AddRange(statusR);
                             }
                         }
                         if (misfortunec.Count > 0)
@@ -424,7 +430,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(misfortuneC);
                                 }
-                                yield return new AddCardsToHandAction(misfortuneC);
+                                newCards.AddRange(misfortuneC);
                             }
                         }
                         if (misfortuneu.Count > 0)
@@ -436,7 +442,7 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(misfortuneU);
                                 }
-                                yield return new AddCardsToHandAction(misfortuneU);
+                                newCards.AddRange(misfortuneU);
                             }
                         }
                         if (misfortuner.Count > 0)
@@ -448,11 +454,15 @@ namespace test
                                 {
                                     yield return new UpgradeCardsAction(misfortuneR);
                                 }
-                                yield return new AddCardsToHandAction(misfortuneR);
+                                newCards.AddRange(misfortuneR);
                             }
                         }
+                        yield return new AddCardsToHandAction(newCards);
                     }
+
                 }
+
+
                 yield break;
             }
         }
