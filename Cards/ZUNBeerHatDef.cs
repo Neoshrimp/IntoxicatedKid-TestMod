@@ -68,7 +68,7 @@ namespace test
                Rarity: Rarity.Rare,
                Type: CardType.Ability,
                TargetType: TargetType.Self,
-               Colors: new List<ManaColor>() { ManaColor.Blue, ManaColor.Red, ManaColor.Green },
+               Colors: new List<ManaColor>() { ManaColor.White, ManaColor.Blue, ManaColor.Black, ManaColor.Red, ManaColor.Green },
                IsXCost: false,
                Cost: new ManaGroup() { White = 1, Blue = 1, Black = 1, Red = 1, Green = 1 },
                UpgradedCost: null,
@@ -101,7 +101,7 @@ namespace test
                UpgradedKeywords: Keyword.Ethereal,
                EmptyDescription: false,
                RelativeKeyword: Keyword.None,
-               UpgradedRelativeKeyword: Keyword.Upgrade,
+               UpgradedRelativeKeyword: Keyword.None,
 
                RelativeEffects: new List<string>() { },
                UpgradedRelativeEffects: new List<string>() { },

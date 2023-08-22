@@ -101,8 +101,8 @@ namespace test
                RelativeKeyword: Keyword.TempMorph,
                UpgradedRelativeKeyword: Keyword.TempMorph,
 
-               RelativeEffects: new List<string>() { "TempFirepower", "DayuuExodiaSe" },
-               UpgradedRelativeEffects: new List<string>() { "TempFirepower", "DayuuExodiaSe" },
+               RelativeEffects: new List<string>() { "TempFirepower", "DayuuFriendSe" },
+               UpgradedRelativeEffects: new List<string>() { "TempFirepower", "DayuuFriendSe" },
                RelativeCards: new List<string>() { "DayuuExodia" },
                UpgradedRelativeCards: new List<string>() { "DayuuExodia" },
                Owner: null,

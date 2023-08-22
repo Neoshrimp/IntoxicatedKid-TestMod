@@ -100,8 +100,8 @@ namespace test
                RelativeKeyword: Keyword.Block,
                UpgradedRelativeKeyword: Keyword.Block,
 
-               RelativeEffects: new List<string>() { "DayuuExodiaSe" },
-               UpgradedRelativeEffects: new List<string>() { "DayuuExodiaSe" },
+               RelativeEffects: new List<string>() { "DayuuFriendSe" },
+               UpgradedRelativeEffects: new List<string>() { "DayuuFriendSe" },
                RelativeCards: new List<string>() { "DayuuExodia" },
                UpgradedRelativeCards: new List<string>() { "DayuuExodia" },
                Owner: null,
