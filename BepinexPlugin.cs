@@ -164,7 +164,7 @@ namespace test
             {
                 if (GameMaster.Instance?.CurrentGameRun != null)
                 {
-                    GameMaster.Instance.StartCoroutine(Trigger());
+                    StartCoroutine(this.Trigger());
                 }
                 else
                 {
@@ -174,20 +174,20 @@ namespace test
         }
         private IEnumerator Trigger()
         {
+            yield return new WaitForSeconds(.1f);
+            var gamemaster = new GameMaster();
             List<Exhibit> list = new List<Exhibit>
             {
                 Library.CreateExhibit<TestExhibit>()
             };
             foreach (Exhibit exhibit in list)
             {
-                yield return _adventure.GameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                yield return gamemaster.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
                 {
                     SourceType = VisualSourceType.Vn,
                     Index = -1
                 });
             }
-            yield break;
         }
-        public Adventure _adventure;
     }
 }
