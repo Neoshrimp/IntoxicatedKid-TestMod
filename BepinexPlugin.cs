@@ -117,7 +117,6 @@ using Untitled.ConfigDataBuilder.Base;
 using Debug = UnityEngine.Debug;
 using static test.TestExhibitDef;
 
-
 namespace test
 {
     [BepInPlugin(PluginInfo.GUID, PluginInfo.Name, PluginInfo.version)]
@@ -164,7 +163,7 @@ namespace test
             {
                 if (GameMaster.Instance?.CurrentGameRun != null)
                 {
-                    StartCoroutine(this.Trigger());
+                    GameMaster.Instance.StartCoroutine(Trigger());
                 }
                 else
                 {
@@ -175,14 +174,13 @@ namespace test
         private IEnumerator Trigger()
         {
             yield return new WaitForSeconds(.1f);
-            var gamemaster = new GameMaster();
             List<Exhibit> list = new List<Exhibit>
             {
                 Library.CreateExhibit<TestExhibit>()
             };
             foreach (Exhibit exhibit in list)
             {
-                yield return gamemaster.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                yield return GameMaster.Instance.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
                 {
                     SourceType = VisualSourceType.Vn,
                     Index = -1
