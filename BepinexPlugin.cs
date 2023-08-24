@@ -115,6 +115,7 @@ using Untitled;
 using Untitled.ConfigDataBuilder;
 using Untitled.ConfigDataBuilder.Base;
 using Debug = UnityEngine.Debug;
+using static test.TestExhibitDef;
 
 
 namespace test
@@ -134,6 +135,7 @@ namespace test
 
         internal static IResourceSource embeddedSource = new EmbeddedSource(Assembly.GetExecutingAssembly());
 
+        static KeyboardShortcut TestKey = new KeyboardShortcut(KeyCode.F2);
 
         private void Awake()
         {
@@ -156,7 +158,36 @@ namespace test
             if (harmony != null)
                 harmony.UnpatchSelf();
         }
-
-
+        private void Update()
+        {
+            if (TestKey.IsDown())
+            {
+                if (GameMaster.Instance?.CurrentGameRun != null)
+                {
+                    GameMaster.Instance.StartCoroutine(Trigger());
+                }
+                else
+                {
+                    log.LogInfo("Run needs to be started.");
+                }
+            }
+        }
+        private IEnumerator Trigger()
+        {
+            List<Exhibit> list = new List<Exhibit>
+            {
+                Library.CreateExhibit<TestExhibit>()
+            };
+            foreach (Exhibit exhibit in list)
+            {
+                yield return _adventure.GameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                {
+                    SourceType = VisualSourceType.Vn,
+                    Index = -1
+                });
+            }
+            yield break;
+        }
+        public Adventure _adventure;
     }
 }

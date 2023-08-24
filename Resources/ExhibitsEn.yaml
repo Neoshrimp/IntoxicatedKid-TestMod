@@ -2,10 +2,18 @@ DayuuSmallSparrow:
   Description: "When acquired, choose 1 of {Value1} |Remnants| cards to add to the library.\nWhenever a |Remnants| card is drawn, gain mana equal to that card's colored mana cost."
   Name: Small Sparrow
   FlavorText: "People have been committing sins since long ago. Why do they commit sins, knowing it's wrong?"
+StSRunicDome:
+  Description: "Adds {BaseMana} to the mana base.\n{PlayerName} can no longer see enemy intents."
+  Name: Runic Dome
+  FlavorText: "The runes are indecipherable."
 StSRunicPyramid:
   Description: "At the end of {PlayerName}'s turn, only discard |Misfortune| and status cards."
   Name: Runic Pyramid
   FlavorText: "The runes are indecipherable."
+TestExhibit:
+  Description: "{PlayerName} may ignore all paths. At the start of combat, gain {Value1} |Firepower| and |Spirit|."
+  Name: Test Exhibit
+  FlavorText: "I can't beat the shit out of you without getting closer."
 Th18BlankCard:
   Description: "At the start of {PlayerName}'s first turn each combat, |Exile| each card from the hand. Then, add that many random non-|Misfortune| and non-status cards to the hand.\nThose cards inherit the type, rarity and |Upgrade| from |Exiled| cards."
   Name: Old Blank Card

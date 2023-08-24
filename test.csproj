@@ -317,6 +317,7 @@
       <None Remove="Resources\StatusEffectsEn.yaml" />
       <None Remove="Resources\StSAlchemize.png" />
       <None Remove="Resources\StSDramaticEntrance.png" />
+      <None Remove="Resources\StSEctoplasm.png" />
       <None Remove="Resources\StSEntrench.png" />
       <None Remove="Resources\StSLimitBreak.png" />
       <None Remove="Resources\StSMindBlast.png" />
@@ -326,6 +327,7 @@
       <None Remove="Resources\StSPerfectedStrike.png" />
       <None Remove="Resources\StSRunicDome.png" />
       <None Remove="Resources\StSRunicPyramid.png" />
+      <None Remove="Resources\TestExhibit.png" />
       <None Remove="Resources\Th18BlankCard.png" />
       <None Remove="Resources\ZunBeerHat.png" />
       <None Remove="Resources\ZunBeerHatSe.png" />

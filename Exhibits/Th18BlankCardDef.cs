@@ -26,6 +26,7 @@ using LBoL.Core.Randoms;
 using LBoL.EntityLib.Cards.Character.Sakuya;
 using LBoL.EntityLib.Cards.Other.Misfortune;
 using static UnityEngine.TouchScreenKeyboard;
+using JetBrains.Annotations;
 
 namespace test
 {
@@ -35,39 +36,21 @@ namespace test
         {
             return nameof(Th18BlankCard);
         }
-
         public override LocalizationOption LoadLocalization()
         {
             var locFiles = new LocalizationFiles(embeddedSource);
             locFiles.AddLocaleFile(Locale.En, "Resources.ExhibitsEn.yaml");
             return locFiles;
         }
-        
         public override ExhibitSprites LoadSprite()
         {
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-
             Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
-
             exhibitSprites.main = wrap("");
-
-            // loads many custom sprites for futher use
-            //exhibitSprites.customSprites.Add("none", wrap("_none"));
-            //exhibitSprites.customSprites.Add("luna", wrap("_luna"));
-            //exhibitSprites.customSprites.Add("-luna", wrap("_-luna"));
-            //exhibitSprites.customSprites.Add("star", wrap("_star"));
-            //exhibitSprites.customSprites.Add("-star", wrap("_-star"));
-            //exhibitSprites.customSprites.Add("sunny", wrap("_sunny"));
-            //exhibitSprites.customSprites.Add("-sunny", wrap("_-sunny"));
-
-
             return exhibitSprites;
         }
-
-
-
         public override ExhibitConfig MakeConfig()
         {
             var exhibitConfig = new ExhibitConfig(
@@ -78,7 +61,7 @@ namespace test
                 IsPooled: true,
                 IsSentinel: false,
                 Revealable: false,
-                Appearance: AppearanceType.Anywhere,
+                Appearance: AppearanceType.ShopOnly,
                 Owner: "",
                 LosableType: ExhibitLosableType.Losable,
                 Rarity: Rarity.Common,
@@ -96,52 +79,12 @@ namespace test
                 // example of referring to UniqueId of an entity without calling MakeConfig
                 RelativeCards: new List<string>() { }
             );
-
             return exhibitConfig;
         }
-
         [EntityLogic(typeof(Th18BlankCardDef))]
+        [UsedImplicitly]
         public sealed class Th18BlankCard : Exhibit
         {
-            // Changes the icon according to last three cards played 
-            // Sunny = attack, Star = defense, Luna = skill
-            // this is where the keys of custom sprites are used
-            //public override string OverrideIconName
-            //{
-            //    get
-            //    {
-            //        if (Battle == null)
-            //            return Id;
-            //
-            //        if (triggered)
-            //            return Id;
-            //
-            //        if (cardTracker.Empty())
-            //            return Id + "none";
-            //        if (cardTracker.Count == 1)
-            //        {
-            //            if (cardTracker.Contains(CardType.Attack))
-            //                return Id + "sunny";
-            //            if (cardTracker.Contains(CardType.Defense))
-            //                return Id + "star";
-            //            if (cardTracker.Contains(CardType.Skill))
-            //                return Id + "luna";
-            //        }
-            //        if (cardTracker.Count == 2)
-            //        {
-            //            if (!cardTracker.Contains(CardType.Attack))
-            //                return Id + "-sunny";
-            //            if (!cardTracker.Contains(CardType.Defense))
-            //                return Id + "-star";
-            //            if (!cardTracker.Contains(CardType.Skill))
-            //                return Id + "-luna";
-            //        }
-            //
-            //
-            //        return Id;
-            //    }
-            //
-            //}
             protected override void OnEnterBattle()
             {
                 base.ReactBattleEvent<UnitEventArgs>(base.Battle.Player.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnStarted));
