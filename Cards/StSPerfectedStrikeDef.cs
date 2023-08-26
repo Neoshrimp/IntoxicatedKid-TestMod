@@ -62,7 +62,7 @@ namespace test
                Colors: new List<ManaColor>() { ManaColor.Red },
                IsXCost: false,
                Cost: new ManaGroup() { Any = 3 },
-               UpgradedCost: new ManaGroup() { Any = 3 },
+               UpgradedCost: null,
                MoneyCost: null,
                Damage: 10,
                UpgradedDamage: null,
@@ -100,7 +100,7 @@ namespace test
                UpgradedRelativeCards: new List<string>() { },
                Owner: null,
                Unfinished: false,
-               Illustrator: null,
+               Illustrator: "Mega Crit",
                SubIllustrator: new List<string>() { }
             );
 

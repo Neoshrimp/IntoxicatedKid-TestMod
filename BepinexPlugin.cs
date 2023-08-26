@@ -116,6 +116,7 @@ using Untitled.ConfigDataBuilder;
 using Untitled.ConfigDataBuilder.Base;
 using Debug = UnityEngine.Debug;
 using static test.TestExhibitDef;
+using static test.StSSneckoEyeDef;
 
 namespace test
 {

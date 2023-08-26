@@ -58,10 +58,10 @@ namespace test
                Rarity: Rarity.Uncommon,
                Type: CardType.Skill,
                TargetType: TargetType.Self,
-               Colors: new List<ManaColor>() { ManaColor.White, ManaColor.Red },
+               Colors: new List<ManaColor>() { ManaColor.White },
                IsXCost: false,
-               Cost: new ManaGroup() { Any = 1, White = 1, Red = 1 },
-               UpgradedCost: null,
+               Cost: new ManaGroup() { Any = 2, White = 2 },
+               UpgradedCost: new ManaGroup() { Any = 2, White = 1 },
                MoneyCost: null,
                Damage: null,
                UpgradedDamage: null,
@@ -90,7 +90,7 @@ namespace test
                Keywords: Keyword.None,
                UpgradedKeywords: Keyword.None,
                EmptyDescription: false,
-               RelativeKeyword: Keyword.Block,
+               RelativeKeyword: Keyword.Block | Keyword.Shield,
                UpgradedRelativeKeyword: Keyword.Block | Keyword.Shield,
 
                RelativeEffects: new List<string>() { },
@@ -99,7 +99,7 @@ namespace test
                UpgradedRelativeCards: new List<string>() { },
                Owner: null,
                Unfinished: false,
-               Illustrator: null,
+               Illustrator: "Mega Crit",
                SubIllustrator: new List<string>() { }
             );
 
@@ -117,13 +117,13 @@ namespace test
             {
                 yield return new CastBlockShieldAction(base.Battle.Player, block, 0, BlockShieldType.Direct, false);
             }
-            if (this.IsUpgraded)
-            {
+            //if (this.IsUpgraded)
+            //{
                 if (Shield > 0)
                 {
                     yield return new CastBlockShieldAction(base.Battle.Player, 0, Shield, BlockShieldType.Direct, false);
                 }
-            }
+            //}
             yield break;
 		}
     }

@@ -35,6 +35,8 @@ using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 using LBoL.EntityLib.Exhibits;
 using JetBrains.Annotations;
+using LBoL.Core.Stations;
+using LBoL.EntityLib.EnemyUnits.Character;
 
 namespace test
 {
@@ -65,7 +67,7 @@ namespace test
                 Index: sequenceTable.Next(typeof(ExhibitConfig)),
                 Id: "",
                 Order: 10,
-                IsDebug: false,
+                IsDebug: true,
                 IsPooled: false,
                 IsSentinel: false,
                 Revealable: false,
@@ -94,14 +96,15 @@ namespace test
         [ExhibitInfo(ExpireStageLevel = 3, ExpireStationLevel = 0)]
         public sealed class StSEctoplasm : ShiningExhibit
         {
-            protected override void OnAdded(PlayerUnit player)
+            /*protected override void OnAdded(PlayerUnit player)
             {
-                base.HandleGameRunEvent<GameEventArgs>(base.GameRun.MoneyGained, new GameEventHandler<GameEventArgs>(this.OnMoneyGained));
+                base.HandleGameRunEvent<GameEventArgs>(base.GameRun.money, new GameEventHandler<GameEventArgs>(this.OnGainMoney));
             }
-            private void OnMoneyGained(GameEventArgs args)
+            private void OnGainMoney(GameEventArgs args)
             {
                 base.NotifyActivating();
-            }
+                args.CancelBy(this);
+            }*/
         }
     }
 }

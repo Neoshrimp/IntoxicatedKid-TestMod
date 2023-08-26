@@ -128,11 +128,6 @@ namespace test
             return cardConfig;
         }
     }
-    //
-    //
-    // Warning: Terrible code
-    //
-    //
     [EntityLogic(typeof(DayuuFriendDef))]
     public sealed class DayuuFriend : Card
     {
