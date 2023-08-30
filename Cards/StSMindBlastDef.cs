@@ -61,7 +61,7 @@ namespace test
                Colors: new List<ManaColor>() { ManaColor.Colorless },
                IsXCost: false,
                Cost: new ManaGroup() { Any = 2, Colorless = 1 },
-               UpgradedCost: new ManaGroup() { Any = 2 },
+               UpgradedCost: new ManaGroup() { Any = 1, Colorless = 1 },
                MoneyCost: null,
                Damage: 0,
                UpgradedDamage: null,

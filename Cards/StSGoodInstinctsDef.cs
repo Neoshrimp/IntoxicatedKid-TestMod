@@ -74,7 +74,7 @@ namespace test
                Damage: null,
                UpgradedDamage: null,
                Block: 10,
-               UpgradedBlock: 14,
+               UpgradedBlock: 13,
                Shield: null,
                UpgradedShield: null,
                Value1: null,

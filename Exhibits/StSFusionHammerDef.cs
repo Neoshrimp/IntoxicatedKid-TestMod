@@ -73,7 +73,7 @@ namespace test
                 Appearance: AppearanceType.ShopOnly,
                 Owner: "",
                 LosableType: ExhibitLosableType.Losable,
-                Rarity: Rarity.Uncommon,
+                Rarity: Rarity.Common,
                 Value1: null,
                 Value2: null,
                 Value3: null,
@@ -101,7 +101,6 @@ namespace test
                     base.NotifyActivating();
                     ((GapStation)args.Station).GapOptions.RemoveAll(o => o.Type == GapOptionType.UpgradeCard);
                     args.Station.Finish();
-                    args.Station.GenerateRecord();
                 });
             }
             protected override void OnEnterBattle()

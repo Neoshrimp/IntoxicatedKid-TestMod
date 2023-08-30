@@ -131,7 +131,7 @@ namespace test
 			{
 				Card drawzone = base.Battle.DrawZone.First<Card>();
                 yield return new MoveCardAction(drawzone, CardZone.Hand);
-                if (drawzone.CardType.Equals(CardType.Attack))
+                if ((drawzone.CardType == CardType.Attack) && (drawzone.Zone == CardZone.Hand))
                 {
                     yield return new DiscardAction(drawzone);
                 }
@@ -140,7 +140,7 @@ namespace test
 			{
 				Card discardzone = base.Battle.DiscardZone.Last<Card>();
 				yield return new MoveCardAction(discardzone, CardZone.Hand);
-                if (discardzone.CardType.Equals(CardType.Attack))
+                if ((discardzone.CardType == CardType.Attack) && (discardzone.Zone == CardZone.Hand))
                 {
                     yield return new DiscardAction(discardzone);
                 }

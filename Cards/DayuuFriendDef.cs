@@ -179,12 +179,11 @@ namespace test
                 {
                     yield return battleAction;
                 }
-                if (base.Loyalty <= 0)
-                {
-                    yield return new RemoveCardAction(this);
-                    yield break;
-                }
                 num = i;
+            }
+            if (base.Loyalty <= 0)
+            {
+                yield return new RemoveCardAction(this);
             }
             yield break;
         }

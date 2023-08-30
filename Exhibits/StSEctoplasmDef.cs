@@ -37,6 +37,9 @@ using LBoL.EntityLib.Exhibits;
 using JetBrains.Annotations;
 using LBoL.Core.Stations;
 using LBoL.EntityLib.EnemyUnits.Character;
+using HarmonyLib;
+using LBoL.EntityLib.EnemyUnits.Normal;
+using System.Runtime.CompilerServices;
 
 namespace test
 {
@@ -96,15 +99,25 @@ namespace test
         [ExhibitInfo(ExpireStageLevel = 3, ExpireStationLevel = 0)]
         public sealed class StSEctoplasm : ShiningExhibit
         {
-            /*protected override void OnAdded(PlayerUnit player)
+            protected override void OnAdded(PlayerUnit player)
             {
-                base.HandleGameRunEvent<GameEventArgs>(base.GameRun.money, new GameEventHandler<GameEventArgs>(this.OnGainMoney));
+                base.HandleGameRunEvent<GameEventArgs>(base.GameRun.MoneyGained, delegate (GameEventArgs _)
+                {
+                    base.NotifyActivating();
+                });
             }
-            private void OnGainMoney(GameEventArgs args)
+            [HarmonyPatch(typeof(GameRunController), nameof(GameRunController.InternalGainMoney))]
+            class GameRunController_InternalGainMoney_Patch
             {
-                base.NotifyActivating();
-                args.CancelBy(this);
-            }*/
+                static bool Prefix()
+                {
+                    if (GameMaster.Instance.CurrentGameRun.Player.HasExhibit<StSEctoplasm>())
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+            }
         }
     }
 }
