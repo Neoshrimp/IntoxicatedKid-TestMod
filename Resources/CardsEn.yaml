@@ -9,27 +9,36 @@ DayuuDefense:
   Name: Late Night Bites
   FlavorText: ":bird:"
 DayuuSkill:
-  Description: "Gain {Value2} life.\nGain {Value1} |Temporary Firepower|. Enemies also gain {Value1} |Temporary Firepower|.\nDraw {Value2} card{Value2:plural one='' other='s'}. Attack cards drawn this way |temporarily costs| {Mana}."
-  UpgradedDescription: "Gain {Value2} life.\nGain {Value1} |Temporary Firepower|. Enemies also gain {Value2} |Temporary Firepower|.\nDraw {Value2} card{Value2:plural one='' other='s'}. Attack cards drawn this way |temporarily costs| {Mana}."
+  Description: "Gain {Value1} life.\nGain {Value2} |Temporary Firepower|. Enemies also gain 2 |Temporary Firepower|.\nDraw 2 card{Value2:plural one='' other='s'}. Attack cards drawn this way |temporarily costs| {Mana}."
+  UpgradedDescription: "Gain {Value1} life.\nGain {Value2} |Temporary Firepower|. Enemies also gain 2 |Temporary Firepower|.\nDraw 2 card{Value2:plural one='' other='s'}. Attack cards drawn this way |temporarily costs| {Mana}."
   Name: Youkai Symposium
   FlavorText: ":beers:"
 DayuuAbility:
-  Description: "At the start of {PlayerName}'s turn, gain {Value1} random mana for each summoned |Teammate| cards in the hand.\n|Dayuu, Sparrow of Sobs and Skulls| counts as {Value2} card{Value2:plural one='' other='s'}."
-  UpgradedDescription: "At the start of {PlayerName}'s turn, gain {Value1} random mana for each summoned |Teammate| cards in the hand.\n|Dayuu, Sparrow of Sobs and Skulls| counts as {Value2} card{Value2:plural one='' other='s'}."
+  Description: "At the start of {PlayerName}'s turn, gain {Value1} random mana for each |Teammate| cards in the hand.\n|Dayuu, Sparrow of Sobs and Skulls| counts as {Value2} card{Value2:plural one='' other='s'}."
+  UpgradedDescription: "At the start of {PlayerName}'s turn, gain {Value1} random mana for each |Teammate| cards in the hand.\n|Dayuu, Sparrow of Sobs and Skulls| counts as {Value2} card{Value2:plural one='' other='s'}."
   Name: Color the World
   FlavorText: ":handshake:"
 DayuuFriend:
+  Description: "{FriendP}|f:Sobbing Cries|: Apply {Value1} |Temporary Firepower Down| to each enemy."
+  UpgradedDescription: "{FriendP}|f:Sobbing Cries|: Apply {Value1} |Temporary Firepower Down| to each enemy."
+  ExtraDescription1: "{FriendA}|a:The Song of Sobs|: Apply {Value2} |Firepower Down| and |Weak| to each enemy. Return {SelfName} from the discard pile to the hand."
+  UpgradedExtraDescription1: "{FriendA}|a:The Song of Sobs|: Apply {Value2} |Firepower Down| and |Weak| to each enemy. Return {SelfName} from the discard pile to the hand."
+  ExtraDescription2: "{FriendU}|u:The Song of Skulls|: If enemies' life is less than 25%, defeat it. Then, apply 3 |Firepower Down|, |Weak| and |Vulnerable| to each enemy."
+  UpgradedExtraDescription2: "{FriendU}|u:The Song of Skulls|: If enemies' life is less than 25%, defeat it. Then, apply 3 |Firepower Down|, |Weak| and |Vulnerable| to each enemy."
+  Name: Dayuu, Sparrow of Sobs and Skulls
+  FlavorText: ":sob:"
+DayuuExodia:
+  Description: "{FriendP}Deal |r:9999| damage to each enemy."
+  Name: Dayuu, the Forbidden One
+DayuuReale:
   Description: "{FriendP}Apply {Value1} |Temporary Firepower Down| to each enemy."
   UpgradedDescription: "{FriendP}Apply {Value1} |Temporary Firepower Down| to each enemy."
   ExtraDescription1: "{FriendA}Apply {Value2} |Firepower Down| and |Weak| to each enemy. Return {SelfName} from the discard pile to the hand."
   UpgradedExtraDescription1: "{FriendA}Apply {Value2} |Firepower Down| and |Weak| to each enemy. Return {SelfName} from the discard pile to the hand."
   ExtraDescription2: "{FriendU}If enemies' life is less than 25%, defeat it. Then, apply 3 |Firepower Down|, |Weak| and |Vulnerable| to each enemy."
   UpgradedExtraDescription2: "{FriendU}If enemies' life is less than 25%, defeat it. Then, apply 3 |Firepower Down|, |Weak| and |Vulnerable| to each enemy."
-  Name: Dayuu, Sparrow of Sobs and Skulls
-  FlavorText: ":sob:"
-DayuuExodia:
-  Description: "{FriendP}Deal {Value1} damage to each enemy."
-  Name: Dayuu, the Forbidden One
+  Name: Reale, Scary Stalker of Discord
+  FlavorText: ""
 StSAlchemize:
   Description: "Add a random |Tool| card to the library."
   UpgradedDescription: "Add a random |Tool| card to the library."
@@ -39,7 +48,7 @@ StSDramaticEntrance:
   UpgradedDescription: "|At the start of combat|: |Exile| {SelfName}, Deal {Value1} damage to each enemy."
   Name: Dramatic Entrance
 StSEntrench:
-  Description: "Double the current |Block| and |Barrier|."
+  Description: "Double the current |Block|."
   UpgradedDescription: "Double the current |Block| and |Barrier|."
   Name: Entrench
 StSFinesse:
@@ -54,24 +63,48 @@ StSLimitBreak:
   Description: Double the current |Firepower| and |Temporary Firepower|.
   UpgradedDescription: Double the current |Firepower| and |Temporary Firepower|.
   Name: Limit Break
+StSMayhem:
+  Description: "At the start of {PlayerName}'s turn, put the top card of the draw pile into the hand. Then, play that card."
+  UpgradedDescription: "At the start of {PlayerName}'s turn, put the top card of the draw pile into the hand. Then, play that card."
+  Name: Mayhem
 StSMindBlast:
   NonbattleDescription: Deal damage equal to the number of cards in the draw pile.
   UpgradedNonbattleDescription: Deal damage equal to the number of cards in the draw pile.
   Description: Deal damage equal to the number of cards in the draw pile. ({Damage})
   UpgradedDescription: Deal damage equal to the number of cards in the draw pile. ({Damage})
   Name: Mind Blast
+StSNecronomicurse:
+  Description: "|When Exiled|: return {SelfName} from the exile pile to the hand."
+  Name: Necronomicurse
 StSPanacea:
   Description: "Remove all debuffs from {PlayerName}.\nGain {Value1} |Amulet|."
   UpgradedDescription: "Remove all debuffs from {PlayerName}.\nGain {Value1} |Amulet|."
   Name: Panacea
+StSPanache:
+  Description: "Whenever {PlayerName} plays {Value1} card{Value1:plural one='' other='s'} in a turn, deal {Value2} damage to each enemy."
+  UpgradedDescription: "Whenever {PlayerName} plays {Value1} card{Value1:plural one='' other='s'} in a turn, deal {Value2} damage to each enemy."
+  Name: Panache
 StSPanicButton:
   Description: "Gain {Block} |Block|.\n{PlayerName} can't gain |Block| or |Barrier| from cards for {Value1} turn{Value1:plural one='' other='s'}."
   UpgradedDescription: "Gain {Block} |Block|.\n{PlayerName} can't gain |Block| or |Barrier| from cards for {Value1} turn{Value1:plural one='' other='s'}."
   Name: Panic Button
 StSPerfectedStrike:
-  Description: "Deal {Damage} damage.\nFor each |Basic| cards in the library, {SelfName} deals {Value1} more damage."
-  UpgradedDescription: "Deal {Damage} damage.\nFor each |Basic| cards in the library, {SelfName} deals {Value1} more damage."
+  Description: "Deal {Damage} damage.\nFor each |Basic| attack cards in the library, {SelfName} deals {Value1} more damage.\nIf {PlayerName} has |Just-a-Knife|, {SelfName} deals {Value2} more damage."
+  UpgradedDescription: "Deal {Damage} damage.\nFor each |Basic| attack cards in the library, {SelfName} deals {Value1} more damage.\nIf {PlayerName} has |Just-a-Knife|, {SelfName} deals {Value2} more damage."
   Name: Perfected Strike
+UnitedWeStand:
+  Description: "Draw cards until the hand is full.\nExile all |Misfortune| and Status cards from the hand. Then, play all cards in the hand."
+  UpgradedDescription: "Draw cards until the hand is full.\nExile all |Misfortune| and Status cards from the hand. Then, play all cards in the hand."
+  Name: United We Stand
+  DetailText: "You can't lose life while playing {SelfName}.\nWhen {SelfName}'s target is defeated, it continues playing using a random enemy as the new target.\nSummoned |Teammate| card will trigger it's |a:Active Skill| even if it doesn't have enough |Unity|."
+YuGiOhBlueEyesWhiteDragon:
+  Description: "{FriendS}Can only summon after discard 2 summoned |Teammate| cards.\n{FriendP}|While in Attack Position|: Deal {Damage} damage to each enemy.\n|While in Defense Position|: Gain {Block} block."
+  UpgradedDescription: "{FriendS}Can only summon after discard 2 summoned |Teammate| cards.\n{FriendP}|While in Attack Position|: Deal {Damage} damage to each enemy.\n|While in Defense Position|: Gain {Block} block."
+  ExtraDescription1: "{FriendA}Change to |Attack Position|."
+  UpgradedExtraDescription1: "{FriendA}Change to |Attack Position|."
+  ExtraDescription2: "{FriendU}Change to |Defense Position|."
+  UpgradedExtraDescription2: "{FriendU}Change to |Defense Position|."
+  Name: Blue-Eyes White Dragon
 ZUNBeerHat:
   Description: "Add {Value1} |Drunk| to the hand, draw and discard pile.\nEnemies cannot act for {Value2} turn{Value2:plural one='' other='s'}."
   UpgradedDescription: "Enemies cannot act for {Value2} turns."
