@@ -141,7 +141,7 @@ namespace test
                 {
                     if (base.Battle.BattleShouldEnd)
                     {
-                        yield return new EndShootAction(base.Battle.Player);
+                        base.GameRun.SynergyAdditionalCount -= 1;
                         yield break;
                     }
                     target = base.Battle.AllAliveEnemies.Sample(base.GameRun.BattleRng);
@@ -150,31 +150,31 @@ namespace test
                 {
                     yield return new ExileCardAction(card);
                 }
-                if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Nobody) && !card.IsForbidden)
+                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Nobody) && !card.IsForbidden)
                 {
                     yield return new UseCardAction(card, UnitSelector.Nobody, this.Mana);
                 }
-                if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.SingleEnemy) && !card.IsForbidden)
+                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.SingleEnemy) && !card.IsForbidden)
                 {
                     yield return new UseCardAction(card, selector, this.Mana);
                 }
-                if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.AllEnemies) && !card.IsForbidden)
+                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.AllEnemies) && !card.IsForbidden)
                 {
                     yield return new UseCardAction(card, UnitSelector.AllEnemies, this.Mana);
                 }
-                if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.RandomEnemy) && !card.IsForbidden)
+                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.RandomEnemy) && !card.IsForbidden)
                 {
                     yield return new UseCardAction(card, UnitSelector.RandomEnemy, this.Mana);
                 }
-                if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Self) && !card.IsForbidden)
+                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Self) && !card.IsForbidden)
                 {
                     yield return new UseCardAction(card, UnitSelector.Self, this.Mana);
                 }
-                if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.All) && !card.IsForbidden)
+                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.All) && !card.IsForbidden)
                 {
                     yield return new UseCardAction(card, UnitSelector.All, this.Mana);
                 }
-                if ((card.CardType == CardType.Friend) && (card.Zone == CardZone.PlayArea) && (card.Loyalty <= 0))
+                else if ((card.CardType == CardType.Friend) && (card.Zone == CardZone.PlayArea) && (card.Loyalty <= 0))
                 {
                     yield return new RemoveCardAction(card);
                 }
@@ -184,8 +184,8 @@ namespace test
             {
                 yield return new RemoveStatusEffectAction(base.Battle.Player.GetStatusEffect<UnitedWeStandSeDef.UnitedWeStandSe>(), true);
             }
-            base.GameRun.SynergyAdditionalCount -= 1;
             base.Battle.MaxHand = _maxhand;
+            base.GameRun.SynergyAdditionalCount -= 1;
             yield break;
         }
         private int _maxhand;

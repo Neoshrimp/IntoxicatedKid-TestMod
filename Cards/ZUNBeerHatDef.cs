@@ -124,8 +124,6 @@ namespace test
             if (!this.IsUpgraded)
             {
                 yield return new AddCardsToHandAction(Library.CreateCards<Drunk>(base.Value1, false));
-                yield return new AddCardsToDrawZoneAction(Library.CreateCards<Drunk>(base.Value1, false), DrawZoneTarget.Random);
-                yield return new AddCardsToDiscardAction(Library.CreateCards<Drunk>(base.Value1, false));
             }
             yield return base.BuffAction<ZUNBeerHatSeDef.ZUNBeerHatSe>(0, base.Value2, 0, 0, 0.2f);
             yield break;

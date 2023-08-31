@@ -73,8 +73,8 @@ namespace test
                 TargetType: TargetType.Self,
                 Colors: new List<ManaColor>() { ManaColor.Colorless },
                 IsXCost: false,
-                Cost: new ManaGroup() { Any = 2, Colorless = 2 },
-                UpgradedCost: new ManaGroup() { Any = 1, Colorless = 2 },
+                Cost: new ManaGroup() { Any = 3, Colorless = 1 },
+                UpgradedCost: new ManaGroup() { Any = 1, Colorless = 1 },
                 MoneyCost: null,
                 Damage: null,
                 UpgradedDamage: null,
@@ -187,63 +187,68 @@ namespace test
             }
             protected override void OnAdded(Unit unit)
             {
-                base.ReactOwnerEvent<UnitEventArgs>(base.Battle.Player.TurnStarting, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnStarting));
+                base.ReactOwnerEvent<UnitEventArgs>(base.Battle.Player.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnStarted));
             }
-            private IEnumerable<BattleAction> OnPlayerTurnStarting(GameEventArgs args)
+            private IEnumerable<BattleAction> OnPlayerTurnStarted(GameEventArgs args)
             {
                 if (base.Battle.BattleShouldEnd)
                 {
                     yield break;
                 }
                 base.NotifyActivating();
+                base.GameRun.SynergyAdditionalCount += 1;
                 int max = (this.Level);
                 int mayhemcount = 1;
                 while (mayhemcount <= max)
                 {
                     if (base.Battle.BattleShouldEnd)
                     {
+                        base.GameRun.SynergyAdditionalCount -= 1;
                         yield break;
                     }
                     List<Card> list = base.Battle.DrawZone.ToList<Card>();
-                    if (list.Count == 0)
+                    List<Card> list2 = base.Battle.DiscardZone.ToList<Card>();
+                    if (list.Count == 0 && list2.Count > 0)
                     {
                         yield return new ReshuffleAction();
+                        mayhemcount -= 1;
                     }
                     if (list.Count > 0)
                     {
                         Card card = list.First();
                         yield return new MoveCardAction(card, CardZone.Hand);
-                        if ((card.CardType == CardType.Misfortune) || (card.CardType == CardType.Status))
+                        if (((card.CardType == CardType.Misfortune) || (card.CardType == CardType.Status)) && card.IsForbidden)
                         {
                             yield return new DiscardAction(card);
                         }
-                        if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Nobody) && !card.IsForbidden)
+                        else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Nobody) && ((card.CardType != CardType.Friend) || (card.CardType == CardType.Friend && !card.Summoned) || (card.CardType == CardType.Friend && card.Summoned && card.Loyalty >= card.MinFriendCost)) && !card.IsForbidden)
                         {
                             yield return new UseCardAction(card, UnitSelector.Nobody, this.Mana);
                         }
-                        if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.SingleEnemy) && !card.IsForbidden)
+                        else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.SingleEnemy) && ((card.CardType != CardType.Friend) || (card.CardType == CardType.Friend && !card.Summoned) || (card.CardType == CardType.Friend && card.Summoned && card.Loyalty >= card.MinFriendCost)) && !card.IsForbidden)
                         {
                             yield return new UseCardAction(card, UnitSelector.RandomEnemy, this.Mana);
                         }
-                        if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.AllEnemies) && !card.IsForbidden)
+                        else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.AllEnemies) && ((card.CardType != CardType.Friend) || (card.CardType == CardType.Friend && !card.Summoned) || (card.CardType == CardType.Friend && card.Summoned && card.Loyalty >= card.MinFriendCost)) && !card.IsForbidden)
                         {
                             yield return new UseCardAction(card, UnitSelector.AllEnemies, this.Mana);
                         }
-                        if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.RandomEnemy) && !card.IsForbidden)
+                        else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.RandomEnemy) && ((card.CardType != CardType.Friend) || (card.CardType == CardType.Friend && !card.Summoned) || (card.CardType == CardType.Friend && card.Summoned && card.Loyalty >= card.MinFriendCost)) && !card.IsForbidden)
                         {
                             yield return new UseCardAction(card, UnitSelector.RandomEnemy, this.Mana);
                         }
-                        if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Self) && !card.IsForbidden)
+                        else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Self) && ((card.CardType != CardType.Friend) || (card.CardType == CardType.Friend && !card.Summoned) || (card.CardType == CardType.Friend && card.Summoned && card.Loyalty >= card.MinFriendCost)) && !card.IsForbidden)
                         {
                             yield return new UseCardAction(card, UnitSelector.Self, this.Mana);
                         }
-                        if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.All) && !card.IsForbidden)
+                        else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.All) && ((card.CardType != CardType.Friend) || (card.CardType == CardType.Friend && !card.Summoned) || (card.CardType == CardType.Friend && card.Summoned && card.Loyalty >= card.MinFriendCost)) && !card.IsForbidden)
                         {
                             yield return new UseCardAction(card, UnitSelector.All, this.Mana);
                         }
                     }
                     mayhemcount += 1;
                 }
+                base.GameRun.SynergyAdditionalCount -= 1;
                 yield break;
             }
         }

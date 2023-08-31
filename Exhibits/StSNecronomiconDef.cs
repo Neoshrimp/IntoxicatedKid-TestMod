@@ -96,6 +96,7 @@ namespace test
             protected override void OnGain(PlayerUnit player)
             {
                 base.OnGain(player);
+                base.GameRun.Damage(this.Value1, DamageType.HpLose, true, true, null);
                 List<Card> list = new List<Card> { Library.CreateCard<StSNecronomicurse>() };
                 base.GameRun.AddDeckCards(list, false, null);
             }

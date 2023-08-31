@@ -70,7 +70,7 @@ namespace test
                 TargetType: TargetType.Self,
                 Colors: new List<ManaColor>() { ManaColor.Colorless },
                 IsXCost: false,
-                Cost: new ManaGroup() { Colorless = 2 },
+                Cost: new ManaGroup() { Any = 1, Colorless = 1 },
                 UpgradedCost: null,
                 MoneyCost: null,
                 Damage: null,

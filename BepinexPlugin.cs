@@ -115,8 +115,6 @@ using Untitled;
 using Untitled.ConfigDataBuilder;
 using Untitled.ConfigDataBuilder.Base;
 using Debug = UnityEngine.Debug;
-using static test.TestExhibitDef;
-using static test.StSSneckoEyeDef;
 
 namespace test
 {
@@ -135,7 +133,9 @@ namespace test
 
         internal static IResourceSource embeddedSource = new EmbeddedSource(Assembly.GetExecutingAssembly());
 
-        static KeyboardShortcut TestKey = new KeyboardShortcut(KeyCode.F2);
+        static KeyboardShortcut TestF1Key = new KeyboardShortcut(KeyCode.F1);
+
+        static KeyboardShortcut TestF2Key = new KeyboardShortcut(KeyCode.F2);
 
         private void Awake()
         {
@@ -160,11 +160,22 @@ namespace test
         }
         private void Update()
         {
-            if (TestKey.IsDown())
+            if (TestF1Key.IsDown())
             {
                 if (GameMaster.Instance?.CurrentGameRun != null)
                 {
-                    GameMaster.Instance.StartCoroutine(Trigger());
+                    GameMaster.Instance.StartCoroutine(TestF1());
+                }
+                else
+                {
+                    log.LogInfo("Run needs to be started.");
+                }
+            }
+            if (TestF2Key.IsDown())
+            {
+                if (GameMaster.Instance?.CurrentGameRun != null)
+                {
+                    GameMaster.Instance.StartCoroutine(TestF2());
                 }
                 else
                 {
@@ -172,12 +183,28 @@ namespace test
                 }
             }
         }
-        private IEnumerator Trigger()
+        private IEnumerator TestF1()
         {
             yield return new WaitForSeconds(.1f);
             List<Exhibit> list = new List<Exhibit>
             {
-                Library.CreateExhibit<TestExhibit>()
+                Library.CreateExhibit<TestExhibitDef.TestExhibit>()
+            };
+            foreach (Exhibit exhibit in list)
+            {
+                yield return GameMaster.Instance.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                {
+                    SourceType = VisualSourceType.Vn,
+                    Index = -1
+                });
+            }
+        }
+        private IEnumerator TestF2()
+        {
+            yield return new WaitForSeconds(.1f);
+            List<Exhibit> list = new List<Exhibit>
+            {
+                Library.CreateExhibit<TASBotDef.TASBot>()
             };
             foreach (Exhibit exhibit in list)
             {
