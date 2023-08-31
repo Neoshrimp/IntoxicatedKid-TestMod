@@ -59,7 +59,7 @@ StSVelvetChoker:
   Name: Velvet Choker
   FlavorText: '"Immense power, but too limited." - Kublai the Great'
 TASBot:
-  Description: "{PlayerName} can't draw cards. At the start of {PlayerName}'s turn, play {Value1} card{Value1:plural one='' other='s'} on top of the draw pile. For each Shining |Exhibit| hold, play 1 more card."
+  Description: "{PlayerName} can't draw cards. At the start of {PlayerName}'s turn, play {Value1} card{Value1:plural one='' other='s'} on top of the draw pile. Play 1 more card for every 2 Shining |Exhibit| {PlayerName} has."
   Name: TASBot
   FlavorText: "TASBot can play games on real video game consoles with superhuman abilities, usually leading to game breaking glitches in front of live audiences."
 TestExhibit:
@@ -67,6 +67,6 @@ TestExhibit:
   Name: Test Exhibit
   FlavorText: "I can't beat the shit out of you without getting closer."
 Th18BlankCard:
-  Description: "At the start of {PlayerName}'s first turn each combat, |Exile| each card from the hand.\nThen, add that many random non-|Misfortune| and non-Status cards to the hand.\nThose cards inherit the type, rarity and |Upgrade| from |Exiled| cards."
+  Description: "At the start of {PlayerName}'s first turn each combat, |Exile| the hand.\nThen, add that many random non-|Misfortune| and non-Status cards to the hand.\nThose cards inherit the Type, Rarity and |Upgrade| from |Exiled| cards."
   Name: Old Blank Card
   FlavorText: "This Blank Card was said to have the ability of Chimata Tenkyuu."

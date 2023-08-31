@@ -93,10 +93,10 @@ StSPerfectedStrike:
   UpgradedDescription: "Deal {Damage} damage.\nFor each |Basic| attack cards in the library, {SelfName} deals {Value1} more damage.\nIf {PlayerName} has |Just-a-Knife|, {SelfName} deals {Value2} more damage."
   Name: Perfected Strike
 UnitedWeStand:
-  Description: "Draw cards until the hand is full.\nExile all |Misfortune| and Status cards from the hand. Then, play all cards in the hand."
-  UpgradedDescription: "Draw cards until the hand is full.\nExile all |Misfortune| and Status cards from the hand. Then, play all cards in the hand."
+  Description: "Draw cards until the hand is full. Then, play all cards in the hand."
+  UpgradedDescription: "Draw cards until the hand is full. Then, play all cards in the hand."
   Name: United We Stand
-  DetailText: "You can't lose life while playing {SelfName}.\nWhen {SelfName}'s target is defeated, it continues playing using a random enemy as the new target.\nSummoned |Teammate| card will trigger it's |a:Active Skill| even if it doesn't have enough |Unity|."
+  DetailText: "You can't lose life while playing {SelfName}.\nWhen {SelfName}'s target is defeated, it continues playing using a random enemy as the new target.\n|Misfortune| or Status cards are |Exiled| instead.\nSummoned |Teammate| card will trigger it's |a:Active Skill| even if it doesn't have enough |Unity|."
 YuGiOhBlueEyesWhiteDragon:
   Description: "{FriendS}Can only summon after discard 2 summoned |Teammate| cards.\n{FriendP}|While in Attack Position|: Deal {Damage} damage to each enemy.\n|While in Defense Position|: Gain {Block} block."
   UpgradedDescription: "{FriendS}Can only summon after discard 2 summoned |Teammate| cards.\n{FriendP}|While in Attack Position|: Deal {Damage} damage to each enemy.\n|While in Defense Position|: Gain {Block} block."
@@ -106,6 +106,6 @@ YuGiOhBlueEyesWhiteDragon:
   UpgradedExtraDescription2: "{FriendU}Change to |Defense Position|."
   Name: Blue-Eyes White Dragon
 ZUNBeerHat:
-  Description: "Add {Value1} |Drunk| to the hand, draw and discard pile.\nEnemies cannot act for {Value2} turn{Value2:plural one='' other='s'}."
+  Description: "Add a |Drunk| to the hand.\nEnemies cannot act for {Value2} turn{Value2:plural one='' other='s'}."
   UpgradedDescription: "Enemies cannot act for {Value2} turns."
   Name: Intoxication
