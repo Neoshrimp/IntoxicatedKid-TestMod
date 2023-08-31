@@ -107,7 +107,7 @@ namespace test
                UpgradedRelativeCards: new List<string>() { },
                Owner: null,
                Unfinished: false,
-               Illustrator: null,
+               Illustrator: "Mega Crit",
                SubIllustrator: new List<string>() { }
             );
 

@@ -1,15 +1,35 @@
-DayuuPowerSe:
-    Brief: "At the start of {PlayerName}'s turn, gain {Value1} random mana for each summoned |Teammate| cards in the hand.\n|Dayuu, Sparrow of Sobs and Skulls| count as {Value2} cards."
-    Description: "At the start of {PlayerName}'s turn, gain {Count} random mana for each summoned |Teammate| cards in the hand.\nFor each summoned |Dayuu, Sparrow of Sobs and Skulls| in the hand, gain {Level} random mana instead."
+DayuuAbilitySe:
+    Brief: "At the start of {PlayerName}'s turn, gain random mana for each |Teammate| cards in the hand.\nFor each |Dayuu, Sparrow of Sobs and Skulls| in the hand, gain more random mana instead."
+    Description: "At the start of {OwnerName}'s turn, gain {Count} random mana for each |Teammate| cards in the hand.\nFor each |Dayuu, Sparrow of Sobs and Skulls| in the hand, gain {Level} random mana instead."
     Name: Color the World
+DayuuFriendSe:
+    Brief: "If |Passer Secare|, |Late Night Bites|, |Youkai Symposium|, |Color the World|, and summoned |Dayuu, Sparrow of Sobs and Skulls| is in the hand, remove them from combat and add a |Dayuu, the Forbidden One| to the hand.\nIt enters the hand summoned."
+    Description: "If |Passer Secare|, |Late Night Bites|, |Youkai Symposium|, |Color the World|, and summoned |Dayuu, Sparrow of Sobs and Skulls| is in the hand, remove them from combat and add a |Dayuu, the Forbidden One| to the hand.\nIt enters the hand summoned."
+    Name: Remnant
 DayuuExodiaSe:
-    Brief: "If |Passer Secare|, |Late Night Bites|, |Youkai Symposium|, |Color the World|, summoned |Dayuu, Sparrow of Sobs and Skulls| is in the hand, remove them from combat and add a |Dayuu, the Forbidden One| to the hand.\nIt enters the hand summoned."
+    Brief: "{PlayerName} can't lose life."
     Description: "{OwnerName} can't lose life."
     Name: Advent
+StSMayhemSe:
+    Brief: "At the start of {PlayerName}'s turn, put the top card of the draw pile into the hand. Then, play that card."
+    Description: "At the start of {OwnerName}'s turn, place {Level} card{Level:plural one='' other='s'} on top of the draw pile into the hand. Then, play that card."
+    Name: Mayhem
+StSPanacheSe:
+    Brief: "Whenever {PlayerName} plays certain amount of cards in a turn, deal damage to each enemy."
+    Description: "deal {Level} damage to each enemy after playing {Count:plural one='% more card' other='% more cards'}."
+    Name: Panache
 StSPanicButtonSe:
     Brief: "Can't gain |Block| or |Barrier| from cards."
     Description: "{OwnerName} can't gain |Block| or |Barrier| from cards for {Duration} turn{Duration:plural one='' other='s'}."
     Name: Panic Button
+TASBotSe:
+    Brief: "Can't draw cards.\nAt the start of {PlayerName}'s turn, play cards on the top of the draw pile."
+    Description: "Can't draw cards.\nAt the start of {OwnerName}'s turn, play {Level} card{Level:plural one='' other='s'} on top of the draw pile."
+    Name: TASBot
+UnitedWeStandSe:
+  Brief: "{PlayerName} can't lose life."
+  Description: "{OwnerName} can't lose life."
+  Name: Unite
 ZUNBeerHatSe:
     Brief: "Enemies cannot act."
     Description: "Enemies cannot act for {Duration} turn{Duration:plural one='' other='s'}."

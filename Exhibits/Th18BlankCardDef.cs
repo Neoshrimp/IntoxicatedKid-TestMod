@@ -26,6 +26,7 @@ using LBoL.Core.Randoms;
 using LBoL.EntityLib.Cards.Character.Sakuya;
 using LBoL.EntityLib.Cards.Other.Misfortune;
 using static UnityEngine.TouchScreenKeyboard;
+using JetBrains.Annotations;
 
 namespace test
 {
@@ -35,52 +36,32 @@ namespace test
         {
             return nameof(Th18BlankCard);
         }
-
         public override LocalizationOption LoadLocalization()
         {
-            // creates global localization for exhibits. Each entity type needs to have their own global localization
-            var globalLoc = new GlobalLocalization(embeddedSource);
-            globalLoc.LocalizationFiles.AddLocaleFile(Locale.En, "ExhibitsEn");
-
-            return globalLoc;
+            var locFiles = new LocalizationFiles(embeddedSource);
+            locFiles.AddLocaleFile(Locale.En, "Resources.ExhibitsEn.yaml");
+            return locFiles;
         }
-        
         public override ExhibitSprites LoadSprite()
         {
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-
             Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
-
             exhibitSprites.main = wrap("");
-
-            // loads many custom sprites for futher use
-            //exhibitSprites.customSprites.Add("none", wrap("_none"));
-            //exhibitSprites.customSprites.Add("luna", wrap("_luna"));
-            //exhibitSprites.customSprites.Add("-luna", wrap("_-luna"));
-            //exhibitSprites.customSprites.Add("star", wrap("_star"));
-            //exhibitSprites.customSprites.Add("-star", wrap("_-star"));
-            //exhibitSprites.customSprites.Add("sunny", wrap("_sunny"));
-            //exhibitSprites.customSprites.Add("-sunny", wrap("_-sunny"));
-
-
             return exhibitSprites;
         }
-
-
-
         public override ExhibitConfig MakeConfig()
         {
             var exhibitConfig = new ExhibitConfig(
-                Index: 0,
+                Index: sequenceTable.Next(typeof(ExhibitConfig)),
                 Id: "",
-                Order: 10,
+                Order: 9,
                 IsDebug: false,
                 IsPooled: true,
                 IsSentinel: false,
                 Revealable: false,
-                Appearance: AppearanceType.Anywhere,
+                Appearance: AppearanceType.ShopOnly,
                 Owner: "",
                 LosableType: ExhibitLosableType.Losable,
                 Rarity: Rarity.Common,
@@ -98,52 +79,12 @@ namespace test
                 // example of referring to UniqueId of an entity without calling MakeConfig
                 RelativeCards: new List<string>() { }
             );
-
             return exhibitConfig;
         }
-
         [EntityLogic(typeof(Th18BlankCardDef))]
+        [UsedImplicitly]
         public sealed class Th18BlankCard : Exhibit
         {
-            // Changes the icon according to last three cards played 
-            // Sunny = attack, Star = defense, Luna = skill
-            // this is where the keys of custom sprites are used
-            //public override string OverrideIconName
-            //{
-            //    get
-            //    {
-            //        if (Battle == null)
-            //            return Id;
-            //
-            //        if (triggered)
-            //            return Id;
-            //
-            //        if (cardTracker.Empty())
-            //            return Id + "none";
-            //        if (cardTracker.Count == 1)
-            //        {
-            //            if (cardTracker.Contains(CardType.Attack))
-            //                return Id + "sunny";
-            //            if (cardTracker.Contains(CardType.Defense))
-            //                return Id + "star";
-            //            if (cardTracker.Contains(CardType.Skill))
-            //                return Id + "luna";
-            //        }
-            //        if (cardTracker.Count == 2)
-            //        {
-            //            if (!cardTracker.Contains(CardType.Attack))
-            //                return Id + "-sunny";
-            //            if (!cardTracker.Contains(CardType.Defense))
-            //                return Id + "-star";
-            //            if (!cardTracker.Contains(CardType.Skill))
-            //                return Id + "-luna";
-            //        }
-            //
-            //
-            //        return Id;
-            //    }
-            //
-            //}
             protected override void OnEnterBattle()
             {
                 base.ReactBattleEvent<UnitEventArgs>(base.Battle.Player.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnStarted));
@@ -168,12 +109,12 @@ namespace test
                     List<Card> friendc = null;
                     List<Card> friendu = null;
                     List<Card> friendr = null;
-                    List<Card> statusc = null;
-                    List<Card> statusu = null;
-                    List<Card> statusr = null;
-                    List<Card> misfortunec = null;
-                    List<Card> misfortuneu = null;
-                    List<Card> misfortuner = null;
+                    //List<Card> statusc = null;
+                    //List<Card> statusu = null;
+                    //List<Card> statusr = null;
+                    //List<Card> misfortunec = null;
+                    //List<Card> misfortuneu = null;
+                    //List<Card> misfortuner = null;
                     List<Card> hand = base.Battle.HandZone.ToList<Card>();
                     if (hand.Count > 0)
                     {
@@ -192,277 +133,182 @@ namespace test
                         friendc = hand.Where((Card card) => (card.CardType == CardType.Friend) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
                         friendu = hand.Where((Card card) => (card.CardType == CardType.Friend) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
                         friendr = hand.Where((Card card) => (card.CardType == CardType.Friend) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
-                        statusc = hand.Where((Card card) => (card.CardType == CardType.Status) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
-                        statusu = hand.Where((Card card) => (card.CardType == CardType.Status) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
-                        statusr = hand.Where((Card card) => (card.CardType == CardType.Status) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
-                        misfortunec = hand.Where((Card card) => (card.CardType == CardType.Misfortune) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
-                        misfortuneu = hand.Where((Card card) => (card.CardType == CardType.Misfortune) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
-                        misfortuner = hand.Where((Card card) => (card.CardType == CardType.Misfortune) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
+                        //statusc = hand.Where((Card card) => (card.CardType == CardType.Status) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
+                        //statusu = hand.Where((Card card) => (card.CardType == CardType.Status) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
+                        //statusr = hand.Where((Card card) => (card.CardType == CardType.Status) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
+                        //misfortunec = hand.Where((Card card) => (card.CardType == CardType.Misfortune) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
+                        //misfortuneu = hand.Where((Card card) => (card.CardType == CardType.Misfortune) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
+                        //misfortuner = hand.Where((Card card) => (card.CardType == CardType.Misfortune) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
+                        List<Card> list = new List<Card>();
                         yield return new ExileManyCardAction(hand);
-
-
-                        var newCards = new List<Card>();
-
-                        
-
-                        if (attackc.Count > 0)
+                        foreach (Card card in attackc)
                         {
-                            foreach (Card card in attackc)
+                            Card[] attackC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Attack);
+                            if (card.IsUpgraded)
                             {
-                                Card[] attackC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Attack);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(attackC);
-                                }
-                                newCards.AddRange(attackC);
+                                yield return new UpgradeCardsAction(attackC);
                             }
+                            list.AddRange(attackC);
                         }
-                        if (attacku.Count > 0)
+                        foreach (Card card in attacku)
                         {
-                            foreach (Card card in attacku)
+                            Card[] attackU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Attack);
+                            if (card.IsUpgraded)
                             {
-                                Card[] attackU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Attack);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(attackU);
-                                }
-                                newCards.AddRange(attackU);
+                                yield return new UpgradeCardsAction(attackU);
                             }
+                            list.AddRange(attackU);
                         }
-                        if (attackr.Count > 0)
+                        foreach (Card card in attackr)
                         {
-                            foreach (Card card in attackr)
+                            Card[] attackR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Attack);
+                            if (card.IsUpgraded)
                             {
-                                Card[] attackR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Attack);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(attackR);
-                                }
-                                newCards.AddRange(attackR);
+                                yield return new UpgradeCardsAction(attackR);
                             }
+                            list.AddRange(attackR);
                         }
-                        if (defensec.Count > 0)
+                        foreach (Card card in defensec)
                         {
-                            foreach (Card card in defensec)
+                            Card[] defenseC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Defense);
+                            if (card.IsUpgraded)
                             {
-                                Card[] defenseC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Defense);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(defenseC);
-                                }
-                                newCards.AddRange(defenseC);
+                                yield return new UpgradeCardsAction(defenseC);
                             }
+                            list.AddRange(defenseC);
                         }
-                        if (defenseu.Count > 0)
+                        foreach (Card card in defenseu)
                         {
-                            foreach (Card card in defenseu)
+                            Card[] defenseU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Defense);
+                            if (card.IsUpgraded)
                             {
-                                Card[] defenseU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Defense);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(defenseU);
-                                }
-                                newCards.AddRange(defenseU);
+                                yield return new UpgradeCardsAction(defenseU);
                             }
+                            list.AddRange(defenseU);
                         }
-                        if (defenser.Count > 0)
+                        foreach (Card card in defenser)
                         {
-                            foreach (Card card in defenser)
+                            Card[] defenseR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Defense);
+                            if (card.IsUpgraded)
                             {
-                                Card[] defenseR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Defense);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(defenseR);
-                                }
-                                newCards.AddRange(defenseR);
+                                yield return new UpgradeCardsAction(defenseR);
                             }
+                            list.AddRange(defenseR);
                         }
-                        if (skillc.Count > 0)
+                        foreach (Card card in skillc)
                         {
-                            foreach (Card card in skillc)
+                            Card[] skillC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Skill);
+                            if (card.IsUpgraded)
                             {
-                                Card[] skillC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Skill);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(skillC);
-                                }
-                                newCards.AddRange(skillC);
+                                yield return new UpgradeCardsAction(skillC);
                             }
+                            list.AddRange(skillC);
                         }
-                        if (skillu.Count > 0)
+                        foreach (Card card in skillu)
                         {
-                            foreach (Card card in skillu)
+                            Card[] skillU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Skill);
+                            if (card.IsUpgraded)
                             {
-                                Card[] skillU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Skill);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(skillU);
-                                }
-                                newCards.AddRange(skillU);
+                                yield return new UpgradeCardsAction(skillU);
                             }
+                            list.AddRange(skillU);
                         }
-                        if (skillr.Count > 0)
+                        foreach (Card card in skillr)
                         {
-                            foreach (Card card in skillr)
+                            Card[] skillR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Skill);
+                            if (card.IsUpgraded)
                             {
-                                Card[] skillR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Skill);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(skillR);
-                                }
-                                newCards.AddRange(skillR);
+                                yield return new UpgradeCardsAction(skillR);
                             }
+                            list.AddRange(skillR);
                         }
-                        if (abilityc.Count > 0)
+                        foreach (Card card in abilityc)
                         {
-                            foreach (Card card in abilityc)
+                            Card[] abilityC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Ability);
+                            if (card.IsUpgraded)
                             {
-                                Card[] abilityC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Ability);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(abilityC);
-                                }
-                                newCards.AddRange(abilityC);
+                                yield return new UpgradeCardsAction(abilityC);
                             }
+                            list.AddRange(abilityC);
                         }
-                        if (abilityu.Count > 0)
+                        foreach (Card card in abilityu)
                         {
-                            foreach (Card card in abilityu)
+                            Card[] abilityU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Ability);
+                            if (card.IsUpgraded)
                             {
-                                Card[] abilityU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Ability);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(abilityU);
-                                }
-                                newCards.AddRange(abilityU);
+                                yield return new UpgradeCardsAction(abilityU);
                             }
+                            list.AddRange(abilityU);
                         }
-                        if (abilityr.Count > 0)
+                        foreach (Card card in abilityr)
                         {
-                            foreach (Card card in abilityr)
+                            Card[] abilityR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Ability);
+                            if (card.IsUpgraded)
                             {
-                                Card[] abilityR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Ability);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(abilityR);
-                                }
-                                newCards.AddRange(abilityR);
+                                yield return new UpgradeCardsAction(abilityR);
                             }
+                            list.AddRange(abilityR);
                         }
-                        if (friendc.Count > 0)
+                        foreach (Card card in friendc)
                         {
-                            foreach (Card card in friendc)
+                            Card[] friendC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Friend);
+                            if (card.IsUpgraded)
                             {
-                                Card[] friendC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Friend);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(friendC);
-                                }
-                                newCards.AddRange(friendC);
+                                yield return new UpgradeCardsAction(friendC);
                             }
+                            list.AddRange(friendC);
                         }
-                        if (friendu.Count > 0)
+                        foreach (Card card in friendu)
                         {
-                            foreach (Card card in friendu)
+                            Card[] friendU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Friend);
+                            if (card.IsUpgraded)
                             {
-                                Card[] friendU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Friend);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(friendU);
-                                }
-                                newCards.AddRange(friendU);
+                                yield return new UpgradeCardsAction(friendU);
                             }
+                            list.AddRange(friendU);
                         }
-                        if (friendr.Count > 0)
+                        foreach (Card card in friendr)
                         {
-                            foreach (Card card in friendr)
+                            Card[] friendR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Friend);
+                            if (card.IsUpgraded)
                             {
-                                Card[] friendR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Friend);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(friendR);
-                                }
-                                newCards.AddRange(friendR);
+                                yield return new UpgradeCardsAction(friendR);
                             }
+                            list.AddRange(friendR);
                         }
-                        if (statusc.Count > 0)
-                        {
-                            foreach (Card card in statusc)
-                            {
-                                Card[] statusC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Status);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(statusC);
-                                }
-                                newCards.AddRange(statusC);
-                            }
-                        }
-                        if (statusu.Count > 0)
-                        {
-                            foreach (Card card in statusu)
-                            {
-                                Card[] statusU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Status);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(statusU);
-                                }
-                                newCards.AddRange(statusU);
-                            }
-                        }
-                        if (statusr.Count > 0)
-                        {
-                            foreach (Card card in statusr)
-                            {
-                                Card[] statusR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Status);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(statusR);
-                                }
-                                newCards.AddRange(statusR);
-                            }
-                        }
-                        if (misfortunec.Count > 0)
-                        {
-                            foreach (Card card in misfortunec)
-                            {
-                                Card[] misfortuneC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Misfortune);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(misfortuneC);
-                                }
-                                newCards.AddRange(misfortuneC);
-                            }
-                        }
-                        if (misfortuneu.Count > 0)
-                        {
-                            foreach (Card card in misfortuneu)
-                            {
-                                Card[] misfortuneU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Misfortune);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(misfortuneU);
-                                }
-                                newCards.AddRange(misfortuneU);
-                            }
-                        }
-                        if (misfortuner.Count > 0)
-                        {
-                            foreach (Card card in misfortuner)
-                            {
-                                Card[] misfortuneR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Misfortune);
-                                if (card.IsUpgraded)
-                                {
-                                    yield return new UpgradeCardsAction(misfortuneR);
-                                }
-                                newCards.AddRange(misfortuneR);
-                            }
-                        }
-                        yield return new AddCardsToHandAction(newCards);
+                        //foreach (Card card in statusc)
+                        //{
+                        //    Card[] statusC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.AllOnes, CardTypeWeightTable.AllOnes), 1, (CardConfig config) => config.Type == CardType.Status);
+                        //    list.AddRange(statusC);
+                        //}
+                        //foreach (Card card in statusu)
+                        //{
+                        //    Card[] statusU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.AllOnes, CardTypeWeightTable.AllOnes), 1, (CardConfig config) => config.Type == CardType.Status);
+                        //    list.AddRange(statusU);
+                        //}
+                        //foreach (Card card in statusr)
+                        //{
+                        //    Card[] statusR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.AllOnes, CardTypeWeightTable.AllOnes), 1, (CardConfig config) => config.Type == CardType.Status);
+                        //    list.AddRange(statusR);
+                        //}
+                        //foreach (Card card in misfortunec)
+                        //{
+                        //    Card[] misfortuneC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.AllOnes, CardTypeWeightTable.AllOnes), 1, (CardConfig config) => config.Type == CardType.Misfortune);
+                        //    list.AddRange(misfortuneC);
+                        //}
+                        //foreach (Card card in misfortuneu)
+                        //{
+                        //    Card[] misfortuneU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.AllOnes, CardTypeWeightTable.AllOnes), 1, (CardConfig config) => config.Type == CardType.Misfortune);
+                        //    list.AddRange(misfortuneU);
+                        //}
+                        //foreach (Card card in misfortuner)
+                        //{
+                        //    Card[] misfortuneR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.AllOnes, CardTypeWeightTable.AllOnes), 1, (CardConfig config) => config.Type == CardType.Misfortune);
+                        //    list.AddRange(misfortuneR);
+                        //}
+                        yield return new AddCardsToHandAction(list);
                     }
-
                 }
-
-
                 yield break;
             }
         }

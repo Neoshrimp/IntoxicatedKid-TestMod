@@ -116,7 +116,6 @@ using Untitled.ConfigDataBuilder;
 using Untitled.ConfigDataBuilder.Base;
 using Debug = UnityEngine.Debug;
 
-
 namespace test
 {
     [BepInPlugin(PluginInfo.GUID, PluginInfo.Name, PluginInfo.version)]
@@ -134,6 +133,9 @@ namespace test
 
         internal static IResourceSource embeddedSource = new EmbeddedSource(Assembly.GetExecutingAssembly());
 
+        static KeyboardShortcut TestF1Key = new KeyboardShortcut(KeyCode.F1);
+
+        static KeyboardShortcut TestF2Key = new KeyboardShortcut(KeyCode.F2);
 
         private void Awake()
         {
@@ -156,7 +158,62 @@ namespace test
             if (harmony != null)
                 harmony.UnpatchSelf();
         }
-
-
+        private void Update()
+        {
+            if (TestF1Key.IsDown())
+            {
+                if (GameMaster.Instance?.CurrentGameRun != null)
+                {
+                    GameMaster.Instance.StartCoroutine(TestF1());
+                }
+                else
+                {
+                    log.LogInfo("Run needs to be started.");
+                }
+            }
+            if (TestF2Key.IsDown())
+            {
+                if (GameMaster.Instance?.CurrentGameRun != null)
+                {
+                    GameMaster.Instance.StartCoroutine(TestF2());
+                }
+                else
+                {
+                    log.LogInfo("Run needs to be started.");
+                }
+            }
+        }
+        private IEnumerator TestF1()
+        {
+            yield return new WaitForSeconds(.1f);
+            List<Exhibit> list = new List<Exhibit>
+            {
+                Library.CreateExhibit<TestExhibitDef.TestExhibit>()
+            };
+            foreach (Exhibit exhibit in list)
+            {
+                yield return GameMaster.Instance.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                {
+                    SourceType = VisualSourceType.Vn,
+                    Index = -1
+                });
+            }
+        }
+        private IEnumerator TestF2()
+        {
+            yield return new WaitForSeconds(.1f);
+            List<Exhibit> list = new List<Exhibit>
+            {
+                Library.CreateExhibit<TASBotDef.TASBot>()
+            };
+            foreach (Exhibit exhibit in list)
+            {
+                yield return GameMaster.Instance.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                {
+                    SourceType = VisualSourceType.Vn,
+                    Index = -1
+                });
+            }
+        }
     }
 }

@@ -77,7 +77,7 @@ namespace test
                Cost: new ManaGroup() { Any = 2, White = 1 },
                UpgradedCost: null,
                MoneyCost: null,
-               Damage: 15,
+               Damage: 13,
                UpgradedDamage: null,
                Block: null,
                UpgradedBlock: null,
@@ -107,8 +107,8 @@ namespace test
                RelativeKeyword: Keyword.None,
                UpgradedRelativeKeyword: Keyword.Replenish,
 
-               RelativeEffects: new List<string>() { "DayuuExodiaSe" },
-               UpgradedRelativeEffects: new List<string>() { "DayuuExodiaSe" },
+               RelativeEffects: new List<string>() { "DayuuFriendSe" },
+               UpgradedRelativeEffects: new List<string>() { "DayuuFriendSe" },
                RelativeCards: new List<string>() { "DayuuExodia" },
                UpgradedRelativeCards: new List<string>() { "DayuuExodia" },
                Owner: null,
@@ -253,10 +253,10 @@ namespace test
             yield return base.AttackAction(base.Battle.RandomAliveEnemy);
             yield break;
         }
-        //public override IEnumerable<BattleAction> AfterUseAction()
-        //{
-        //    yield return new MoveCardToDrawZoneAction(this, DrawZoneTarget.Top);
-        //    yield break;
-        //}
+        public override IEnumerable<BattleAction> AfterUseAction()
+        {
+            yield return new MoveCardToDrawZoneAction(this, DrawZoneTarget.Top);
+            yield break;
+        }
     }
 }

@@ -27,7 +27,7 @@ using UnityEngine;
 using System.Security.Cryptography;
 using LBoL.EntityLib.JadeBoxes;
 using static test.BepinexPlugin;
-using static test.DayuuPowerDef;
+using static test.DayuuAbilityDef;
 using UnityEngine.Playables;
 using LBoL.EntityLib.Cards.Neutral.NoColor;
 using LBoL.EntityLib.Cards.Character.Cirno.Friend;
@@ -115,8 +115,8 @@ namespace test
                RelativeKeyword: Keyword.None,
                UpgradedRelativeKeyword: Keyword.None,
 
-               RelativeEffects: new List<string>() { "TempFirepowerNegative", "FirepowerNegative", "Weak", "Vulnerable", "DayuuExodiaSe" },
-               UpgradedRelativeEffects: new List<string>() { "TempFirepowerNegative", "FirepowerNegative", "Weak", "Vulnerable", "DayuuExodiaSe" },
+               RelativeEffects: new List<string>() { "TempFirepowerNegative", "FirepowerNegative", "Weak", "Vulnerable", "DayuuFriendSe" },
+               UpgradedRelativeEffects: new List<string>() { "TempFirepowerNegative", "FirepowerNegative", "Weak", "Vulnerable", "DayuuFriendSe" },
                RelativeCards: new List<string>() { "DayuuExodia" },
                UpgradedRelativeCards: new List<string>() { "DayuuExodia" },
                Owner: null,
@@ -128,11 +128,6 @@ namespace test
             return cardConfig;
         }
     }
-    //
-    //
-    // Warning: Terrible code
-    //
-    //
     [EntityLogic(typeof(DayuuFriendDef))]
     public sealed class DayuuFriend : Card
     {
@@ -142,41 +137,22 @@ namespace test
         }
         private IEnumerable<BattleAction> OnCardUsed(CardUsingEventArgs args)
         {
-            if (!base.Battle.BattleShouldEnd && base.Battle.Player.IsInTurn && base.Zone == CardZone.Hand && base.Summoned)
+            if (!base.Battle.BattleShouldEnd && base.Battle.Player.IsInTurn && this.Zone == CardZone.Hand && this.Summoned)
             {
                 List<Card> DayuuA = base.Battle.HandZone.Where((Card card) => (card is DayuuAttack)).ToList<Card>();
                 List<Card> DayuuD = base.Battle.HandZone.Where((Card card) => (card is DayuuDefense)).ToList<Card>();
                 List<Card> DayuuS = base.Battle.HandZone.Where((Card card) => (card is DayuuSkill)).ToList<Card>();
-                List<Card> DayuuP = base.Battle.HandZone.Where((Card card) => (card is DayuuPower)).ToList<Card>();
-                List<Card> DayuuF = base.Battle.HandZone.Where((Card card) => (card is DayuuFriend) && card.Summoned).ToList<Card>();
-                if (DayuuA.Count > 0 && DayuuD.Count > 0 && DayuuS.Count > 0 && DayuuP.Count > 0 && DayuuF.Count > 0)
+                List<Card> DayuuP = base.Battle.HandZone.Where((Card card) => (card is DayuuAbility)).ToList<Card>();
+                if (DayuuA.Count > 0 && DayuuD.Count > 0 && DayuuS.Count > 0 && DayuuP.Count > 0)
                 {
-                    foreach (Card card in DayuuA)
+                    List<Card> Dayuu = base.Battle.HandZone.Where((Card card) => (card is DayuuAttack) || (card is DayuuDefense) || (card is DayuuSkill) || (card is DayuuAbility) || (card is DayuuFriend)).ToList<Card>();
+                    foreach (Card card in Dayuu)
                     {
                         yield return new RemoveCardAction(card);
                     }
-                    foreach (Card card in DayuuD)
-                    {
-                        yield return new RemoveCardAction(card);
-                    }
-                    foreach (Card card in DayuuS)
-                    {
-                        yield return new RemoveCardAction(card);
-                    }
-                    foreach (Card card in DayuuP)
-                    {
-                        yield return new RemoveCardAction(card);
-                    }
-                    foreach (Card card in DayuuF)
-                    {
-                        yield return new RemoveCardAction(card);
-                    }
-                    List<Card> Exodia = new List<Card> { Library.CreateCard<DayuuExodia>() }.ToList<Card>();
-                    foreach (Card card in Exodia)
-                    {
-                        card.Summon();
-                        yield return new AddCardsToHandAction(new Card[] { card });
-                    }
+                    Card Exodia = Library.CreateCard<DayuuExodia>();
+                    Exodia.Summon();
+                    yield return new AddCardsToHandAction(new Card[] { Exodia });
                 }
             }
         }
@@ -203,12 +179,11 @@ namespace test
                 {
                     yield return battleAction;
                 }
-                if (base.Loyalty <= 0)
-                {
-                    yield return new RemoveCardAction(this);
-                    yield break;
-                }
                 num = i;
+            }
+            if (base.Loyalty <= 0)
+            {
+                yield return new RemoveCardAction(this);
             }
             yield break;
         }
@@ -276,6 +251,58 @@ namespace test
             }
             yield return new MoveCardAction(this, CardZone.Hand);
             yield break;
+        }
+    }
+    public sealed class DayuuFriendSeDef : StatusEffectTemplate
+    {
+        public override IdContainer GetId()
+        {
+            return nameof(DayuuFriendSe);
+        }
+
+        public override LocalizationOption LoadLocalization()
+        {
+            var locFiles = new LocalizationFiles(embeddedSource);
+            locFiles.AddLocaleFile(Locale.En, "Resources.StatusEffectsEn.yaml");
+            return locFiles;
+        }
+
+        public override Sprite LoadSprite()
+        {
+            return ResourceLoader.LoadSprite("Resources.DayuuExodiaSe.png", embeddedSource);
+        }
+        public override StatusEffectConfig MakeConfig()
+        {
+            var statusEffectConfig = new StatusEffectConfig(
+                Id: "",
+                Order: 10,
+                Type: StatusEffectType.Positive,
+                IsVerbose: false,
+                IsStackable: false,
+                StackActionTriggerLevel: null,
+                HasLevel: false,
+                LevelStackType: StackType.Add,
+                HasDuration: false,
+                DurationStackType: StackType.Add,
+                DurationDecreaseTiming: DurationDecreaseTiming.Custom,
+                HasCount: false,
+                CountStackType: StackType.Keep,
+                LimitStackType: StackType.Keep,
+                ShowPlusByLimit: false,
+                Keywords: Keyword.None,
+                RelativeEffects: new List<string>() { },
+                VFX: "Default",
+                VFXloop: "Default",
+                SFX: "Default"
+            );
+            return statusEffectConfig;
+        }
+
+
+
+        [EntityLogic(typeof(DayuuFriendSeDef))]
+        public sealed class DayuuFriendSe : StatusEffect
+        {
         }
     }
 }

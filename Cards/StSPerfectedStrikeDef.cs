@@ -17,6 +17,7 @@ using System.Threading;
 using LBoL.Core.StatusEffects;
 using static test.BepinexPlugin;
 using System.Linq;
+using LBoL.EntityLib.Exhibits.Common;
 
 namespace test
 {
@@ -62,7 +63,7 @@ namespace test
                Colors: new List<ManaColor>() { ManaColor.Red },
                IsXCost: false,
                Cost: new ManaGroup() { Any = 3 },
-               UpgradedCost: new ManaGroup() { Any = 3 },
+               UpgradedCost: null,
                MoneyCost: null,
                Damage: 10,
                UpgradedDamage: null,
@@ -70,9 +71,9 @@ namespace test
                UpgradedBlock: null,
                Shield: null,
                UpgradedShield: null,
-               Value1: 2,
-               UpgradedValue1: 3,
-               Value2: null,
+               Value1: 4,
+               UpgradedValue1: 6,
+               Value2: 6,
                UpgradedValue2: null,
                Mana: null,
                UpgradedMana: null,
@@ -91,8 +92,8 @@ namespace test
                Keywords: Keyword.None,
                UpgradedKeywords: Keyword.None,
                EmptyDescription: false,
-               RelativeKeyword: Keyword.Basic,
-               UpgradedRelativeKeyword: Keyword.Basic,
+               RelativeKeyword: Keyword.None,
+               UpgradedRelativeKeyword: Keyword.None,
 
                RelativeEffects: new List<string>() { },
                UpgradedRelativeEffects: new List<string>() { },
@@ -100,7 +101,7 @@ namespace test
                UpgradedRelativeCards: new List<string>() { },
                Owner: null,
                Unfinished: false,
-               Illustrator: null,
+               Illustrator: "Mega Crit",
                SubIllustrator: new List<string>() { }
             );
 
@@ -116,7 +117,7 @@ namespace test
             {
                 if (base.GameRun != null)
                 {
-                    return base.GameRun.BaseDeck.Count((Card card) => card.IsBasic) * base.Value1;
+                    return base.GameRun.BaseDeck.Count((Card card) => card.IsBasic && (card.CardType == CardType.Attack)) * base.Value1 + (base.GameRun.Player.HasExhibit<PingfanDao>() ? base.Value2 : 0);
                 }
                 return 0;
             }

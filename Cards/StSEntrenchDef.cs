@@ -58,9 +58,9 @@ namespace test
                Rarity: Rarity.Uncommon,
                Type: CardType.Skill,
                TargetType: TargetType.Self,
-               Colors: new List<ManaColor>() { ManaColor.White, ManaColor.Red },
+               Colors: new List<ManaColor>() { ManaColor.White },
                IsXCost: false,
-               Cost: new ManaGroup() { Any = 1, White = 1, Red = 1 },
+               Cost: new ManaGroup() { Any = 2, White = 2 },
                UpgradedCost: null,
                MoneyCost: null,
                Damage: null,
@@ -99,7 +99,7 @@ namespace test
                UpgradedRelativeCards: new List<string>() { },
                Owner: null,
                Unfinished: false,
-               Illustrator: null,
+               Illustrator: "Mega Crit",
                SubIllustrator: new List<string>() { }
             );
 

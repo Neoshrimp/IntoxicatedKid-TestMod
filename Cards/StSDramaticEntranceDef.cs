@@ -52,8 +52,8 @@ namespace test
                Order: 10,
                AutoPerform: true,
                Perform: new string[0][],
-               GunName: "Simple1",
-               GunNameBurst: "Simple1",
+               GunName: "StarPas",
+               GunNameBurst: "StarPas",
                DebugLevel: 0,
                Revealable: false,
                IsPooled: true,
@@ -64,8 +64,8 @@ namespace test
                TargetType: TargetType.AllEnemies,
                Colors: new List<ManaColor>() { ManaColor.Colorless },
                IsXCost: false,
-               Cost: new ManaGroup() { },
-               UpgradedCost: new ManaGroup() { },
+               Cost: new ManaGroup() { Any = 0 },
+               UpgradedCost: null,
                MoneyCost: null,
                Damage: 0,
                UpgradedDamage: null,
@@ -73,8 +73,8 @@ namespace test
                UpgradedBlock: null,
                Shield: null,
                UpgradedShield: null,
-               Value1: 20,
-               UpgradedValue1: 30,
+               Value1: 22,
+               UpgradedValue1: 24,
                Value2: null,
                UpgradedValue2: null,
                Mana: null,
@@ -91,7 +91,7 @@ namespace test
                UltimateCost: null,
                UpgradedUltimateCost: null,
 
-               Keywords: Keyword.Forbidden,
+               Keywords: Keyword.Exile | Keyword.Initial,
                UpgradedKeywords: Keyword.Forbidden,
                EmptyDescription: false,
                RelativeKeyword: Keyword.Exile,
@@ -103,7 +103,7 @@ namespace test
                UpgradedRelativeCards: new List<string>() { },
                Owner: null,
                Unfinished: false,
-               Illustrator: null,
+               Illustrator: "Mega Crit",
                SubIllustrator: new List<string>() { }
             );
 
@@ -117,12 +117,12 @@ namespace test
         {
             get
             {
-                if (base.Battle != null)
+                if (base.Battle != null && this.IsUpgraded)
                 {
-                    List<Card> list = base.GameRun.BaseDeck.Where((Card card) => card is StSDramaticEntrance).ToList<Card>();
+                    List<Card> list = base.GameRun.BaseDeck.Where((Card card) => card is StSDramaticEntrance && card.IsUpgraded).ToList<Card>();
                     return list.Sum((Card card) => card.Value1);
                 }
-                return 0;
+                return Value1;
             }
         }
         protected override void OnEnterBattle(BattleController battle)
@@ -131,9 +131,9 @@ namespace test
         }
         private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
         {
-            if (this == base.Battle.EnumerateAllCards().First((Card card) => card is StSDramaticEntrance))
+            if (this == base.Battle.EnumerateAllCards().First((Card card) => card is StSDramaticEntrance && card.IsUpgraded))
             {
-                List<Card> list = base.Battle.DrawZone.Where((Card card) => card is StSDramaticEntrance).ToList<Card>();
+                List<Card> list = base.Battle.DrawZone.Where((Card card) => card is StSDramaticEntrance && card.IsUpgraded).ToList<Card>();
                 yield return new ExileManyCardAction(list);
                 yield return base.AttackAction(base.Battle.AllAliveEnemies, "StarPasNoAni");
             }

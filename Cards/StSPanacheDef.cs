@@ -27,14 +27,15 @@ using JetBrains.Annotations;
 using System.Linq;
 using LBoL.EntityLib.StatusEffects.Neutral.Black;
 using test;
+using static test.StSPanacheDef;
 
 namespace test
 {
-    public sealed class DayuuPowerDef : CardTemplate
+    public sealed class StSPanacheDef : CardTemplate
     {
         public override IdContainer GetId()
         {
-            return nameof(DayuuPower);
+            return nameof(StSPanache);
         }
         public override CardImages LoadCardImages()
         {
@@ -49,8 +50,6 @@ namespace test
             locFiles.AddLocaleFile(Locale.En, "Resources.CardsEn.yaml");
             return locFiles;
         }
-        // if some information is needed from this config it can be accessed by calling
-        // CardConfig.FromId(new DayuuPowerDef().UniqueId) 
         public override CardConfig MakeConfig()
         {
             var cardConfig = new CardConfig(
@@ -69,9 +68,9 @@ namespace test
                 Rarity: Rarity.Uncommon,
                 Type: CardType.Ability,
                 TargetType: TargetType.Self,
-                Colors: new List<ManaColor>() { ManaColor.Green },
+                Colors: new List<ManaColor>() { ManaColor.Colorless },
                 IsXCost: false,
-                Cost: new ManaGroup() { Any = 2, Green = 1 },
+                Cost: new ManaGroup() { Any = 1, Colorless = 1 },
                 UpgradedCost: null,
                 MoneyCost: null,
                 Damage: null,
@@ -80,11 +79,11 @@ namespace test
                 UpgradedBlock: null,
                 Shield: null,
                 UpgradedShield: null,
-                Value1: 1,
+                Value1: 5,
                 UpgradedValue1: null,
-                Value2: 2,
-                UpgradedValue2: 4,
-                Mana: new ManaGroup() { Any = 1 },
+                Value2: 9,
+                UpgradedValue2: 12,
+                Mana: null,
                 UpgradedMana: null,
                 Scry: null,
                 UpgradedScry: null,
@@ -102,37 +101,37 @@ namespace test
                 Keywords: Keyword.None,
                 UpgradedKeywords: Keyword.None,
                 EmptyDescription: false,
-                RelativeKeyword: Keyword.FriendCard,
-                UpgradedRelativeKeyword: Keyword.FriendCard,
+                RelativeKeyword: Keyword.None,
+                UpgradedRelativeKeyword: Keyword.None,
 
-                RelativeEffects: new List<string>() { "DayuuExodiaSe" },
-                UpgradedRelativeEffects: new List<string>() { "DayuuExodiaSe" },
-                RelativeCards: new List<string>() { "DayuuFriend", "DayuuExodia" },
-                UpgradedRelativeCards: new List<string>() { "DayuuFriend", "DayuuExodia" },
+                RelativeEffects: new List<string>() { },
+                UpgradedRelativeEffects: new List<string>() { },
+                RelativeCards: new List<string>() { },
+                UpgradedRelativeCards: new List<string>() { },
                 Owner: null,
                 Unfinished: false,
-                Illustrator: "Roke",
-                SubIllustrator: new List<string>() { "MIO" }
+                Illustrator: "Mega Crit",
+                SubIllustrator: new List<string>() { }
              );
 
             return cardConfig;
         }
-        [EntityLogic(typeof(DayuuPowerDef))]
-        public sealed class DayuuPower : Card
+        [EntityLogic(typeof(StSPanacheDef))]
+        public sealed class StSPanache : Card
         {
             protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
             {
-                yield return base.BuffAction<DayuuPowerSeDef.DayuuPowerSe>(base.Value2, 0, 0, 1, 0.2f);
+                yield return base.BuffAction<StSPanacheSeDef.StSPanacheSe>(base.Value2, 0, 0, base.Value1, 0.2f);
                 yield break;
             }
         }
 
     }
-    public sealed class DayuuPowerSeDef : StatusEffectTemplate
+    public sealed class StSPanacheSeDef : StatusEffectTemplate
     {
         public override IdContainer GetId()
         {
-            return nameof(DayuuPowerSe);
+            return nameof(StSPanacheSe);
         }
 
         public override LocalizationOption LoadLocalization()
@@ -144,10 +143,8 @@ namespace test
 
         public override Sprite LoadSprite()
         {
-            return ResourceLoader.LoadSprite("Resources.DayuuPowerSe.png", embeddedSource);
+            return ResourceLoader.LoadSprite("Resources.StSPanacheSe.png", embeddedSource);
         }
-        // if some information is needed from this config it can be accessed by calling
-        // StatusEffectConfig.FromId(new DayuuPowerSeDefinition().UniqueId) 
         public override StatusEffectConfig MakeConfig()
         {
             var statusEffectConfig = new StatusEffectConfig(
@@ -163,7 +160,7 @@ namespace test
                 DurationStackType: StackType.Add,
                 DurationDecreaseTiming: DurationDecreaseTiming.Custom,
                 HasCount: true,
-                CountStackType: StackType.Keep,
+                CountStackType: StackType.Add,
                 LimitStackType: StackType.Keep,
                 ShowPlusByLimit: false,
                 Keywords: Keyword.None,
@@ -174,25 +171,37 @@ namespace test
             );
             return statusEffectConfig;
         }
-        [EntityLogic(typeof(DayuuPowerSeDef))]
-        public sealed class DayuuPowerSe : StatusEffect
+        [EntityLogic(typeof(StSPanacheSeDef))]
+        public sealed class StSPanacheSe : StatusEffect
         {
             protected override void OnAdded(Unit unit)
             {
-                base.ReactOwnerEvent<UnitEventArgs>(base.Battle.Player.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnTurnStarted));
+                base.ReactOwnerEvent<CardUsingEventArgs>(base.Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsed));
+                base.ReactOwnerEvent<UnitEventArgs>(base.Battle.Player.TurnEnding, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnEnding));
             }
-            private IEnumerable<BattleAction> OnTurnStarted(UnitEventArgs args)
+            private IEnumerable<BattleAction> OnCardUsed(CardUsingEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd)
+                if (base.Battle.BattleShouldEnd)
                 {
-                    List<Card> list = base.Battle.HandZone.Where((Card card) => (card.CardType == CardType.Friend) && card.Summoned && !(card is DayuuFriend)).ToList<Card>();
-                    List<Card> list2 = base.Battle.HandZone.Where((Card card) => (card is DayuuFriend) && card.Summoned).ToList<Card>();
-                    if (list.Count > 0 || list2.Count > 0)
-                        base.NotifyActivating();
-                    ManaGroup manaGroup = ManaGroup.Single(ManaColors.Colors.Sample(base.GameRun.BattleRng));
-                    yield return new GainManaAction(manaGroup * (base.Count * list.Count));
-                    yield return new GainManaAction(manaGroup * (base.Level * list2.Count));
+                    yield break;
                 }
+                if (args.Card != base.SourceCard)
+                {
+                    int count = base.Count;
+                    base.Count = count - 1;
+                    this.NotifyChanged();
+                    if (base.Count <= 0)
+                    {
+                        base.NotifyActivating();
+                        yield return new DamageAction(base.Battle.Player, base.Battle.EnemyGroup.Alives, DamageInfo.Reaction((float)base.Level), "Instant", GunType.Single);
+                        base.Count = 5;
+                    }
+                }
+                yield break;
+            }
+            private IEnumerable<BattleAction> OnPlayerTurnEnding(UnitEventArgs args)
+            {
+                base.Count = 5;
                 yield break;
             }
         }

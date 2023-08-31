@@ -73,7 +73,7 @@ namespace test
                Damage: null,
                UpgradedDamage: null,
                Block: 20,
-               UpgradedBlock: 25,
+               UpgradedBlock: 26,
                Shield: null,
                UpgradedShield: null,
                Value1: 2,
@@ -100,8 +100,8 @@ namespace test
                RelativeKeyword: Keyword.Block,
                UpgradedRelativeKeyword: Keyword.Block,
 
-               RelativeEffects: new List<string>() { "DayuuExodiaSe" },
-               UpgradedRelativeEffects: new List<string>() { "DayuuExodiaSe" },
+               RelativeEffects: new List<string>() { "DayuuFriendSe" },
+               UpgradedRelativeEffects: new List<string>() { "DayuuFriendSe" },
                RelativeCards: new List<string>() { "DayuuExodia" },
                UpgradedRelativeCards: new List<string>() { "DayuuExodia" },
                Owner: null,
@@ -131,7 +131,7 @@ namespace test
 			{
 				Card drawzone = base.Battle.DrawZone.First<Card>();
                 yield return new MoveCardAction(drawzone, CardZone.Hand);
-                if (drawzone.CardType.Equals(CardType.Attack))
+                if ((drawzone.CardType == CardType.Attack) && (drawzone.Zone == CardZone.Hand))
                 {
                     yield return new DiscardAction(drawzone);
                 }
@@ -140,7 +140,7 @@ namespace test
 			{
 				Card discardzone = base.Battle.DiscardZone.Last<Card>();
 				yield return new MoveCardAction(discardzone, CardZone.Hand);
-                if (discardzone.CardType.Equals(CardType.Attack))
+                if ((discardzone.CardType == CardType.Attack) && (discardzone.Zone == CardZone.Hand))
                 {
                     yield return new DiscardAction(discardzone);
                 }
