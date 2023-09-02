@@ -1,3 +1,7 @@
+BlossomingYinYangOrb:
+  Description: "Replaces |Bloodthirsty Yin-Yang Orb|. Adds {Mana} to the mana base.\nAt the start of combat, {PlayerName} gains {Value1} |Firepower|, |Spirit| and {Value2} life.\nWhenever an enemy is defeated, {PlayerName} gains {Value1} |Firepower|, |Spirit| and {Value2} life.\nWhenever {PlayerName} takes damage from an enemy, add a |Yin-Yang Orb| to the hand. Then, play it against the attacker."
+  Name: Blossoming Yin-Yang Orb
+  FlavorText: "Ascended orb radiates with purity."
 DayuuSmallSparrow:
   Description: "When acquired, choose 1 of {Value1} |Remnant| cards to add to the library.\nWhenever a |Remnant| card is drawn, gain mana equal to that card's colored mana cost."
   Name: Small Sparrow
@@ -59,7 +63,7 @@ StSVelvetChoker:
   Name: Velvet Choker
   FlavorText: '"Immense power, but too limited." - Kublai the Great'
 TASBot:
-  Description: "{PlayerName} can't draw cards. At the start of {PlayerName}'s turn, play {Value1} card{Value1:plural one='' other='s'} on top of the draw pile. Play 1 more card for every 2 Shining |Exhibit| {PlayerName} has."
+  Description: "{PlayerName} can't draw cards during draw step. At the start of {PlayerName}'s turn, play {Value1} card{Value1:plural one='' other='s'} on top of the draw pile. Play 1 more card for each |Shining| |Exhibit| {PlayerName} has."
   Name: TASBot
   FlavorText: "TASBot can play games on real video game consoles with superhuman abilities, usually leading to game breaking glitches in front of live audiences."
 TestExhibit:
