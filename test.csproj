@@ -296,6 +296,7 @@
 
 
     <ItemGroup>
+      <None Remove="Resources\BlossomingYinYangOrb.png" />
       <None Remove="resources\CardsEn.yaml" />
       <None Remove="Resources\DayuuAbility.png" />
       <None Remove="Resources\DayuuAbilityMIO.png" />
@@ -308,6 +309,7 @@
       <None Remove="Resources\DayuuExodiaMIO.png" />
       <None Remove="Resources\DayuuExodiaSe.png" />
       <None Remove="Resources\DayuuFriend.png" />
+      <None Remove="Resources\DayuuFriend2MIO.png" />
       <None Remove="Resources\DayuuFriendMIO.png" />
       <None Remove="Resources\DayuuReale.PNG" />
       <None Remove="Resources\DayuuRealeCruezor.png" />

@@ -63,7 +63,7 @@ namespace test
                Colors: new List<ManaColor>() { ManaColor.Red },
                IsXCost: false,
                Cost: new ManaGroup() { Any = 3 },
-               UpgradedCost: null,
+               UpgradedCost: new ManaGroup() { Any = 3 },
                MoneyCost: null,
                Damage: 10,
                UpgradedDamage: null,
@@ -71,9 +71,9 @@ namespace test
                UpgradedBlock: null,
                Shield: null,
                UpgradedShield: null,
-               Value1: 4,
-               UpgradedValue1: 6,
-               Value2: 6,
+               Value1: 3,
+               UpgradedValue1: 4,
+               Value2: null,
                UpgradedValue2: null,
                Mana: null,
                UpgradedMana: null,
@@ -117,7 +117,7 @@ namespace test
             {
                 if (base.GameRun != null)
                 {
-                    return base.GameRun.BaseDeck.Count((Card card) => card.IsBasic && (card.CardType == CardType.Attack)) * base.Value1 + (base.GameRun.Player.HasExhibit<PingfanDao>() ? base.Value2 : 0);
+                    return base.GameRun.BaseDeck.Count((Card card) => (card.IsBasic && card.CardType == CardType.Attack) || card.Name.Contains("Strike")) * base.Value1;
                 }
                 return 0;
             }

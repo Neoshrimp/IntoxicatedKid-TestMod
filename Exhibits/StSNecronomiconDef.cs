@@ -110,10 +110,11 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardUsed(CardUsingEventArgs args)
             {
-                if (base.Active && (args.Card.CardType == CardType.Attack) && (args.ConsumingMana.Amount >= base.Value2))
+                if (base.Active && (args.Card.CardType == CardType.Attack) && (args.ConsumingMana.Amount >= base.Value2) && !base.Battle.BattleShouldEnd)
                 {
                     base.NotifyActivating();
                     base.Active = false;
+                    args.ConsumingMana = new ManaGroup() { Any = 0 };
                     yield return new MoveCardAction(args.Card, CardZone.Hand);
                     yield return new UseCardAction(args.Card, args.Selector, this.Mana);
                 }
