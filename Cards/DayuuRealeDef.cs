@@ -38,6 +38,9 @@ using LBoL.Presentation.UI.Panels;
 using LBoL.Core.GapOptions;
 using Mono.Cecil;
 using test;
+using LBoL.Core.SaveData;
+using UnityEngine.Assertions.Must;
+using LBoL.Presentation;
 
 namespace test
 {
@@ -91,10 +94,10 @@ namespace test
                UpgradedBlock: null,
                Shield: null,
                UpgradedShield: null,
-               Value1: 2,
-               UpgradedValue1: 2,
-               Value2: 1,
-               UpgradedValue2: 1,
+               Value1: 1,
+               UpgradedValue1: null,
+               Value2: 2,
+               UpgradedValue2: null,
                Mana: null,
                UpgradedMana: null,
                Scry: null,
@@ -106,19 +109,19 @@ namespace test
                UpgradedPassiveCost: 2,
                ActiveCost: 2,
                UpgradedActiveCost: 2,
-               UltimateCost: -6,
-               UpgradedUltimateCost: -6,
+               UltimateCost: -7,
+               UpgradedUltimateCost: -7,
 
                Keywords: Keyword.None,
                UpgradedKeywords: Keyword.None,
-               EmptyDescription: true,
+               EmptyDescription: false,
                RelativeKeyword: Keyword.None,
                UpgradedRelativeKeyword: Keyword.None,
 
-               RelativeEffects: new List<string>() { },
-               UpgradedRelativeEffects: new List<string>() { },
-               RelativeCards: new List<string>() { },
-               UpgradedRelativeCards: new List<string>() { },
+               RelativeEffects: new List<string>() { "Weak", "Fragil", "Vulnerable", "DayuuFriendSe" },
+               UpgradedRelativeEffects: new List<string>() { "Weak", "Fragil", "Vulnerable", "DayuuFriendSe" },
+               RelativeCards: new List<string>() { "DayuuFriend2+" },
+               UpgradedRelativeCards: new List<string>() { "DayuuFriend2+" },
                Owner: null,
                Unfinished: false,
                Illustrator: "Reale雷耀",
@@ -131,32 +134,66 @@ namespace test
     [EntityLogic(typeof(DayuuRealeDef))]
     public sealed class DayuuReale : Card
     {
-        protected override void OnEnterBattle(BattleController battle)
+        public override bool OnDrawVisual
         {
-            base.ReactBattleEvent<CardUsingEventArgs>(base.Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsed));
-        }
-        private IEnumerable<BattleAction> OnCardUsed(CardUsingEventArgs args)
-        {
-            if (!base.Battle.BattleShouldEnd && base.Battle.Player.IsInTurn && this.Zone == CardZone.Hand && this.Summoned)
+            get
             {
-                List<Card> DayuuA = base.Battle.HandZone.Where((Card card) => (card is DayuuAttack)).ToList<Card>();
-                List<Card> DayuuD = base.Battle.HandZone.Where((Card card) => (card is DayuuDefense)).ToList<Card>();
-                List<Card> DayuuS = base.Battle.HandZone.Where((Card card) => (card is DayuuSkill)).ToList<Card>();
-                List<Card> DayuuP = base.Battle.HandZone.Where((Card card) => (card is DayuuAbility)).ToList<Card>();
-                if (DayuuA.Count > 0 && DayuuD.Count > 0 && DayuuS.Count > 0 && DayuuP.Count > 0)
-                {
-                    List<Card> Dayuu = base.Battle.HandZone.Where((Card card) => (card is DayuuAttack) || (card is DayuuDefense) || (card is DayuuSkill) || (card is DayuuAbility) || (card is DayuuFriend)).ToList<Card>();
-                    foreach (Card card in Dayuu)
-                    {
-                        yield return new RemoveCardAction(card);
-                    }
-                    Card Exodia = Library.CreateCard<DayuuExodia>();
-                    Exodia.Summon();
-                    yield return new AddCardsToHandAction(new Card[] { Exodia });
-                }
+                return false;
             }
         }
-        public override IEnumerable<BattleAction> OnTurnEndingInHand()
+        protected override void OnEnterBattle(BattleController battle)
+        {
+            //base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(this.OnBattleStarted));
+            base.ReactBattleEvent<CardUsingEventArgs>(base.Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsed));
+            //base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleEnding, new EventSequencedReactor<GameEventArgs>(this.OnBattleEnding));
+        }
+        public override IEnumerable<BattleAction> OnDraw()
+        {
+            if (drawn == false)
+            {
+                if (!GameMaster.Instance.CurrentProfile.Name.Equals("Dayuu") && !this.IsUpgraded)
+                {
+                    drawn = true;
+                    this.NotifyActivating();
+                    yield return new ExileCardAction(this);
+                }
+                else
+                {
+                    drawn = true;
+                    yield return new DiscardAction(this);
+                    yield return new DrawManyCardAction(2);
+                }
+            }
+            yield break;
+        }
+        /*private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
+        {
+            if (!GameMaster.Instance.CurrentProfile.Name.Equals("Dayuu") && !this.IsUpgraded)
+            {
+                this.NotifyActivating();
+                yield return new ExileCardAction(this);
+                yield break;
+            }
+        }*/
+        private IEnumerable<BattleAction> OnCardUsed(CardUsingEventArgs args)
+        {
+            if ((base.Zone == CardZone.Hand) && base.Summoned && (base.Loyalty >= 7))
+            {
+                this.NotifyActivating();
+                base.Loyalty += base.UltimateCost;
+                base.UltimateUsed = true;
+                Card friend = Library.CreateCard<DayuuFriend2>();
+                friend.IsUpgraded = true;
+                friend.Summon();
+                yield return new AddCardsToHandAction(friend);
+                yield return base.DebuffAction<Weak>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
+                yield return base.DebuffAction<Fragil>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
+                yield return base.DebuffAction<Vulnerable>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
+                yield return new RemoveCardAction(this);
+            }
+            yield break;
+        }
+        public override IEnumerable<BattleAction> OnTurnStartedInHand()
         {
             return this.GetPassiveActions();
         }
@@ -175,16 +212,27 @@ namespace test
                 {
                     yield break;
                 }
-                foreach (BattleAction battleAction in base.DebuffAction<TempFirepowerNegative>(base.Battle.AllAliveEnemies, base.Value1, 0, 0, 0, true, 0.2f))
+                List<Card> list = base.Battle.RollCardsWithoutManaLimit(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.AllOnes, CardTypeWeightTable.CanBeLoot), base.Value1, (CardConfig config) => config.RelativeCards.Contains("DayuuExodia") && config.Id != base.Id).ToList<Card>();
+                foreach (Card card in list)
                 {
-                    yield return battleAction;
+                    card.SetBaseCost(ManaGroup.Anys(card.ConfigCost.Amount));
                 }
-                if (base.Loyalty <= 0)
-                {
-                    yield return new RemoveCardAction(this);
-                    yield break;
-                }
+                yield return new AddCardsToHandAction(list);
                 num = i;
+            }
+            if (this.Loyalty >= 7)
+            {
+                this.NotifyActivating();
+                base.Loyalty += base.UltimateCost;
+                base.UltimateUsed = true;
+                Card friend2 = Library.CreateCard<DayuuFriend2>();
+                friend2.IsUpgraded = true;
+                friend2.Summon();
+                yield return new AddCardsToHandAction(friend2);
+                yield return base.DebuffAction<Weak>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
+                yield return base.DebuffAction<Fragil>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
+                yield return base.DebuffAction<Vulnerable>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
+                yield return new RemoveCardAction(this);
             }
             yield break;
         }
@@ -202,40 +250,27 @@ namespace test
             if (precondition == null || ((MiniSelectCardInteraction)precondition).SelectedCard.FriendToken == FriendToken.Active)
             {
                 base.Loyalty += base.ActiveCost;
-                yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0f, "BirdSing", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
-                foreach (BattleAction battleAction in base.DebuffAction<FirepowerNegative>(base.Battle.AllAliveEnemies, base.Value2, 0, 0, 0, true, 0.2f))
+                List<Card> list = base.Battle.RollCardsWithoutManaLimit(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.AllOnes, CardTypeWeightTable.CanBeLoot), base.Value1, (CardConfig config) => config.RelativeCards.Contains("DayuuExodia") && config.Id != base.Id).ToList<Card>();
+                foreach (Card card in list)
                 {
-                    yield return battleAction;
+                    card.SetBaseCost(ManaGroup.Anys(card.ConfigCost.Amount));
+                    card.IsUpgraded = true;
                 }
-                foreach (BattleAction battleAction2 in base.DebuffAction<Weak>(base.Battle.AllAliveEnemies, 0, base.Value2, 0, 0, true, 0.2f))
-                {
-                    yield return battleAction2;
-                }
+                yield return new AddCardsToHandAction(list);
+                yield return base.DebuffAction<Weak>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
+                yield return base.DebuffAction<Fragil>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
             }
             else
             {
                 base.Loyalty += base.UltimateCost;
                 base.UltimateUsed = true;
-                yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0f, "BirdSing", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
-                foreach (EnemyUnit enemyUnit in base.Battle.AllAliveEnemies)
-                {
-                    if (enemyUnit.Hp <= (enemyUnit.MaxHp + 1) / 4)
-                    {
-                        yield return new ForceKillAction(base.Battle.Player, enemyUnit);
-                    }
-                }
-                foreach (BattleAction battleAction in base.DebuffAction<FirepowerNegative>(base.Battle.AllAliveEnemies, 3, 0, 0, 0, true, 0.2f))
-                {
-                    yield return battleAction;
-                }
-                foreach (BattleAction battleAction2 in base.DebuffAction<Weak>(base.Battle.AllAliveEnemies, 0, 3, 0, 0, true, 0.2f))
-                {
-                    yield return battleAction2;
-                }
-                foreach (BattleAction battleAction3 in base.DebuffAction<Vulnerable>(base.Battle.AllAliveEnemies, 0, 3, 0, 0, true, 0.2f))
-                {
-                    yield return battleAction3;
-                }
+                Card friend3 = Library.CreateCard<DayuuFriend2>();
+                friend3.IsUpgraded = true;
+                friend3.Summon();
+                yield return new AddCardsToHandAction(friend3);
+                yield return base.DebuffAction<Weak>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
+                yield return base.DebuffAction<Fragil>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
+                yield return base.DebuffAction<Vulnerable>(base.Battle.Player, 0, base.Value1, 0, 0, true, 0.2f);
             }
             yield break;
         }
@@ -253,57 +288,11 @@ namespace test
             yield return new MoveCardAction(this, CardZone.Hand);
             yield break;
         }
-    }
-    public sealed class DayuuRealeSeDef : StatusEffectTemplate
-    {
-        public override IdContainer GetId()
+        /*private IEnumerable<BattleAction> OnBattleEnding(GameEventArgs args)
         {
-            return nameof(DayuuRealeSe);
-        }
-
-        public override LocalizationOption LoadLocalization()
-        {
-            var locFiles = new LocalizationFiles(embeddedSource);
-            locFiles.AddLocaleFile(Locale.En, "Resources.StatusEffectsEn.yaml");
-            return locFiles;
-        }
-
-        public override Sprite LoadSprite()
-        {
-            return ResourceLoader.LoadSprite("Resources.DayuuExodiaSe.png", embeddedSource);
-        }
-        public override StatusEffectConfig MakeConfig()
-        {
-            var statusEffectConfig = new StatusEffectConfig(
-                Id: "",
-                Order: 10,
-                Type: StatusEffectType.Positive,
-                IsVerbose: false,
-                IsStackable: false,
-                StackActionTriggerLevel: null,
-                HasLevel: false,
-                LevelStackType: StackType.Add,
-                HasDuration: false,
-                DurationStackType: StackType.Add,
-                DurationDecreaseTiming: DurationDecreaseTiming.Custom,
-                HasCount: false,
-                CountStackType: StackType.Keep,
-                LimitStackType: StackType.Keep,
-                ShowPlusByLimit: false,
-                Keywords: Keyword.None,
-                RelativeEffects: new List<string>() { },
-                VFX: "Default",
-                VFXloop: "Default",
-                SFX: "Default"
-            );
-            return statusEffectConfig;
-        }
-
-
-
-        [EntityLogic(typeof(DayuuRealeSeDef))]
-        public sealed class DayuuRealeSe : StatusEffect
-        {
-        }
+            drawn = false;
+            yield break;
+        }*/
+        private bool drawn = false;
     }
 }

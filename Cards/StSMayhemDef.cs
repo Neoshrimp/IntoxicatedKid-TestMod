@@ -152,7 +152,7 @@ namespace test
         {
             var statusEffectConfig = new StatusEffectConfig(
                 Id: "",
-                Order: 10,
+                Order: 7,
                 Type: StatusEffectType.Positive,
                 IsVerbose: false,
                 IsStackable: true,
@@ -216,6 +216,7 @@ namespace test
                     if (list.Count > 0)
                     {
                         Card card = list.First();
+                        card.SetTurnCost(new ManaGroup() { Any = 0 });
                         yield return new MoveCardAction(card, CardZone.Hand);
                         if (((card.CardType == CardType.Misfortune) || (card.CardType == CardType.Status)) && card.IsForbidden)
                         {
@@ -227,7 +228,9 @@ namespace test
                         }
                         else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.SingleEnemy) && ((card.CardType != CardType.Friend) || (card.CardType == CardType.Friend && !card.Summoned) || (card.CardType == CardType.Friend && card.Summoned && card.Loyalty >= card.MinFriendCost)) && !card.IsForbidden)
                         {
-                            yield return new UseCardAction(card, UnitSelector.RandomEnemy, this.Mana);
+                            EnemyUnit enemy = base.Battle.AllAliveEnemies.Sample(base.GameRun.BattleRng);
+                            UnitSelector unitSelector = new UnitSelector(enemy);
+                            yield return new UseCardAction(card, unitSelector, this.Mana);
                         }
                         else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.AllEnemies) && ((card.CardType != CardType.Friend) || (card.CardType == CardType.Friend && !card.Summoned) || (card.CardType == CardType.Friend && card.Summoned && card.Loyalty >= card.MinFriendCost)) && !card.IsForbidden)
                         {

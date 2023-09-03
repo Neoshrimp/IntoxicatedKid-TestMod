@@ -146,6 +146,7 @@ namespace test
                     }
                     target = base.Battle.AllAliveEnemies.Sample(base.GameRun.BattleRng);
                 }
+                card.SetTurnCost(new ManaGroup() { Any = 0 });
                 if ((card.CardType == CardType.Misfortune) || (card.CardType == CardType.Status))
                 {
                     yield return new ExileCardAction(card);
@@ -156,7 +157,8 @@ namespace test
                 }
                 else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.SingleEnemy) && !card.IsForbidden)
                 {
-                    yield return new UseCardAction(card, selector, this.Mana);
+                    UnitSelector unitSelector = new UnitSelector(target);
+                    yield return new UseCardAction(card, unitSelector, this.Mana);
                 }
                 else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.AllEnemies) && !card.IsForbidden)
                 {
