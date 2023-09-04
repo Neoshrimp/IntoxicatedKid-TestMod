@@ -38,11 +38,11 @@ using LBoL.EntityLib.Cards.Character.Marisa;
 
 namespace test
 {
-    public sealed class StSSacredBarkDef : ExhibitTemplate
+    public sealed class StSSozuDef : ExhibitTemplate
     {
         public override IdContainer GetId()
         {
-            return nameof(StSSacredBark);
+            return nameof(StSSozu);
         }
         public override LocalizationOption LoadLocalization()
         {
@@ -69,10 +69,10 @@ namespace test
                 IsPooled: true,
                 IsSentinel: false,
                 Revealable: false,
-                Appearance: AppearanceType.Anywhere,
+                Appearance: AppearanceType.ShopOnly,
                 Owner: "",
-                LosableType: ExhibitLosableType.Losable,
-                Rarity: Rarity.Uncommon,
+                LosableType: ExhibitLosableType.CantLose,
+                Rarity: Rarity.Common,
                 Value1: 100,
                 Value2: null,
                 Value3: null,
@@ -82,20 +82,21 @@ namespace test
                 BaseManaAmount: 0,
                 HasCounter: false,
                 InitialCounter: 0,
-                Keywords: Keyword.None,
+                Keywords: Keyword.Forbidden,
                 RelativeEffects: new List<string>() { },
                 // example of referring to UniqueId of an entity without calling MakeConfig
                 RelativeCards: new List<string>() { }
             );
             return exhibitConfig;
         }
-        [EntityLogic(typeof(StSSacredBarkDef))]
+        [EntityLogic(typeof(StSSozuDef))]
         [UsedImplicitly]
-        public sealed class StSSacredBark : Exhibit
+        public sealed class StSSozu : Exhibit
         {
             protected override void OnEnterBattle()
             {
                 base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(this.OnBattleStarted));
+                base.ReactBattleEvent<UnitEventArgs>(base.Owner.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnOwnerTurnStarted));
                 base.ReactBattleEvent<CardsAddingToDrawZoneEventArgs>(base.Battle.CardsAddedToDrawZone, new EventSequencedReactor<CardsAddingToDrawZoneEventArgs>(this.OnCardsAddedToDrawZone));
                 base.ReactBattleEvent<CardsEventArgs>(base.Battle.CardsAddedToHand, new EventSequencedReactor<CardsEventArgs>(this.OnAddCard));
                 base.ReactBattleEvent<CardsEventArgs>(base.Battle.CardsAddedToDiscard, new EventSequencedReactor<CardsEventArgs>(this.OnAddCard));
@@ -107,36 +108,16 @@ namespace test
                 {
                     if (card.CardType == CardType.Tool)
                     {
-                        if (card.Config.Damage != null && card.RawDamage > 0)
-                        {
-                            card.DeltaDamage += card.RawDamage * (base.Value1 / 100);
-                        }
-                        if (card.Config.Block != null && card.RawBlock > 0)
-                        {
-                            card.DeltaBlock += card.RawBlock * (base.Value1 / 100);
-                        }
-                        if (card.Config.Shield != null && card.RawShield > 0)
-                        {
-                            card.DeltaShield += card.RawShield * (base.Value1 / 100);
-                        }
-                        if (card.Config.Value1 != null && card.ConfigValue1 > 0)
-                        {
-                            card.DeltaValue1 += card.ConfigValue1 * (base.Value1 / 100);
-                        }
-                        if (card.Config.Value2 != null && card.ConfigValue2 > 0)
-                        {
-                            card.DeltaValue2 += card.ConfigValue2 * (base.Value1 / 100);
-                        }
-                        /*if (card.Config.Mana != null)
-                        {
-                            card.Config.Mana *= (base.Value1 / 50);
-                        }
-                        if (card.Config.Scry != null)
-                        {
-                            card.Config.Scry *= (base.Value1 / 50);
-                        }*/
+                        card.IsForbidden = true;
                     }
                 }
+                yield break;
+            }
+            private IEnumerable<BattleAction> OnOwnerTurnStarted(UnitEventArgs args)
+            {
+                base.NotifyActivating();
+                ManaGroup manaGroup = ManaGroup.Single(ManaColors.Colors.Sample(base.GameRun.BattleRng));
+                yield return new GainManaAction(manaGroup);
                 yield break;
             }
             private IEnumerable<BattleAction> OnCardsAddedToDrawZone(CardsAddingToDrawZoneEventArgs args)
@@ -155,34 +136,7 @@ namespace test
                 {
                     if (card.CardType == CardType.Tool)
                     {
-                        if (card.Config.Damage != null && card.RawDamage > 0)
-                        {
-                            card.DeltaDamage += card.RawDamage * (base.Value1 / 100);
-                        }
-                        if (card.Config.Block != null && card.RawBlock > 0)
-                        {
-                            card.DeltaBlock += card.RawBlock * (base.Value1 / 100);
-                        }
-                        if (card.Config.Shield != null && card.RawShield > 0)
-                        {
-                            card.DeltaShield += card.RawShield * (base.Value1 / 100);
-                        }
-                        if (card.Config.Value1 != null && card.ConfigValue1 > 0)
-                        {
-                            card.DeltaValue1 += card.ConfigValue1 * (base.Value1 / 100);
-                        }
-                        if (card.Config.Value2 != null && card.ConfigValue2 > 0)
-                        {
-                            card.DeltaValue2 += card.ConfigValue2 * (base.Value1 / 100);
-                        }
-                        /*if (card.Config.Mana != null)
-                        {
-                            card.Config.Mana *= (base.Value1 / 50);
-                        }
-                        if (card.Config.Scry != null)
-                        {
-                            card.Config.Scry *= (base.Value1 / 50);
-                        }*/
+                        card.IsForbidden = true;
                     }
                 }
                 return null;

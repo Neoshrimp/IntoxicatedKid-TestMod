@@ -104,6 +104,7 @@ using LBoL.Presentation.Units;
 using LBoLEntitySideloader;
 using LBoLEntitySideloader.ReflectionHelpers;
 using LBoLEntitySideloader.Resource;
+using Mono.Cecil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -256,7 +257,7 @@ namespace test
                     prevCi = ci;
                 }
             }
-        }
+        }*/
         [HarmonyPatch]
         class ViewConsumeMana_ErrorMessage_Patch
         {
@@ -273,12 +274,65 @@ namespace test
                     {
                         yield return new CodeInstruction(OpCodes.Pop);
                     }
+                    else if (prevCi != null && ci.opcode == OpCodes.Call && prevCi.opcode == OpCodes.Call)
+                    {
+                        yield return new CodeInstruction(OpCodes.Pop);
+                    }
                     else
                     {
                         yield return ci;
                     }
                     prevCi = ci;
                 }
+            }
+        }
+        /*[HarmonyPatch]
+        class ViewConsumeMana_ErrorMessage2_Patch
+        {
+            static IEnumerable<MethodBase> TargetMethods()
+            {
+                yield return ExtraAccess.InnerMoveNext(typeof(BattleManaPanel), nameof(BattleManaPanel.ViewConsumeMana));
+            }
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var finish = false;
+                int start = -1, end = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (int i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldstr)
+                    {
+                        if (finish)
+                        {
+                            Debug.LogError("endline " + i);
+
+                            end = i;
+                            break;
+                        }
+                        else
+                        {
+                            Debug.LogError("startline " + (i + 1));
+
+                            start = i + 1;
+
+                            for (int j = start; j < codes.Count; j++)
+                            {
+                                if (codes[j].opcode == OpCodes.Call && codes[j - 1].opcode == OpCodes.Call)
+                                {
+                                    finish = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (start > -1 && end > -1)
+                {
+                    codes[start].opcode = OpCodes.Pop;
+                    codes.RemoveRange(start + 1, end - start - 1);
+                }
+                return codes.AsEnumerable();
             }
         }*/
     }

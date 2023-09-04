@@ -320,6 +320,7 @@
       <None Remove="resources\KeywordsEn.yaml" />
       <None Remove="Resources\StatusEffectsEn.yaml" />
       <None Remove="Resources\StSAlchemize.png" />
+      <None Remove="Resources\StSBlind.png" />
       <None Remove="Resources\StSBlueCandle.png" />
       <None Remove="Resources\StSBustedCrown.png" />
       <None Remove="Resources\StSCoffeeDripper.png" />
@@ -342,6 +343,7 @@
       <None Remove="Resources\StSPanacea.png" />
       <None Remove="Resources\StSPanache.png" />
       <None Remove="Resources\StSPanacheSe.png" />
+      <None Remove="Resources\StSPandorasBox.png" />
       <None Remove="Resources\StSPanicButton.png" />
       <None Remove="Resources\StSPanicButtonSe.png" />
       <None Remove="Resources\StSPerfectedStrike.png" />
@@ -350,7 +352,9 @@
       <None Remove="Resources\StSRunicPyramid.png" />
       <None Remove="Resources\StSSacredBark.png" />
       <None Remove="Resources\StSSneckoEye.png" />
+      <None Remove="Resources\StSSozu.png" />
       <None Remove="Resources\StSSwiftStrike.png" />
+      <None Remove="Resources\StSTrip.png" />
       <None Remove="Resources\StSVelvetChoker.png" />
       <None Remove="Resources\TASBot.png" />
       <None Remove="Resources\TASBotSe.png" />

@@ -27,11 +27,11 @@ using UnityEngine;
 
 namespace test
 {
-    public sealed class StSFinesseDef : CardTemplate
+    public sealed class StSFlashofSteelDef : CardTemplate
     {
         public override IdContainer GetId()
         {
-            return nameof(StSFinesse);
+            return nameof(StSFlashofSteel);
         }
 
         public override CardImages LoadCardImages()
@@ -56,25 +56,25 @@ namespace test
                Order: 10,
                AutoPerform: true,
                Perform: new string[0][],
-               GunName: "Simple1",
-               GunNameBurst: "Simple1",
+               GunName: "飞刀弹射",
+               GunNameBurst: "飞刀弹射B",
                DebugLevel: 0,
                Revealable: false,
                IsPooled: true,
                HideMesuem: false,
                IsUpgradable: true,
                Rarity: Rarity.Uncommon,
-               Type: CardType.Defense,
-               TargetType: TargetType.Self,
+               Type: CardType.Attack,
+               TargetType: TargetType.SingleEnemy,
                Colors: new List<ManaColor>() { ManaColor.Colorless },
                IsXCost: false,
                Cost: new ManaGroup() { Any = 0 },
                UpgradedCost: null,
                MoneyCost: null,
-               Damage: null,
-               UpgradedDamage: null,
-               Block: 5,
-               UpgradedBlock: 8,
+               Damage: 6,
+               UpgradedDamage: 9,
+               Block: null,
+               UpgradedBlock: null,
                Shield: null,
                UpgradedShield: null,
                Value1: 1,
@@ -98,8 +98,8 @@ namespace test
                Keywords: Keyword.None,
                UpgradedKeywords: Keyword.None,
                EmptyDescription: false,
-               RelativeKeyword: Keyword.Block,
-               UpgradedRelativeKeyword: Keyword.Block,
+               RelativeKeyword: Keyword.None,
+               UpgradedRelativeKeyword: Keyword.None,
 
                RelativeEffects: new List<string>() { },
                UpgradedRelativeEffects: new List<string>() { },
@@ -114,12 +114,12 @@ namespace test
             return cardConfig;
         }
     }
-    [EntityLogic(typeof(StSFinesseDef))]
-    public sealed class StSFinesse : Card
+    [EntityLogic(typeof(StSFlashofSteelDef))]
+    public sealed class StSFlashofSteel : Card
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            yield return base.DefenseAction(true);
+            yield return base.AttackAction(selector);
             yield return new DrawManyCardAction(base.Value1);
             yield break;
         }

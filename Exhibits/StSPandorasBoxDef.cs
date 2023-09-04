@@ -30,20 +30,18 @@ using LBoL.Core.Units;
 using LBoL.EntityLib.Cards.Character.Cirno.Friend;
 using LBoL.EntityLib.Cards.Character.Reimu;
 using LBoL.EntityLib.Cards.Neutral.MultiColor;
-using static test.DayuuAbilityDef;
 using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 using JetBrains.Annotations;
-using LBoL.Core.GapOptions;
-using LBoL.Core.Stations;
+using LBoL.EntityLib.Exhibits.Shining;
 
 namespace test
 {
-    public sealed class StSFusionHammerDef : ExhibitTemplate
+    public sealed class StSPandorasBoxDef : ExhibitTemplate
     {
         public override IdContainer GetId()
         {
-            return nameof(StSFusionHammer);
+            return nameof(StSPandorasBox);
         }
         public override LocalizationOption LoadLocalization()
         {
@@ -70,10 +68,10 @@ namespace test
                 IsPooled: true,
                 IsSentinel: false,
                 Revealable: false,
-                Appearance: AppearanceType.ShopOnly,
+                Appearance: AppearanceType.Anywhere,
                 Owner: "",
-                LosableType: ExhibitLosableType.CantLose,
-                Rarity: Rarity.Common,
+                LosableType: ExhibitLosableType.Losable,
+                Rarity: Rarity.Rare,
                 Value1: null,
                 Value2: null,
                 Value3: null,
@@ -90,29 +88,30 @@ namespace test
             );
             return exhibitConfig;
         }
-        [EntityLogic(typeof(StSFusionHammerDef))]
+        [EntityLogic(typeof(StSPandorasBoxDef))]
         [UsedImplicitly]
-        public sealed class StSFusionHammer : Exhibit
+        public sealed class StSPandorasBox : Exhibit
         {
-            protected override void OnAdded(PlayerUnit player)
+            protected override void OnGain(PlayerUnit player)
             {
-                base.HandleGameRunEvent<StationEventArgs>(base.GameRun.GapOptionsGenerating, delegate (StationEventArgs args)
+                List<Card> list = base.GameRun.BaseDeckWithOutUnremovable.Where((Card c) => c.IsBasic).ToList<Card>();
+                if (list.Count > 0)
                 {
-                    base.NotifyActivating();
-                    ((GapStation)args.Station).GapOptions.RemoveAll(o => o.Type == GapOptionType.UpgradeCard);
-                    args.Station.Finish();
-                });
+                    base.GameRun.RemoveDeckCards(list, false);
+                    List<Card> list2 = new List<Card>();
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        list2.Add(base.GameRun.RollCard(base.GameRun.GameRunEventRng, new CardWeightTable(RarityWeightTable.AllOnes, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), false, null));
+                    }
+                    base.GameRun.AddDeckCards(list2, true, null);
+                }
             }
-            protected override void OnEnterBattle()
+            private class StSPandorasBoxWeighter : IExhibitWeighter
             {
-                base.ReactBattleEvent<UnitEventArgs>(base.Owner.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnOwnerTurnStarted));
-            }
-            private IEnumerable<BattleAction> OnOwnerTurnStarted(UnitEventArgs args)
-            {
-                base.NotifyActivating();
-                ManaGroup manaGroup = ManaGroup.Single(ManaColors.Colors.Sample(base.GameRun.BattleRng));
-                yield return new GainManaAction(manaGroup);
-                yield break;
+                public float WeightFor(Type type, GameRunController gameRun)
+                {
+                    return (float)((gameRun.BaseDeck.Count((Card c) => c.IsBasic) > 0) ? 1 : 0);
+                }
             }
         }
     }

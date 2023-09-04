@@ -112,7 +112,7 @@ namespace test
 
                Keywords: Keyword.None,
                UpgradedKeywords: Keyword.None,
-               EmptyDescription: false,
+               EmptyDescription: true,
                RelativeKeyword: Keyword.None,
                UpgradedRelativeKeyword: Keyword.None,
 
