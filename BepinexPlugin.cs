@@ -258,7 +258,7 @@ namespace test
                 }
             }
         }*/
-        [HarmonyPatch]
+        /*[HarmonyPatch]
         class ViewConsumeMana_ErrorMessage_Patch
         {
             static IEnumerable<MethodBase> TargetMethods()
@@ -285,7 +285,7 @@ namespace test
                     prevCi = ci;
                 }
             }
-        }
+        }*/
         /*[HarmonyPatch]
         class ViewConsumeMana_ErrorMessage2_Patch
         {
