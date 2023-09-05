@@ -31,7 +31,7 @@ using LBoL.Core.Units;
 using LBoL.EntityLib.Cards.Character.Cirno.Friend;
 using LBoL.EntityLib.Cards.Character.Reimu;
 using LBoL.EntityLib.Cards.Neutral.MultiColor;
-using static test.DayuuAbilityDef;
+
 using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 
@@ -128,7 +128,7 @@ namespace test
         {
             var statusEffectConfig = new StatusEffectConfig(
                 Id: "",
-                Order: 7,
+                Order: 11,
                 Type: StatusEffectType.Special,
                 IsVerbose: false,
                 IsStackable: true,

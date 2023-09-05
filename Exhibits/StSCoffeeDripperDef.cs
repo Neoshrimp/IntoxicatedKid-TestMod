@@ -30,13 +30,15 @@ using LBoL.Core.Units;
 using LBoL.EntityLib.Cards.Character.Cirno.Friend;
 using LBoL.EntityLib.Cards.Character.Reimu;
 using LBoL.EntityLib.Cards.Neutral.MultiColor;
-using static test.DayuuAbilityDef;
+
 using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 using JetBrains.Annotations;
 using LBoL.Core.GapOptions;
 using LBoL.Core.Stations;
 using LBoL.Presentation.UI;
+using LBoL.EntityLib.Exhibits.Adventure;
+using System.Reflection;
 
 namespace test
 {
@@ -102,6 +104,13 @@ namespace test
                     base.NotifyActivating();
                     ((GapStation)args.Station).GapOptions.RemoveAll(o => o.Type == GapOptionType.DrinkTea);
                     args.Station.Finish();
+                });
+                base.HandleGameRunEvent<StationEventArgs>(base.GameRun.StationEntered, delegate (StationEventArgs args)
+                {
+                    if (args.Station.Type == StationType.Gap && ((GapStation)args.Station).GapOptions.Empty() && player.HasExhibit<WaijieYanshuang>() && !player.HasExhibit<JingjieGanzhiyi>())
+                    {
+                        ((GapStation)args.Station).PreDialogs.Add(new StationDialogSource("YukariProvide", new WaijieYanshuang.YanshuangCommandHandler(base.GameRun)));
+                    }
                 });
             }
             protected override void OnEnterBattle()

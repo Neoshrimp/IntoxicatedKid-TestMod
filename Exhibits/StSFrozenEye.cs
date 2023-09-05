@@ -30,24 +30,29 @@ using LBoL.Core.Units;
 using LBoL.EntityLib.Cards.Character.Cirno.Friend;
 using LBoL.EntityLib.Cards.Character.Reimu;
 using LBoL.EntityLib.Cards.Neutral.MultiColor;
-
 using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 using LBoL.EntityLib.Exhibits;
 using JetBrains.Annotations;
 using LBoL.Core.Stations;
-using LBoL.EntityLib.EnemyUnits.Character;
 using HarmonyLib;
 using LBoL.EntityLib.EnemyUnits.Normal;
 using System.Runtime.CompilerServices;
+using LBoL.Presentation.Effect;
+using LBoL.Presentation.UI.Dialogs;
+using LBoL.Presentation.UI.ExtraWidgets;
+using LBoL.Presentation.UI.Widgets;
+using LBoL.Presentation.Units;
+using LBoL.EntityLib.EnemyUnits.Character;
+using LBoL.Presentation.UI;
 
 namespace test
 {
-    public sealed class StSEctoplasmDef : ExhibitTemplate
+    public sealed class StSFrozenEyeDef : ExhibitTemplate
     {
         public override IdContainer GetId()
         {
-            return nameof(StSEctoplasm);
+            return nameof(StSFrozenEye);
         }
         public override LocalizationOption LoadLocalization()
         {
@@ -70,21 +75,21 @@ namespace test
                 Index: sequenceTable.Next(typeof(ExhibitConfig)),
                 Id: "",
                 Order: 10,
-                IsDebug: true,
-                IsPooled: false,
+                IsDebug: false,
+                IsPooled: true,
                 IsSentinel: false,
                 Revealable: false,
-                Appearance: AppearanceType.Anywhere,
+                Appearance: AppearanceType.ShopOnly,
                 Owner: "",
-                LosableType: ExhibitLosableType.CantLose,
-                Rarity: Rarity.Shining,
+                LosableType: ExhibitLosableType.Losable,
+                Rarity: Rarity.Common,
                 Value1: null,
                 Value2: null,
                 Value3: null,
                 Mana: null,
                 BaseManaRequirement: null,
-                BaseManaColor: ManaColor.Green,
-                BaseManaAmount: 2,
+                BaseManaColor: null,
+                BaseManaAmount: 0,
                 HasCounter: false,
                 InitialCounter: null,
                 Keywords: Keyword.None,
@@ -94,25 +99,29 @@ namespace test
             );
             return exhibitConfig;
         }
-        [EntityLogic(typeof(StSEctoplasmDef))]
+        [EntityLogic(typeof(StSFrozenEyeDef))]
         [UsedImplicitly]
-        [ExhibitInfo(ExpireStageLevel = 3, ExpireStationLevel = 0)]
-        public sealed class StSEctoplasm : ShiningExhibit
+        public sealed class StSFrozenEye : Exhibit
         {
-            protected override void OnAdded(PlayerUnit player)
-            {
-                base.HandleGameRunEvent<GameEventArgs>(base.GameRun.MoneyGained, delegate (GameEventArgs _)
-                {
-                    base.NotifyActivating();
-                });
-            }
-            [HarmonyPatch(typeof(GameRunController), nameof(GameRunController.InternalGainMoney))]
-            class GameRunController_InternalGainMoney_Patch
+            [HarmonyPatch(typeof(PlayBoard), nameof(PlayBoard.ShowDrawZone))]
+            class PlayBoard_ShowDrawZone_Patch
             {
                 static bool Prefix()
                 {
-                    if (GameMaster.Instance.CurrentGameRun.Player.HasExhibit<StSEctoplasm>())
+                    if (GameMaster.Instance.CurrentGameRun.Player.HasExhibit<StSFrozenEyeDef.StSFrozenEye>())
                     {
+                        if (GameMaster.Instance.CurrentGameRun.Battle == null)
+                        {
+                            return false;
+                        }
+                        ShowCardsPayload showCardsPayload = new ShowCardsPayload
+                        {
+                            Name = "Game.DrawZoneOutOfOrder".Localize(true),
+                            Description = "Cards.Show".Localize(true),
+                            Cards = GameMaster.Instance.CurrentGameRun.Battle.DrawZone,
+                            ShowType = ShowCardsType.None
+                        };
+                        UiManager.GetPanel<ShowCardsPanel>().Show(showCardsPayload);
                         return false;
                     }
                     return true;

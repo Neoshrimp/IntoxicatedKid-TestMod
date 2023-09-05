@@ -207,7 +207,7 @@ namespace test
             {
                 foreach (Exhibit exhibit in list)
                 {
-                    GameMaster.Instance.CurrentGameRun.LoseExhibit(exhibit, false, true);
+                    GameMaster.Instance.CurrentGameRun.LoseExhibit(GameMaster.Instance.CurrentGameRun.Player.GetExhibit<TestExhibitDef.TestExhibit>(), false, true);
                 }
             }
         }
@@ -233,7 +233,7 @@ namespace test
             {
                 foreach (Exhibit exhibit in list)
                 {
-                    GameMaster.Instance.CurrentGameRun.LoseExhibit(exhibit, false, true);
+                    GameMaster.Instance.CurrentGameRun.LoseExhibit(GameMaster.Instance.CurrentGameRun.Player.GetExhibit<TASBotDef.TASBot>(), false, true);
                 }
             }
         }

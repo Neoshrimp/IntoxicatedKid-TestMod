@@ -54,79 +54,77 @@ namespace test
         public override CardConfig MakeConfig()
         {
             var cardConfig = new CardConfig(
-                Index: sequenceTable.Next(typeof(CardConfig)),
-                Id: "",
-                Order: 10,
-                AutoPerform: true,
-                Perform: new string[0][],
-                GunName: "Simple1",
-                GunNameBurst: "Simple1",
-                DebugLevel: 0,
-                Revealable: false,
-                IsPooled: true,
-                HideMesuem: false,
-                IsUpgradable: true,
-                Rarity: Rarity.Uncommon,
-                Type: CardType.Ability,
-                TargetType: TargetType.Self,
-                Colors: new List<ManaColor>() { ManaColor.Green },
-                IsXCost: false,
-                Cost: new ManaGroup() { Any = 2, Green = 1 },
-                UpgradedCost: null,
-                MoneyCost: null,
-                Damage: null,
-                UpgradedDamage: null,
-                Block: null,
-                UpgradedBlock: null,
-                Shield: null,
-                UpgradedShield: null,
-                Value1: 1,
-                UpgradedValue1: null,
-                Value2: 2,
-                UpgradedValue2: 4,
-                Mana: new ManaGroup() { Any = 1 },
-                UpgradedMana: null,
-                Scry: null,
-                UpgradedScry: null,
-                ToolPlayableTimes: null,
+               Index: sequenceTable.Next(typeof(CardConfig)),
+               Id: "",
+               Order: 10,
+               AutoPerform: true,
+               Perform: new string[0][],
+               GunName: "Simple1",
+               GunNameBurst: "Simple1",
+               DebugLevel: 0,
+               Revealable: false,
+               IsPooled: true,
+               HideMesuem: false,
+               IsUpgradable: true,
+               Rarity: Rarity.Uncommon,
+               Type: CardType.Ability,
+               TargetType: TargetType.Self,
+               Colors: new List<ManaColor>() { ManaColor.Green },
+               IsXCost: false,
+               Cost: new ManaGroup() { Any = 2, Green = 1 },
+               UpgradedCost: null,
+               MoneyCost: null,
+               Damage: null,
+               UpgradedDamage: null,
+               Block: null,
+               UpgradedBlock: null,
+               Shield: null,
+               UpgradedShield: null,
+               Value1: 1,
+               UpgradedValue1: null,
+               Value2: 2,
+               UpgradedValue2: 4,
+               Mana: new ManaGroup() { Any = 1 },
+               UpgradedMana: null,
+               Scry: null,
+               UpgradedScry: null,
+               ToolPlayableTimes: null,
+               Loyalty: null,
+               UpgradedLoyalty: null,
+               PassiveCost: null,
+               UpgradedPassiveCost: null,
+               ActiveCost: null,
+               UpgradedActiveCost: null,
+               UltimateCost: null,
+               UpgradedUltimateCost: null,
 
-                Loyalty: null,
-                UpgradedLoyalty: null,
-                PassiveCost: null,
-                UpgradedPassiveCost: null,
-                ActiveCost: null,
-                UpgradedActiveCost: null,
-                UltimateCost: null,
-                UpgradedUltimateCost: null,
+               Keywords: Keyword.None,
+               UpgradedKeywords: Keyword.None,
+               EmptyDescription: false,
+               RelativeKeyword: Keyword.FriendCard,
+               UpgradedRelativeKeyword: Keyword.FriendCard,
 
-                Keywords: Keyword.None,
-                UpgradedKeywords: Keyword.None,
-                EmptyDescription: false,
-                RelativeKeyword: Keyword.FriendCard,
-                UpgradedRelativeKeyword: Keyword.FriendCard,
-
-                RelativeEffects: new List<string>() { "DayuuFriendSe" },
-                UpgradedRelativeEffects: new List<string>() { "DayuuFriendSe" },
-                RelativeCards: new List<string>() { "DayuuFriend", "DayuuExodia" },
-                UpgradedRelativeCards: new List<string>() { "DayuuFriend", "DayuuExodia" },
-                Owner: null,
-                Unfinished: false,
-                Illustrator: "Roke",
-                SubIllustrator: new List<string>() { "MIO" }
-             );
+               RelativeEffects: new List<string>() { "DayuuFriendSe" },
+               UpgradedRelativeEffects: new List<string>() { "DayuuFriendSe" },
+               RelativeCards: new List<string>() { "DayuuFriend", "DayuuExodia" },
+               UpgradedRelativeCards: new List<string>() { "DayuuFriend", "DayuuExodia" },
+               Owner: null,
+               Unfinished: false,
+               Illustrator: "Roke",
+               SubIllustrator: new List<string>() { "MIO" }
+            );
 
             return cardConfig;
         }
-        [EntityLogic(typeof(DayuuAbilityDef))]
-        public sealed class DayuuAbility : Card
+    }
+    [EntityLogic(typeof(DayuuAbilityDef))]
+    public sealed class DayuuAbility : Card
+    {
+        protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
-            {
-                yield return base.BuffAction<DayuuAbilitySeDef.DayuuAbilitySe>(base.Value2, 0, 0, base.Value1, 0.2f);
-                yield break;
-            }
+            yield return base.BuffAction<DayuuAbilitySeDef.DayuuAbilitySe>(base.Value2, 0, 0, base.Value1, 0.2f);
+            yield break;
         }
-
     }
     public sealed class DayuuAbilitySeDef : StatusEffectTemplate
     {

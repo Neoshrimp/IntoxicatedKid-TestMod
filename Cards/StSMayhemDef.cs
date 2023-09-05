@@ -152,7 +152,7 @@ namespace test
         {
             var statusEffectConfig = new StatusEffectConfig(
                 Id: "",
-                Order: 7,
+                Order: 11,
                 Type: StatusEffectType.Positive,
                 IsVerbose: false,
                 IsStackable: true,
