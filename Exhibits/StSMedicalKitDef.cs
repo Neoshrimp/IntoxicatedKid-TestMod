@@ -72,7 +72,7 @@ namespace test
                 Appearance: AppearanceType.ShopOnly,
                 Owner: "",
                 LosableType: ExhibitLosableType.Losable,
-                Rarity: Rarity.Uncommon,
+                Rarity: Rarity.Common,
                 Value1: null,
                 Value2: null,
                 Value3: null,
