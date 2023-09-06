@@ -118,11 +118,8 @@ namespace test
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
             {
                 base.NotifyActivating();
-                foreach (EnemyUnit enemyUnit in base.Battle.AllAliveEnemies)
-                {
-                    yield return new ApplyStatusEffectAction<Firepower>(enemyUnit, new int?(base.Value1), null, null, null, 0.2f, true);
-                }
                 yield return new ApplyStatusEffectAction<Firepower>(base.Owner, new int?(base.Value1), null, null, null, 0f, true);
+                yield return new ApplyStatusEffectAction<Spirit>(base.Owner, new int?(base.Value1), null, null, null, 0f, true);
                 yield break;
             }
         }
