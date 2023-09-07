@@ -86,14 +86,14 @@ namespace test
                 HasCounter: false,
                 InitialCounter: null,
                 Keywords: Keyword.None,
-                RelativeEffects: new List<string>() { "Firepower", "Spirit" },
-                // example of referring to UniqueId of an entity without calling MakeConfig
+                RelativeEffects: new List<string>() { "Firepower" },
                 RelativeCards: new List<string>() { "YinyangCard" }
             );
             return exhibitConfig;
         }
         [EntityLogic(typeof(BlossomingYinYangOrbDef))]
         [UsedImplicitly]
+        [ExhibitInfo(WeighterType = typeof(BlossomingYinYangOrb.BlossomingYinYangOrbWeighter))]
         public sealed class BlossomingYinYangOrb : ShiningExhibit
         {
             protected override void OnAdded(PlayerUnit player)
@@ -173,7 +173,7 @@ namespace test
             {
                 public float WeightFor(Type type, GameRunController gameRun)
                 {
-                    return (float)(gameRun.Player.HasExhibit<ReimuR>() ? 1.2 : 0);
+                    return (float)(gameRun.Player.HasExhibit<ReimuR>() ? 1 : 0);
                 }
             }
         }
