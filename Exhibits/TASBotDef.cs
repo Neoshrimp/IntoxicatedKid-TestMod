@@ -39,6 +39,7 @@ using LBoL.Presentation.UI;
 using LBoL.EntityLib.StatusEffects.Cirno;
 using LBoL.EntityLib.StatusEffects.Enemy;
 using LBoL.EntityLib.Cards.Other.Enemy;
+using LBoL.EntityLib.Exhibits.Shining;
 
 namespace test
 {
@@ -167,6 +168,20 @@ namespace test
             }
             protected override void OnAdded(Unit unit)
             {
+
+                HandleOwnerEvent(Battle.CardUsingCanceled, (CardUsingEventArgs args) =>
+                {
+
+                    /*                    yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                    yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                    yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                    yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                    yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());*/
+                    //yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+/*                    GC.Collect();
+                    GC.WaitForPendingFinalizers();*/
+                });
+
                 this.LastSpell = false;
                 base.HandleOwnerEvent<UnitEventArgs>(base.Battle.Player.TurnStarting, delegate (UnitEventArgs _)
                 {
@@ -180,6 +195,10 @@ namespace test
                 base.ReactOwnerEvent<CardEventArgs>(base.Battle.CardDrawn, new EventSequencedReactor<CardEventArgs>(this.OnCardDrawn));
                 base.ReactOwnerEvent<CardMovingEventArgs>(base.Battle.CardMoved, new EventSequencedReactor<CardMovingEventArgs>(this.OnCardMoved));
                 base.ReactOwnerEvent<CardsEventArgs>(base.Battle.CardsAddedToHand, new EventSequencedReactor<CardsEventArgs>(this.OnCardsAddedToHand));
+
+
+
+
             }
             private void OnPredraw(CardEventArgs args)
             {
@@ -348,6 +367,12 @@ namespace test
                             yield return new UseCardAction(card, UnitSelector.All, this.Mana);
                         }
                     }
+
+
+
+
+
+
                 }
                 base.GameRun.SynergyAdditionalCount -= 1;
                 yield return new RequestEndPlayerTurnAction();
@@ -430,6 +455,7 @@ namespace test
                             yield return new UseCardAction(card, UnitSelector.All, this.Mana);
                         }
                     }
+
                 }
                 yield break;
             }
@@ -510,6 +536,8 @@ namespace test
                             yield return new UseCardAction(card, UnitSelector.All, this.Mana);
                         }
                     }
+
+
                 }
                 yield break;
             }
@@ -594,7 +622,7 @@ namespace test
                         }
                     }
                 }
-                yield break;
+                
             }
         }
     }
