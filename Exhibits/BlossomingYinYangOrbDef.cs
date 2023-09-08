@@ -77,23 +77,23 @@ namespace test
                 LosableType: ExhibitLosableType.CantLose,
                 Rarity: Rarity.Shining,
                 Value1: 1,
-                Value2: 4,
+                Value2: 3,
                 Value3: null,
-                Mana: new ManaGroup() { White = 1, Red = 1, Philosophy = 1 },
+                Mana: new ManaGroup() { Red = 2 },
                 BaseManaRequirement: null,
                 BaseManaColor: null,
                 BaseManaAmount: 0,
                 HasCounter: false,
                 InitialCounter: null,
                 Keywords: Keyword.None,
-                RelativeEffects: new List<string>() { "Firepower", "Spirit" },
-                // example of referring to UniqueId of an entity without calling MakeConfig
+                RelativeEffects: new List<string>() { "Firepower" },
                 RelativeCards: new List<string>() { "YinyangCard" }
             );
             return exhibitConfig;
         }
         [EntityLogic(typeof(BlossomingYinYangOrbDef))]
         [UsedImplicitly]
+        [ExhibitInfo(WeighterType = typeof(BlossomingYinYangOrb.BlossomingYinYangOrbWeighter))]
         public sealed class BlossomingYinYangOrb : ShiningExhibit
         {
             protected override void OnAdded(PlayerUnit player)
@@ -114,20 +114,17 @@ namespace test
             }
             protected override void OnEnterBattle()
             {
-                base.HandleBattleEvent<UnitEventArgs>(base.Battle.Player.TurnStarting, delegate (UnitEventArgs _)
-                {
-                    base.Active = true;
-                });
+                base.Active = true;
                 base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(this.OnBattleStarted));
                 base.ReactBattleEvent<DieEventArgs>(base.Battle.EnemyDied, new EventSequencedReactor<DieEventArgs>(this.OnEnemyDied));
-                base.HandleBattleEvent<DamageEventArgs>(base.Battle.Player.DamageTaking, new GameEventHandler<DamageEventArgs>(this.OnPlayerDamageTaking));
+                //base.HandleBattleEvent<DamageEventArgs>(base.Battle.Player.DamageTaking, new GameEventHandler<DamageEventArgs>(this.OnPlayerDamageTaking));
                 base.ReactBattleEvent<DamageEventArgs>(base.Battle.Player.DamageReceived, new EventSequencedReactor<DamageEventArgs>(this.OnPlayerDamageReceived));
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
             {
                 base.NotifyActivating();
                 yield return new ApplyStatusEffectAction<Firepower>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
-                yield return new ApplyStatusEffectAction<Spirit>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
+                //yield return new ApplyStatusEffectAction<Spirit>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
                 yield return new HealAction(base.Owner, base.Owner, base.Value2, HealType.Base, 0.1f);
                 yield break;
             }
@@ -137,12 +134,12 @@ namespace test
                 if (!base.Battle.BattleShouldEnd)
                 {
                     yield return new ApplyStatusEffectAction<Firepower>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
-                    yield return new ApplyStatusEffectAction<Spirit>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
+                    //yield return new ApplyStatusEffectAction<Spirit>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
                 }
                 yield return new HealAction(base.Owner, base.Owner, base.Value2, HealType.Base, 0.1f);
                 yield break;
             }
-            private void OnPlayerDamageTaking(DamageEventArgs args)
+            /*private void OnPlayerDamageTaking(DamageEventArgs args)
             {
                 DamageInfo damageInfo = args.DamageInfo;
                 int num = damageInfo.Damage.RoundToInt();
@@ -152,17 +149,18 @@ namespace test
                     args.DamageInfo = damageInfo.ReduceActualDamageBy(num);
                     args.AddModifier(this);
                 }
-            }
+            }*/
             private IEnumerable<BattleAction> OnPlayerDamageReceived(DamageEventArgs args)
             {
                 Unit source = args.Source;
                 if (source is EnemyUnit && source.IsAlive && this.Active)
                 {
+                    base.NotifyActivating();
+                    base.Active = false;
                     Card card = Library.CreateCard<YinyangCard>();
-                    card.SetTurnCost(new ManaGroup() { Any = 0 });
                     yield return new AddCardsToHandAction(card);
-                    EnemyUnit pointedEnemy = (EnemyUnit)args.Source;
-                    UnitSelector unitSelector = new UnitSelector(pointedEnemy);
+                    EnemyUnit attacker = (EnemyUnit)args.Source;
+                    UnitSelector unitSelector = new UnitSelector(attacker);
                     yield return new UseCardAction(card, unitSelector, new ManaGroup() { Any = 0 });
                 }
                 yield break;
@@ -175,7 +173,7 @@ namespace test
             {
                 public float WeightFor(Type type, GameRunController gameRun)
                 {
-                    return (float)(gameRun.Player.HasExhibit<ReimuR>() ? 2 : 0);
+                    return (float)(gameRun.Player.HasExhibit<ReimuR>() ? 1 : 0);
                 }
             }
         }

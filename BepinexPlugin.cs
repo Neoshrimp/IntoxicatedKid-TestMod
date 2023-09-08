@@ -102,7 +102,9 @@ using LBoL.Presentation.UI.Transitions;
 using LBoL.Presentation.UI.Widgets;
 using LBoL.Presentation.Units;
 using LBoLEntitySideloader;
+using LBoLEntitySideloader.ReflectionHelpers;
 using LBoLEntitySideloader.Resource;
+using Mono.Cecil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -190,13 +192,23 @@ namespace test
             {
                 Library.CreateExhibit<TestExhibitDef.TestExhibit>()
             };
-            foreach (Exhibit exhibit in list)
+            if (!GameMaster.Instance.CurrentGameRun.Player.HasExhibit<TestExhibitDef.TestExhibit>())
             {
-                yield return GameMaster.Instance.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                foreach (Exhibit exhibit in list)
                 {
-                    SourceType = VisualSourceType.Vn,
-                    Index = -1
-                });
+                    yield return GameMaster.Instance.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                    {
+                        SourceType = VisualSourceType.Vn,
+                        Index = -1
+                    });
+                }
+            }
+            else
+            {
+                foreach (Exhibit exhibit in list)
+                {
+                    GameMaster.Instance.CurrentGameRun.LoseExhibit(GameMaster.Instance.CurrentGameRun.Player.GetExhibit<TestExhibitDef.TestExhibit>(), false, true);
+                }
             }
         }
         private IEnumerator TestF2()
@@ -206,14 +218,122 @@ namespace test
             {
                 Library.CreateExhibit<TASBotDef.TASBot>()
             };
-            foreach (Exhibit exhibit in list)
+            if (!GameMaster.Instance.CurrentGameRun.Player.HasExhibit<TASBotDef.TASBot>())
             {
-                yield return GameMaster.Instance.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                foreach (Exhibit exhibit in list)
                 {
-                    SourceType = VisualSourceType.Vn,
-                    Index = -1
-                });
+                    yield return GameMaster.Instance.CurrentGameRun.GainExhibitRunner(exhibit, true, new VisualSourceData
+                    {
+                        SourceType = VisualSourceType.Vn,
+                        Index = -1
+                    });
+                }
+            }
+            else
+            {
+                foreach (Exhibit exhibit in list)
+                {
+                    GameMaster.Instance.CurrentGameRun.LoseExhibit(GameMaster.Instance.CurrentGameRun.Player.GetExhibit<TASBotDef.TASBot>(), false, true);
+                }
             }
         }
+        /*[HarmonyPatch(typeof(CardUi), nameof(CardUi.Awake))]
+        class _13thCard_Patch
+        {
+
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                CodeInstruction prevCi = null;
+                foreach (var ci in instructions)
+                {
+                    if (ci.opcode == OpCodes.Ldc_I4_S && prevCi.opcode == OpCodes.Ldloc_0)
+                    {
+                        yield return new CodeInstruction(OpCodes.Ldc_I4_S, 99);
+                    }
+                    else
+                    {
+                        yield return ci;
+                    }
+                    prevCi = ci;
+                }
+            }
+        }*/
+        /*[HarmonyPatch]
+        class ViewConsumeMana_ErrorMessage_Patch
+        {
+            static IEnumerable<MethodBase> TargetMethods()
+            {
+                yield return ExtraAccess.InnerMoveNext(typeof(BattleManaPanel), nameof(BattleManaPanel.ViewConsumeMana));
+            }
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+            {
+                CodeInstruction prevCi = null;
+                foreach (var ci in instructions)
+                {
+                    if (prevCi != null && ci.opcode == OpCodes.Call && prevCi.opcode == OpCodes.Ldstr && prevCi.operand.ToString() == "Cannot dequeue consuming mana, resetting all.")
+                    {
+                        yield return new CodeInstruction(OpCodes.Pop);
+                    }
+                    else if (prevCi != null && ci.opcode == OpCodes.Call && prevCi.opcode == OpCodes.Call)
+                    {
+                        yield return new CodeInstruction(OpCodes.Pop);
+                    }
+                    else
+                    {
+                        yield return ci;
+                    }
+                    prevCi = ci;
+                }
+            }
+        }*/
+        /*[HarmonyPatch]
+        class ViewConsumeMana_ErrorMessage2_Patch
+        {
+            static IEnumerable<MethodBase> TargetMethods()
+            {
+                yield return ExtraAccess.InnerMoveNext(typeof(BattleManaPanel), nameof(BattleManaPanel.ViewConsumeMana));
+            }
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var finish = false;
+                int start = -1, end = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (int i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldstr)
+                    {
+                        if (finish)
+                        {
+                            Debug.LogError("endline " + i);
+
+                            end = i;
+                            break;
+                        }
+                        else
+                        {
+                            Debug.LogError("startline " + (i + 1));
+
+                            start = i + 1;
+
+                            for (int j = start; j < codes.Count; j++)
+                            {
+                                if (codes[j].opcode == OpCodes.Call && codes[j - 1].opcode == OpCodes.Call)
+                                {
+                                    finish = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (start > -1 && end > -1)
+                {
+                    codes[start].opcode = OpCodes.Pop;
+                    codes.RemoveRange(start + 1, end - start - 1);
+                }
+                return codes.AsEnumerable();
+            }
+        }*/
     }
 }

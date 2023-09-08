@@ -30,7 +30,7 @@ using LBoL.Core.Units;
 using LBoL.EntityLib.Cards.Character.Cirno.Friend;
 using LBoL.EntityLib.Cards.Character.Reimu;
 using LBoL.EntityLib.Cards.Neutral.MultiColor;
-using static test.DayuuAbilityDef;
+
 using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 using JetBrains.Annotations;
@@ -98,12 +98,10 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardMoving(CardMovingEventArgs args)
             {
-                if (base.Battle.PlayerTurnShouldEnd)
+                if (args.Cause == ActionCause.TurnEnd)
                 {
-                    Card card = args.Card;
-                    if ((card.CardType != CardType.Misfortune) && (card.CardType != CardType.Status))
+                    if ((args.Card.CardType != CardType.Misfortune) && (args.Card.CardType != CardType.Status))
                     {
-                        base.NotifyActivating();
                         args.CancelBy(this);
                     }
                 }

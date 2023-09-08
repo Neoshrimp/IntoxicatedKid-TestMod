@@ -30,7 +30,7 @@ using LBoL.Core.Units;
 using LBoL.EntityLib.Cards.Character.Cirno.Friend;
 using LBoL.EntityLib.Cards.Character.Reimu;
 using LBoL.EntityLib.Cards.Neutral.MultiColor;
-using static test.DayuuAbilityDef;
+
 using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 using JetBrains.Annotations;
@@ -72,7 +72,7 @@ namespace test
                 Appearance: AppearanceType.ShopOnly,
                 Owner: "",
                 LosableType: ExhibitLosableType.Losable,
-                Rarity: Rarity.Uncommon,
+                Rarity: Rarity.Common,
                 Value1: null,
                 Value2: null,
                 Value3: null,
