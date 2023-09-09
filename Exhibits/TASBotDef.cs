@@ -39,6 +39,10 @@ using LBoL.Presentation.UI;
 using LBoL.EntityLib.StatusEffects.Cirno;
 using LBoL.EntityLib.StatusEffects.Enemy;
 using LBoL.EntityLib.Cards.Other.Enemy;
+using HarmonyLib;
+using LBoLEntitySideloader.ReflectionHelpers;
+using System.Reflection.Emit;
+using System.Reflection;
 
 namespace test
 {
@@ -153,6 +157,40 @@ namespace test
             );
             return statusEffectConfig;
         }
+        /*[HarmonyPatch]
+        [HarmonyDebug]
+        class funny_Patch
+        {
+            static IEnumerable<MethodBase> TargetMethods()
+            {
+                yield return ExtraAccess.InnerMoveNext(typeof(SelectCardPanel), nameof(SelectCardPanel.ViewMiniSelect));
+            }
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+            {
+                int i = 0;
+                var ciList = instructions.ToList();
+                var c = ciList.Count();
+                CodeInstruction prevCi = null;
+                foreach (var ci in instructions)
+                {
+                    if (ci.Is(OpCodes.Ldc_R4, 0.2f) && prevCi.Is(OpCodes.Ldc_R4, 0f))
+                    {
+                        yield return new CodeInstruction(OpCodes.Ldc_R4, 0f);
+                    }
+                    else if (ci.opcode == OpCodes.Leave)
+                    {
+                        yield return ci;
+                        yield return new CodeInstruction(OpCodes.Nop);
+                    }
+                    else
+                    {
+                        yield return ci;
+                    }
+                    prevCi = ci;
+                    i++;
+                }
+            }
+        }*/
         [EntityLogic(typeof(TASBotSeDef))]
         public sealed class TASBotSe : StatusEffect
         {
@@ -184,11 +222,6 @@ namespace test
                 base.ReactOwnerEvent<CardEventArgs>(base.Battle.CardDrawn, new EventSequencedReactor<CardEventArgs>(this.OnCardDrawn));
                 base.ReactOwnerEvent<CardMovingEventArgs>(base.Battle.CardMoved, new EventSequencedReactor<CardMovingEventArgs>(this.OnCardMoved));
                 base.ReactOwnerEvent<CardsEventArgs>(base.Battle.CardsAddedToHand, new EventSequencedReactor<CardsEventArgs>(this.OnCardsAddedToHand));
-                //base.ReactOwnerEvent<CardUsingEventArgs>(base.Battle.CardUsingCanceled, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsingCanceled));
-                base.HandleOwnerEvent(Battle.CardUsingCanceled, (CardUsingEventArgs args) => {
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                });
             }
             private void OnPredraw(CardEventArgs args)
             {
@@ -277,14 +310,9 @@ namespace test
                 }
                 base.NotifyActivating();
                 base.GameRun.SynergyAdditionalCount += 1;
-                Card usedcard = null;
                 List<Card> list = base.Battle.HandZone.ToList<Card>();
                 foreach (Card card in list)
                 {
-                    /*if (usedcard.CardType == CardType.Friend && usedcard.Loyalty >= usedcard.UltimateCost && card.CardType == CardType.Friend)
-                    {
-                        yield return new WaitForYieldInstructionAction(new WaitForSeconds(0.1f));
-                    }*/
                     if (base.Battle.BattleShouldEnd)
                     {
                         base.GameRun.SynergyAdditionalCount -= 1;
@@ -358,7 +386,6 @@ namespace test
                             yield return new UseCardAction(card, UnitSelector.All, this.Mana);
                         }
                     }
-                    usedcard = card;
                 }
                 base.GameRun.SynergyAdditionalCount -= 1;
                 yield return new RequestEndPlayerTurnAction();
@@ -606,18 +633,6 @@ namespace test
                         }
                     }
                 }
-                yield break;
-            }
-            private IEnumerable<BattleAction> OnCardUsingCanceled(CardUsingEventArgs args)
-            {
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                //yield return new WaitForYieldInstructionAction(new WaitForSeconds(0.11f));
                 yield break;
             }
         }

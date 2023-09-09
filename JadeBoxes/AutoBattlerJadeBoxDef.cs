@@ -47,7 +47,6 @@ namespace test.JadeBoxes
     {
         protected override void OnGain(GameRunController gameRun)
         {
-            gameRun.LoseExhibit(base.GameRun.Player.Exhibits[0], false, true);
             GameMaster.Instance.StartCoroutine(GainExhibits(gameRun));
         }
         private IEnumerator GainExhibits(GameRunController gameRun)
