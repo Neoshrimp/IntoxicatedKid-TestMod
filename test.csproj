@@ -281,6 +281,9 @@
         <Reference Include="UnityEngine.UIModule">
             <HintPath>$(GameFolder)\LBoL_Data\Managed\UnityEngine.UIModule.dll</HintPath>
         </Reference>
+        <Reference Include="YarnSpinner">
+            <HintPath>$(GameFolder)\LBoL_Data\Managed\YarnSpinner.dll</HintPath>
+        </Reference>
         <Reference Include="LBoL-Entity-Sideloader">
             <HintPath>$(BepInExFolder)\plugins\LBoL-Entity-Sideloader.dll</HintPath>
         </Reference>
@@ -322,6 +325,7 @@
       <None Remove="Resources\StSAccuracy.png" />
       <None Remove="Resources\StSAccuracySe.png" />
       <None Remove="Resources\StSAlchemize.png" />
+      <None Remove="Resources\StSBandageUp.png" />
       <None Remove="Resources\StSBlind.png" />
       <None Remove="Resources\StSBlueCandle.png" />
       <None Remove="Resources\StSBustedCrown.png" />
@@ -330,6 +334,7 @@
       <None Remove="Resources\StSCursedKey.png" />
       <None Remove="Resources\StSDramaticEntrance.png" />
       <None Remove="Resources\StSEctoplasm.png" />
+      <None Remove="Resources\StSEnlightenment.png" />
       <None Remove="Resources\StSEntrench.png" />
       <None Remove="Resources\StSExpertise.png" />
       <None Remove="Resources\StSFinesse.png" />
@@ -339,6 +344,7 @@
       <None Remove="Resources\StSFusionHammer.png" />
       <None Remove="Resources\StSGoodInstincts.png" />
       <None Remove="Resources\StSLimitBreak.png" />
+      <None Remove="Resources\StSMadness.png" />
       <None Remove="Resources\StSMayhem.png" />
       <None Remove="Resources\StSMayhemSe.png" />
       <None Remove="Resources\StSMedicalKit.png" />
@@ -346,6 +352,8 @@
       <None Remove="Resources\StSNecronomicon.png" />
       <None Remove="Resources\StSNecronomicurse.png" />
       <None Remove="Resources\StSNecronomicurseZUN.png" />
+      <None Remove="Resources\StSNeowsLament.png" />
+      <None Remove="Resources\StSNlothsGift.png" />
       <None Remove="Resources\StSPanacea.png" />
       <None Remove="Resources\StSPanache.png" />
       <None Remove="Resources\StSPanacheSe.png" />
@@ -354,12 +362,18 @@
       <None Remove="Resources\StSPanicButtonSe.png" />
       <None Remove="Resources\StSPerfectedStrike.png" />
       <None Remove="Resources\StSPhilosophersStone.png" />
+      <None Remove="Resources\StSPurity.png" />
       <None Remove="Resources\StSRunicDome.png" />
       <None Remove="Resources\StSRunicPyramid.png" />
       <None Remove="Resources\StSSacredBark.png" />
       <None Remove="Resources\StSSneckoEye.png" />
       <None Remove="Resources\StSSozu.png" />
       <None Remove="Resources\StSSwiftStrike.png" />
+      <None Remove="Resources\StSTheBomb.png" />
+      <None Remove="Resources\StSTheBombSe.png" />
+      <None Remove="Resources\StSThreadandNeedle.png" />
+      <None Remove="Resources\StSToolbox.png" />
+      <None Remove="Resources\StSTorii.png" />
       <None Remove="Resources\StSTrip.png" />
       <None Remove="Resources\StSVelvetChoker.png" />
       <None Remove="Resources\TASBot.png" />

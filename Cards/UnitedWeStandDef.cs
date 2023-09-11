@@ -71,7 +71,7 @@ namespace test
                Colors: new List<ManaColor>() { ManaColor.White, ManaColor.Blue, ManaColor.Black, ManaColor.Red, ManaColor.Green },
                IsXCost: false,
                Cost: new ManaGroup() { White = 1, Blue = 1, Black = 1, Red = 1, Green = 1},
-               UpgradedCost: new ManaGroup() { White = 1, Blue = 1, Black = 1, Red = 1, Green = 1},
+               UpgradedCost: null,
                MoneyCost: null,
                Damage: null,
                UpgradedDamage: null,
@@ -146,7 +146,6 @@ namespace test
                     }
                     target = base.Battle.AllAliveEnemies.Sample(base.GameRun.BattleRng);
                 }
-                card.SetTurnCost(new ManaGroup() { Any = 0 });
                 if ((card.CardType == CardType.Misfortune) || (card.CardType == CardType.Status))
                 {
                     yield return new ExileCardAction(card);
@@ -176,7 +175,7 @@ namespace test
                 {
                     yield return new UseCardAction(card, UnitSelector.All, this.Mana);
                 }
-                else if ((card.CardType == CardType.Friend) && (card.Zone == CardZone.PlayArea) && (card.Loyalty <= 0))
+                if ((card.CardType == CardType.Friend) && (card.Zone == CardZone.PlayArea) && (card.Loyalty <= 0))
                 {
                     yield return new RemoveCardAction(card);
                 }
@@ -241,24 +240,9 @@ namespace test
         {
             protected override void OnAdded(Unit unit)
             {
-                //base.HandleOwnerEvent<CardEventArgs>(base.Battle.Predraw, new GameEventHandler<CardEventArgs>(this.OnPredraw));
-                //base.HandleOwnerEvent<CardMovingEventArgs>(base.Battle.CardMoving, new GameEventHandler<CardMovingEventArgs>(this.OnCardMoving));
                 base.HandleOwnerEvent<DamageEventArgs>(unit.DamageTaking, new GameEventHandler<DamageEventArgs>(this.OnDamageTaking));
                 base.ReactOwnerEvent<UnitEventArgs>(base.Owner.TurnEnded, new EventSequencedReactor<UnitEventArgs>(this.OnTurnEnded));
             }
-            /*private void OnPredraw(CardEventArgs args)
-            {
-                base.NotifyActivating();
-                args.CancelBy(this);
-            }*/
-            /*private void OnCardMoving(CardMovingEventArgs args)
-            {
-                if ((args.DestinationZone == CardZone.Hand) && (args.Card.CardType != CardType.Friend))
-                {
-                    base.NotifyActivating();
-                    args.CancelBy(this);
-                }
-            }*/
             private void OnDamageTaking(DamageEventArgs args)
             {
                 int num = args.DamageInfo.Damage.RoundToInt();
@@ -273,6 +257,13 @@ namespace test
             {
                 yield return new RemoveStatusEffectAction(this, true);
                 yield break;
+            }
+            public override string UnitEffectName
+            {
+                get
+                {
+                    return "InvincibleLoop";
+                }
             }
         }
     }

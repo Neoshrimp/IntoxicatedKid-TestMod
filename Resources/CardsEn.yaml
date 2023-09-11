@@ -49,22 +49,47 @@ DayuuReale:
   Name: Reale, Scary Stalker of Discord
   FlavorText: ":skull:"
   DetailText: "These |e:alternate cards| ignore total mana, mana color and mana of any color can be spent to pay their mana costs."
+StSAccuracy:
+  Description: "Increase the damage of |Throwing Knives| by {Value1}."
+  UpgradedDescription: "Increase the damage of |Throwing Knives| by {Value1}."
+  Name: Accuracy
 StSAlchemize:
   Description: "Add a random |Tool| card to the library."
   UpgradedDescription: "Add a random |Tool| card to the library."
   Name: Alchemize
+StSBlind:
+  Description: Apply {Value1} |Weak|.
+  UpgradedDescription: Apply {Value1} |Weak| to each enemy.
+  Name: Blind
 StSDramaticEntrance:
   Description: "Deal {Damage} damage to each enemy."
-  UpgradedDescription: "|At the start of combat|: |Exile| {SelfName}, Deal {Value1} damage to each enemy."
+  UpgradedDescription: "Deal {Damage} damage to each enemy.\n|At the start of combat|:\n|Exile| {SelfName}, Deal {Value1} damage to each enemy."
   Name: Dramatic Entrance
+StSEnlightenment:
+  Description: "All cards in the hand |temporarily costs| {Mana}."
+  UpgradedDescription: "All cards in the hand |costs| {Mana}."
+  Name: Enlightenment
+  DetailText: "Cards with <sprite=\"ManaSprite\" name=\"0\"> cost are unaffected."
 StSEntrench:
   Description: "Double the current |Block|."
   UpgradedDescription: "Double the current |Block| and |Barrier|."
   Name: Entrench
+StSExpertise:
+  Description: "Draw cards until there's {Value1} card{Value1:plural one='' other='s'} in the hand."
+  UpgradedDescription: "Draw cards until there's {Value1} card{Value1:plural one='' other='s'} in the hand."
+  Name: Expertise
 StSFinesse:
   Description: "Gain {Block} |Block|.\nDraw {Value1} card{Value1:plural one='' other='s'}."
   UpgradedDescription: "Gain {Block} |Block|.\nDraw {Value1} card{Value1:plural one='' other='s'}."
   Name: Finesse
+StSFlashofSteel:
+  Description: "Deal {Damage} damage.\nDraw {Value1} card{Value1:plural one='' other='s'}."
+  UpgradedDescription: "Deal {Damage} damage.\nDraw {Value1} card{Value1:plural one='' other='s'}."
+  Name: Flash of Steel
+StSFootwork:
+  Description: Gain {Value1} |Spirit|.
+  UpgradedDescription: Gain {Value1} |Spirit|.
+  Name: Footwork
 StSGoodInstincts:
   Description: Gain {Block} |Block|.
   UpgradedDescription: Gain {Block} |Block|.
@@ -73,6 +98,10 @@ StSLimitBreak:
   Description: Double the current |Firepower| and |Temporary Firepower|.
   UpgradedDescription: Double the current |Firepower| and |Temporary Firepower|.
   Name: Limit Break
+StSMadness:
+  Description: "A random card in the hand |costs| {Mana} this combat."
+  UpgradedDescription: "A random card in the hand |costs| {Mana} this combat."
+  Name: Madness
 StSMayhem:
   Description: "At the start of {PlayerName}'s turn, put the top card of the draw pile into the hand. Then, play that card."
   UpgradedDescription: "At the start of {PlayerName}'s turn, put the top card of the draw pile into the hand. Then, play that card."
@@ -84,7 +113,7 @@ StSMindBlast:
   UpgradedDescription: Deal damage equal to the number of cards in the draw pile. ({Damage})
   Name: Mind Blast
 StSNecronomicurse:
-  Description: "|When Exiled|: return {SelfName} from the exile pile to the hand."
+  Description: "|When Exiled|: Return {SelfName} from the exile pile to the hand."
   Name: Necronomicurse
 StSPanacea:
   Description: "Remove all debuffs from {PlayerName}.\nGain {Value1} |Amulet|."
@@ -102,6 +131,22 @@ StSPerfectedStrike:
   Description: "Deal {Damage} damage.\nFor each |Basic| attack or \"Strike\" cards in the library, {SelfName} deals {Value1} more damage."
   UpgradedDescription: "Deal {Damage} damage.\nFor each |Basic| attack or \"Strike\" cards in the library, {SelfName} deals {Value1} more damage."
   Name: Perfected Strike
+StSPurity:
+  Description: "|Exile| up to {Value1} cards from the hand."
+  UpgradedDescription: "|Exile| up to {Value1} cards from the hand."
+  Name: Purity
+StSSwiftStrike:
+  Description: "Deal {Damage} damage."
+  UpgradedDescription: "Deal {Damage} damage."
+  Name: Swift Strike
+StSTheBomb:
+  Description: "At the end of {PlayerName}'s third turn, deal {Value1} damage to each enemy."
+  UpgradedDescription: "At the end of {PlayerName}'s third turn, deal {Value1} damage to each enemy."
+  Name: The Bomb
+StSTrip:
+  Description: Apply {Value1} |Vulnerable|.
+  UpgradedDescription: Apply {Value1} |Vulnerable| to each enemy.
+  Name: Trip
 UnitedWeStand:
   Description: "Draw cards until the hand is full. Then, play all cards in the hand."
   UpgradedDescription: "Draw cards until the hand is full. Then, play all cards in the hand."
@@ -117,5 +162,5 @@ YuGiOhBlueEyesWhiteDragon:
   Name: Blue-Eyes White Dragon
 ZUNBeerHat:
   Description: "Add a |Drunk| to the hand.\nEnemies cannot act for {Value2} turn{Value2:plural one='' other='s'}."
-  UpgradedDescription: "Enemies cannot act for {Value2} turns."
+  UpgradedDescription: "Enemies cannot act for {Value2} turn{Value2:plural one='' other='s'}."
   Name: Intoxication

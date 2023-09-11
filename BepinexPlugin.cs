@@ -216,7 +216,8 @@ namespace test
             yield return new WaitForSeconds(.1f);
             List<Exhibit> list = new List<Exhibit>
             {
-                Library.CreateExhibit<TASBotDef.TASBot>()
+                Library.CreateExhibit<TASBotDef.TASBot>(),
+                Library.CreateExhibit<StSNlothsGiftDef.StSNlothsGift>()
             };
             if (!GameMaster.Instance.CurrentGameRun.Player.HasExhibit<TASBotDef.TASBot>())
             {

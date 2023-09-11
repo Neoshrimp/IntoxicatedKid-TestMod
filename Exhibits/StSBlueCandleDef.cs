@@ -103,13 +103,13 @@ namespace test
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
             {
-                List<Card> list = base.Battle.DrawZone.Where((Card card) => (card.CardType == CardType.Misfortune)).ToList<Card>();
-                if (list.Count > 0)
+                base.NotifyActivating();
+                foreach (Card card in base.Battle.EnumerateAllCards())
                 {
-                    base.NotifyActivating();
-                    foreach (Card card in list)
+                    if (card.CardType == CardType.Misfortune)
                     {
-                        card.SetBaseCost(base.Mana);
+                        card.NotifyChanged();
+                        card.FreeCost = true;
                         card.IsExile = true;
                         card.IsForbidden = false;
                     }
@@ -118,27 +118,25 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardsAddedToDrawZone(CardsAddingToDrawZoneEventArgs args)
             {
-                yield return this.StatusCardModify(args.Cards);
+                yield return this.MisfortuneCardModify(args.Cards);
                 yield break;
             }
             private IEnumerable<BattleAction> OnAddCard(CardsEventArgs args)
             {
-                yield return this.StatusCardModify(args.Cards);
+                yield return this.MisfortuneCardModify(args.Cards);
                 yield break;
             }
-            private BattleAction StatusCardModify(IEnumerable<Card> cards)
+            private BattleAction MisfortuneCardModify(IEnumerable<Card> cards)
             {
-                List<Card> list = cards.Where((Card card) => (card.CardType == CardType.Misfortune)).ToList<Card>();
-                if (list.Count == 0)
+                foreach (Card card in cards)
                 {
-                    return null;
-                }
-                base.NotifyActivating();
-                foreach (Card card in list)
-                {
-                    card.SetBaseCost(base.Mana);
-                    card.IsExile = true;
-                    card.IsForbidden = false;
+                    if (card.CardType == CardType.Misfortune)
+                    {
+                        card.NotifyChanged();
+                        card.FreeCost = true;
+                        card.IsExile = true;
+                        card.IsForbidden = false;
+                    }
                 }
                 return null;
             }

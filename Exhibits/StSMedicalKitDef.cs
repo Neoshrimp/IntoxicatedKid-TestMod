@@ -72,7 +72,7 @@ namespace test
                 Appearance: AppearanceType.ShopOnly,
                 Owner: "",
                 LosableType: ExhibitLosableType.Losable,
-                Rarity: Rarity.Common,
+                Rarity: Rarity.Uncommon,
                 Value1: null,
                 Value2: null,
                 Value3: null,
@@ -103,13 +103,13 @@ namespace test
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
             {
-                List<Card> list = base.Battle.DrawZone.Where((Card card) => (card.CardType == CardType.Status) && card.IsForbidden).ToList<Card>();
-                if (list.Count > 0)
+                base.NotifyActivating();
+                foreach (Card card in base.Battle.EnumerateAllCards())
                 {
-                    base.NotifyActivating();
-                    foreach (Card card in list)
+                    if (card.CardType == CardType.Status)
                     {
-                        card.SetBaseCost(base.Mana);
+                        card.NotifyChanged();
+                        card.FreeCost = true;
                         card.IsExile = true;
                         card.IsForbidden = false;
                     }
@@ -128,17 +128,15 @@ namespace test
             }
             private BattleAction StatusCardModify(IEnumerable<Card> cards)
             {
-                List<Card> list = cards.Where((Card card) => (card.CardType == CardType.Status) && card.IsForbidden).ToList<Card>();
-                if (list.Count == 0)
+                foreach (Card card in cards)
                 {
-                    return null;
-                }
-                base.NotifyActivating();
-                foreach (Card card in list)
-                {
-                    card.SetBaseCost(base.Mana);
-                    card.IsExile = true;
-                    card.IsForbidden = false;
+                    if (card.CardType == CardType.Status)
+                    {
+                        card.NotifyChanged();
+                        card.FreeCost = true;
+                        card.IsExile = true;
+                        card.IsForbidden = false;
+                    }
                 }
                 return null;
             }

@@ -10,6 +10,10 @@ DayuuExodiaSe:
     Brief: "{PlayerName} can't lose life."
     Description: "{OwnerName} can't lose life."
     Name: Advent
+StSAccuracySe:
+    Brief: "Damage of |Throwing Knives| are increased."
+    Description: "|Throwing Knives| deal {Level} more damage."
+    Name: Accuracy
 StSMayhemSe:
     Brief: "At the start of {PlayerName}'s turn, put the top card of the draw pile into the hand. Then, play that card."
     Description: "At the start of {OwnerName}'s turn, place {Level} card{Level:plural one='' other='s'} on top of the draw pile into the hand. Then, play that card."
@@ -22,9 +26,13 @@ StSPanicButtonSe:
     Brief: "Can't gain |Block| or |Barrier| from cards."
     Description: "{OwnerName} can't gain |Block| or |Barrier| from cards for {Duration} turn{Duration:plural one='' other='s'}."
     Name: Panic Button
+StSTheBombSe:
+    Brief: "When removed, deal damage to each enemy."
+    Description: "When removed, deal {Count} damage to each enemy."
+    Name: The Bomb
 TASBotSe:
-    Brief: "Can't draw cards.\nAt the start of {PlayerName}'s turn, play cards on the top of the draw pile."
-    Description: "Can't draw cards.\nAt the start of {OwnerName}'s turn, play {Level} card{Level:plural one='' other='s'} on top of the draw pile."
+    Brief: "Auto battle in progress."
+    Description: "Auto battle in progress."
     Name: TASBot
 UnitedWeStandSe:
   Brief: "{PlayerName} can't lose life."
