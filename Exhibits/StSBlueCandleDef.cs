@@ -96,9 +96,9 @@ namespace test
             {
                 base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(this.OnBattleStarted));
                 base.ReactBattleEvent<CardsAddingToDrawZoneEventArgs>(base.Battle.CardsAddedToDrawZone, new EventSequencedReactor<CardsAddingToDrawZoneEventArgs>(this.OnCardsAddedToDrawZone));
-                base.ReactBattleEvent<CardsEventArgs>(base.Battle.CardsAddedToHand, new EventSequencedReactor<CardsEventArgs>(this.OnAddCard));
-                base.ReactBattleEvent<CardsEventArgs>(base.Battle.CardsAddedToDiscard, new EventSequencedReactor<CardsEventArgs>(this.OnAddCard));
-                base.ReactBattleEvent<CardsEventArgs>(base.Battle.CardsAddedToExile, new EventSequencedReactor<CardsEventArgs>(this.OnAddCard));
+                base.ReactBattleEvent<CardsEventArgs>(base.Battle.CardsAddedToHand, new EventSequencedReactor<CardsEventArgs>(this.OnCardsAdded));
+                base.ReactBattleEvent<CardsEventArgs>(base.Battle.CardsAddedToDiscard, new EventSequencedReactor<CardsEventArgs>(this.OnCardsAdded));
+                base.ReactBattleEvent<CardsEventArgs>(base.Battle.CardsAddedToExile, new EventSequencedReactor<CardsEventArgs>(this.OnCardsAdded));
                 base.ReactBattleEvent<CardUsingEventArgs>(base.Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsed));
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
@@ -109,7 +109,7 @@ namespace test
                     if (card.CardType == CardType.Misfortune)
                     {
                         card.NotifyChanged();
-                        card.FreeCost = true;
+                        card.SetBaseCost(base.Mana);
                         card.IsExile = true;
                         card.IsForbidden = false;
                     }
@@ -121,7 +121,7 @@ namespace test
                 yield return this.MisfortuneCardModify(args.Cards);
                 yield break;
             }
-            private IEnumerable<BattleAction> OnAddCard(CardsEventArgs args)
+            private IEnumerable<BattleAction> OnCardsAdded(CardsEventArgs args)
             {
                 yield return this.MisfortuneCardModify(args.Cards);
                 yield break;
@@ -133,7 +133,7 @@ namespace test
                     if (card.CardType == CardType.Misfortune)
                     {
                         card.NotifyChanged();
-                        card.FreeCost = true;
+                        card.SetBaseCost(base.Mana);
                         card.IsExile = true;
                         card.IsForbidden = false;
                     }

@@ -68,7 +68,7 @@ namespace test
                Colors: new List<ManaColor>() { ManaColor.Colorless },
                IsXCost: false,
                Cost: new ManaGroup() { Any = 0 },
-               UpgradedCost: new ManaGroup() { Any = 0 },
+               UpgradedCost: null,
                MoneyCost: null,
                Damage: null,
                UpgradedDamage: null,
@@ -118,7 +118,7 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            List<Card> list = base.Battle.HandZone.Where((Card card) => card.Cost.Amount > 0).ToList<Card>();
+            List<Card> list = base.Battle.HandZone.Where((Card card) => card.BaseCost.Amount > 0).ToList<Card>();
             if (list.Count > 0)
             {
                 yield return PerformAction.Effect(base.Battle.Player, "Invincible", 0f, "GuirenItem", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);

@@ -117,7 +117,7 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            List<Card> list = base.Battle.HandZone.Where((Card card) => card.Cost.Amount > 0).ToList<Card>();
+            List<Card> list = base.Battle.HandZone.Where((Card card) => card.BaseCost.Amount > 0).ToList<Card>();
             if (list.Count > 0)
             {
                 Card card2 = list.Sample(base.GameRun.BattleRng);

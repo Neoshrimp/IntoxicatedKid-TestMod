@@ -159,12 +159,12 @@ namespace test
         private IEnumerable<BattleAction> AddToHandReactor()
         {
             yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0f, "BirdSing", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
-            yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0.4f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
-            yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0.8f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
+            yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 0.5f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
+            yield return PerformAction.Effect(base.Battle.Player, "Wave1s", 1f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
             yield return PerformAction.Effect(base.Battle.Player, "JunkoNightmare", 0f, "JunkoNightmare", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
-            yield return PerformAction.Effect(base.Battle.Player, "JunkoNightmare", 0.4f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
-            yield return PerformAction.Effect(base.Battle.Player, "JunkoNightmare", 0.8f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
-            yield return PerformAction.Effect(base.Battle.Player, "RenzhenAura", 1f, "RenzhenAura", 0f, PerformAction.EffectBehavior.Add, 0f);
+            yield return PerformAction.Effect(base.Battle.Player, "JunkoNightmare", 0.5f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
+            yield return PerformAction.Effect(base.Battle.Player, "JunkoNightmare", 1f, "", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
+            yield return PerformAction.Effect(base.Battle.Player, "RenzhenAura", 1f, "RenzhenAura", 1f, PerformAction.EffectBehavior.Add, 0f);
             yield return base.BuffAction<DayuuExodiaSeDef.DayuuExodiaSe>(0, 0, 0, 0, 0f);
             yield break;
         }
@@ -315,13 +315,13 @@ namespace test
                     args.AddModifier(this);
                 }
             }
-            public override string UnitEffectName
+            /*public override string UnitEffectName
             {
                 get
                 {
                     return "InvincibleLoop";
                 }
-            }
+            }*/
         }
     }
 }
