@@ -107,8 +107,8 @@ namespace test
 
                 RelativeEffects: new List<string>() { },
                 UpgradedRelativeEffects: new List<string>() { },
-                RelativeCards: new List<string>() { },
-                UpgradedRelativeCards: new List<string>() { },
+                RelativeCards: new List<string>() { "Knife" },
+                UpgradedRelativeCards: new List<string>() { "Knife" },
                 Owner: "Sakuya",
                 Unfinished: false,
                 Illustrator: "Mega Crit",

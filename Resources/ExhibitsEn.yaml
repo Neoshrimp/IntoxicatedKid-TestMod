@@ -14,6 +14,10 @@ StSBustedCrown:
   Description: "Adds {BaseMana} to the mana base.\nCard rewards have {Value1} less option{Value1:plural one='' other='s'}.\n{SelfName} can't be found after act 3."
   Name: Busted Crown
   FlavorText: "The Champ's crown... or a pale imitation?"
+StSCauldron:
+  Description: "When acquired, choose {Value1} random |Tool| cards to add to the library."
+  Name: Cauldron
+  FlavorText: "The Merchant is actually a rather skilled potion brewer. Buy 4 get 1 free."
 StSCoffeeDripper:
   Description: "At the start of {PlayerName}'s turn, gain 1 random mana.\nRemoves the ability to |Drink| at Gaps."
   Name: Coffee Dripper
@@ -54,6 +58,10 @@ StSNlothsGift:
   Description: "Triples the chance to find rare cards."
   Name: N'loth's Gift
   FlavorText: "The strange gift from N'loth. Whenever you try and unwrap it, another wrapped box of the same size lies within."
+StSOrrery:
+  Description: "When acquired, grants {Value1} card rewards."
+  Name: Orrery
+  FlavorText: '"Once you understand the universe..." - Zoroth'
 StSPandorasBox:
   Description: "When acquired, transform |Basic| cards to random cards."
   Name: Pandora's Box

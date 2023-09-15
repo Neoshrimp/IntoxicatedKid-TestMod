@@ -102,7 +102,7 @@ namespace test
                     if (args.Station.Type == StationType.Supply)
                     {
                         base.NotifyActivating();
-                        Card card = base.GameRun.GetRandomCurseCard(base.GameRun.AdventureRng, false);
+                        Card card = base.GameRun.GetRandomCurseCard(base.GameRun.GameRunEventRng, false);
                         base.GameRun.AddDeckCard(card, false, null);
                     }
                 });

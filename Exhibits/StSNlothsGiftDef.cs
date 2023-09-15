@@ -101,6 +101,7 @@ namespace test
         }
         [EntityLogic(typeof(StSNlothsGiftDef))]
         [UsedImplicitly]
+        [ExhibitInfo(ExpireStageLevel = 3, ExpireStationLevel = 9)]
         public sealed class StSNlothsGift : Exhibit
         {
             [HarmonyPatch(typeof(GameRunController), nameof(GameRunController.GetRewardCards))]

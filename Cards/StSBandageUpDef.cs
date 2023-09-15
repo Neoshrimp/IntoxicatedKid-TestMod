@@ -73,7 +73,7 @@ namespace test
                Shield: null,
                UpgradedShield: null,
                Value1: 4,
-               UpgradedValue1: 6,
+               UpgradedValue1: 8,
                Value2: null,
                UpgradedValue2: null,
                Mana: null,

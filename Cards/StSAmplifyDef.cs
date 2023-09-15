@@ -178,13 +178,11 @@ namespace test
         {
             private bool Again;
             private Card card;
-            private Card card2;
             private UnitSelector unitSelector;
             protected override void OnAdded(Unit unit)
             {
                 this.Again = false;
                 card = null;
-                card2 = null;
                 unitSelector = null;
                 base.ReactOwnerEvent<CardUsingEventArgs>(base.Battle.CardUsing, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsing));
                 base.ReactOwnerEvent<CardMovingEventArgs>(base.Battle.CardMoving, new EventSequencedReactor<CardMovingEventArgs>(this.OnCardMoving));
@@ -193,7 +191,7 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardUsing(CardUsingEventArgs args)
             {
-                if (args.Card.CardType == CardType.Ability && args.Card != card && args.Card != card2)
+                if (args.Card.CardType == CardType.Ability && args.Card != card)
                 {
                     this.Again = true;
                     card = args.Card;
@@ -206,7 +204,7 @@ namespace test
                 if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card && !(args.SourceZone == CardZone.PlayArea && args.DestinationZone == CardZone.Hand))
                 {
                     this.Again = false;
-                    if (base.Battle.MaxHand <= base.Battle.HandZone.Count)
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
                         yield break;
                     }
@@ -231,7 +229,7 @@ namespace test
                 if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
                 {
                     this.Again = false;
-                    if (base.Battle.MaxHand <= base.Battle.HandZone.Count)
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
                         yield break;
                     }
@@ -256,7 +254,7 @@ namespace test
                 if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
                 {
                     this.Again = false;
-                    if (base.Battle.MaxHand <= base.Battle.HandZone.Count)
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
                         yield break;
                     }

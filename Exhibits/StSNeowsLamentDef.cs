@@ -115,11 +115,12 @@ namespace test
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
             {
-                if (base.Owner != null && base.Owner.IsAlive && base.Counter > 0)
+                if (base.Counter > 0)
                 {
                     int num = base.Counter - 1;
                     base.Counter = num;
                     base.NotifyActivating();
+                    yield return PerformAction.Effect(base.Battle.Player, "JunkoPurify", 0f, "Junko3", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
                     foreach (EnemyUnit enemyUnit in base.Battle.AllAliveEnemies)
                     {
                         base.GameRun.SetEnemyHpAndMaxHp(base.Value2, enemyUnit.MaxHp, enemyUnit, false);

@@ -62,7 +62,7 @@ namespace test
                TargetType: TargetType.Self,
                Colors: new List<ManaColor>() { ManaColor.Colorless },
                IsXCost: false,
-               Cost: new ManaGroup() { Colorless = 2 },
+               Cost: new ManaGroup() { Any = 1, Colorless = 1 },
                UpgradedCost: new ManaGroup() { Any = 0 },
                MoneyCost: null,
                Damage: null,
@@ -113,7 +113,7 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            this.toolCards = base.GameRun.RollCards(base.GameRun.AdventureRng, new CardWeightTable(RarityWeightTable.ShopCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyTool), base.Value1, false, null);
+            this.toolCards = base.GameRun.RollCards(base.GameRun.GameRunEventRng, new CardWeightTable(RarityWeightTable.ShopCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyTool), base.Value1, false, null);
             base.GameRun.AddDeckCards(this.toolCards, false, null);
             yield break;
         }

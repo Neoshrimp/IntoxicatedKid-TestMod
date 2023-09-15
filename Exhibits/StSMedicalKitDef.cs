@@ -82,7 +82,7 @@ namespace test
                 BaseManaAmount: 0,
                 HasCounter: false,
                 InitialCounter: 0,
-                Keywords: Keyword.Morph | Keyword.Exile | Keyword.Forbidden,
+                Keywords: Keyword.Forbidden | Keyword.Exile | Keyword.Morph,
                 RelativeEffects: new List<string>() { },
                 // example of referring to UniqueId of an entity without calling MakeConfig
                 RelativeCards: new List<string>() { }

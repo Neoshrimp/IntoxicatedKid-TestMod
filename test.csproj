@@ -334,6 +334,7 @@
       <None Remove="Resources\StSBurstSe.png" />
       <None Remove="Resources\StSBustedCrown.png" />
       <None Remove="Resources\StSCaltrops.png" />
+      <None Remove="Resources\StSCauldron.png" />
       <None Remove="Resources\StSCoffeeDripper.png" />
       <None Remove="Resources\StSCultistHeadpiece.png" />
       <None Remove="Resources\StSCursedKey.png" />
@@ -344,6 +345,7 @@
       <None Remove="Resources\StSEchoForm.png" />
       <None Remove="Resources\StSEchoFormSe.png" />
       <None Remove="Resources\StSEctoplasm.png" />
+      <None Remove="Resources\StSEnchiridion.png" />
       <None Remove="Resources\StSEnlightenment.png" />
       <None Remove="Resources\StSEntrench.png" />
       <None Remove="Resources\StSExpertise.png" />
@@ -364,7 +366,10 @@
       <None Remove="Resources\StSNecronomicurse.png" />
       <None Remove="Resources\StSNecronomicurseZUN.png" />
       <None Remove="Resources\StSNeowsLament.png" />
+      <None Remove="Resources\StSNilrysCodex.png" />
       <None Remove="Resources\StSNlothsGift.png" />
+      <None Remove="Resources\StSOrangePellets.png" />
+      <None Remove="Resources\StSOrrery.png" />
       <None Remove="Resources\StSPanacea.png" />
       <None Remove="Resources\StSPanache.png" />
       <None Remove="Resources\StSPanacheSe.png" />

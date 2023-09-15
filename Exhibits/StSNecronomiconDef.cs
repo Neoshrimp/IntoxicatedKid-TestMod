@@ -96,7 +96,6 @@ namespace test
         {
             private bool Again;
             private Card card;
-            private Card card2;
             private UnitSelector unitSelector;
             protected override void OnGain(PlayerUnit player)
             {
@@ -108,7 +107,6 @@ namespace test
             {
                 this.Again = false;
                 card = null;
-                card2 = null;
                 unitSelector = null;
                 base.HandleBattleEvent<UnitEventArgs>(base.Battle.Player.TurnStarting, delegate (UnitEventArgs _)
                 {
@@ -121,7 +119,7 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardUsing(CardUsingEventArgs args)
             {
-                if (base.Active && args.Card.CardType == CardType.Attack && args.ConsumingMana.Amount >= base.Value2 && args.Card != card && args.Card != card2)
+                if (base.Active && args.Card.CardType == CardType.Attack && args.ConsumingMana.Amount >= base.Value2 && args.Card != card)
                 {
                     this.Again = true;
                     card = args.Card;
@@ -134,7 +132,7 @@ namespace test
                 if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card && !(args.SourceZone == CardZone.PlayArea && args.DestinationZone == CardZone.Hand))
                 {
                     this.Again = false;
-                    if (base.Battle.MaxHand <= base.Battle.HandZone.Count)
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
                         yield break;
                     }
@@ -143,7 +141,7 @@ namespace test
                     yield return new MoveCardAction(args.Card, CardZone.Hand);
                     if (args.Card.Zone == CardZone.Hand)
                     {
-                        yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
+                        yield return new UseCardAction(args.Card, unitSelector, this.Mana);
                     }
                     base.Active = false;
                 }
@@ -154,7 +152,7 @@ namespace test
                 if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
                 {
                     this.Again = false;
-                    if (base.Battle.MaxHand <= base.Battle.HandZone.Count)
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
                         yield break;
                     }
@@ -163,7 +161,7 @@ namespace test
                     yield return new MoveCardAction(args.Card, CardZone.Hand);
                     if (args.Card.Zone == CardZone.Hand)
                     {
-                        yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
+                        yield return new UseCardAction(args.Card, unitSelector, this.Mana);
                     }
                     base.Active = false;
                 }
@@ -174,7 +172,7 @@ namespace test
                 if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
                 {
                     this.Again = false;
-                    if (base.Battle.MaxHand <= base.Battle.HandZone.Count)
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
                         yield break;
                     }
@@ -183,7 +181,7 @@ namespace test
                     yield return new MoveCardAction(args.Card, CardZone.Hand);
                     if (args.Card.Zone == CardZone.Hand)
                     {
-                        yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
+                        yield return new UseCardAction(args.Card, unitSelector, this.Mana);
                     }
                     base.Active = false;
                 }

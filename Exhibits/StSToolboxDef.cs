@@ -111,7 +111,7 @@ namespace test
                     };
                     yield return new InteractionAction(interaction, false);
                     Card selectedCard = interaction.SelectedCard;
-                    if (base.Battle.MaxHand <= base.Battle.HandZone.Count)
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
                         yield return new AddCardsToDiscardAction(new Card[] { selectedCard });
                     }

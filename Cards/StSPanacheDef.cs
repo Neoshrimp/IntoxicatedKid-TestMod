@@ -160,7 +160,7 @@ namespace test
                 DurationStackType: StackType.Add,
                 DurationDecreaseTiming: DurationDecreaseTiming.Custom,
                 HasCount: true,
-                CountStackType: StackType.Add,
+                CountStackType: StackType.Keep,
                 LimitStackType: StackType.Keep,
                 ShowPlusByLimit: false,
                 Keywords: Keyword.None,

@@ -216,8 +216,7 @@ namespace test
             yield return new WaitForSeconds(.1f);
             List<Exhibit> list = new List<Exhibit>
             {
-                Library.CreateExhibit<TASBotDef.TASBot>(),
-                Library.CreateExhibit<StSNlothsGiftDef.StSNlothsGift>()
+                Library.CreateExhibit<TASBotDef.TASBot>()
             };
             if (!GameMaster.Instance.CurrentGameRun.Player.HasExhibit<TASBotDef.TASBot>())
             {
@@ -238,6 +237,15 @@ namespace test
                 }
             }
         }
+        /*[HarmonyPatch(typeof(GameMaster), nameof(GameMaster.SetTurboMode))]
+        class GameMaster_SetTurboMode_Patch
+        {
+            static bool Prefix(bool turboMode)
+            {
+                Time.timeScale = (turboMode ? 2.4f : 1.5f);
+                return false;
+            }
+        }*/
         /*[HarmonyPatch(typeof(CardUi), nameof(CardUi.Awake))]
         class _13thCard_Patch
         {

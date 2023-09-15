@@ -120,9 +120,9 @@ namespace test
             List<Card> list = base.Battle.HandZone.Where((Card card) => card.BaseCost.Amount > 0).ToList<Card>();
             if (list.Count > 0)
             {
-                Card card2 = list.Sample(base.GameRun.BattleRng);
-                card2.NotifyActivating();
-                card2.SetBaseCost(base.Mana);
+                Card card = list.Sample(base.GameRun.BattleRng);
+                card.NotifyActivating();
+                card.SetBaseCost(base.Mana);
             }
             yield break;
         }

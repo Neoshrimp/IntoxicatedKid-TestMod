@@ -118,7 +118,7 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            List<Card> list = base.Battle.HandZone.Where((Card card) => card.BaseCost.Amount > 0).ToList<Card>();
+            List<Card> list = base.Battle.HandZone.ToList<Card>();
             if (list.Count > 0)
             {
                 yield return PerformAction.Effect(base.Battle.Player, "Invincible", 0f, "GuirenItem", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
@@ -126,12 +126,12 @@ namespace test
                 {
                     if (!this.IsUpgraded)
                     {
-                        card.NotifyActivating();
+                        card.NotifyChanged();
                         card.SetTurnCost(base.Mana);
                     }
                     else
                     {
-                        card.NotifyActivating();
+                        card.NotifyChanged();
                         card.SetBaseCost(base.Mana);
                     }
                 }
