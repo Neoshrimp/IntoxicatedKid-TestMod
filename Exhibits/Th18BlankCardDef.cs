@@ -1,4 +1,4 @@
-﻿/*using LBoL.ConfigData;
+﻿using LBoL.ConfigData;
 using LBoL.Core.Cards;
 using LBoLEntitySideloader;
 using LBoLEntitySideloader.Attributes;
@@ -58,7 +58,7 @@ namespace test
                 Id: "",
                 Order: 9,
                 IsDebug: false,
-                IsPooled: true,
+                IsPooled: false,
                 IsSentinel: false,
                 Revealable: false,
                 Appearance: AppearanceType.ShopOnly,
@@ -313,4 +313,4 @@ namespace test
             }
         }
     }
-}*/
+}

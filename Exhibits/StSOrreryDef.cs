@@ -35,9 +35,13 @@ using UnityEngine.InputSystem.Controls;
 using JetBrains.Annotations;
 using LBoL.Core.Stations;
 using LBoL.Presentation.UI;
-using static System.Collections.Specialized.BitVector32;
-using static test.BlossomingYinYangOrbDef;
 using LBoL.EntityLib.Exhibits.Shining;
+using static System.Collections.Specialized.BitVector32;
+using HarmonyLib;
+using LBoL.Presentation.UI.Widgets;
+using DG.Tweening;
+using LBoL.EntityLib.Cards.Neutral.Green;
+using UnityEngine.UI;
 
 namespace test
 {
@@ -55,7 +59,6 @@ namespace test
         }
         public override ExhibitSprites LoadSprite()
         {
-            // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
             Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
@@ -87,7 +90,6 @@ namespace test
                 InitialCounter: 0,
                 Keywords: Keyword.None,
                 RelativeEffects: new List<string>() { },
-                // example of referring to UniqueId of an entity without calling MakeConfig
                 RelativeCards: new List<string>() { }
             );
             return exhibitConfig;
@@ -97,33 +99,49 @@ namespace test
         [ExhibitInfo(WeighterType = typeof(StSOrrery.StSOrreryWeighter))]
         public sealed class StSOrrery : Exhibit
         {
-            public class OrreryRewardInteraction : Interaction
-            {
-                public IReadOnlyList<StationReward> PendingRewards { get; }
-                public OrreryRewardInteraction(IEnumerable<StationReward> rewards)
-                {
-                    this.PendingRewards = new List<StationReward>(rewards).AsReadOnly();
-                }
-            }
             protected override IEnumerator SpecialGain(PlayerUnit player)
             {
                 base.OnGain(player);
-                List<StationReward> rewards = new List<StationReward>();
-                for (int i = 0; i < base.Value1; i++)
+                GameRun.CurrentStation.AddReward(GetOrreryReward());
+                GameRun.CurrentStation.AddReward(GetOrreryReward());
+                GameRun.CurrentStation.AddReward(GetOrreryReward());
+                GameRun.CurrentStation.AddReward(GetOrreryReward());
+                GameRun.CurrentStation.AddReward(GetOrreryReward());
+                UiManager.GetPanel<RewardPanel>().Show(new ShowRewardContent
                 {
-                    rewards.Add(GameRun.CurrentStage.GetDrinkTeaCardReward());
-                }
-                OrreryRewardInteraction rewardInteraction = new OrreryRewardInteraction(rewards)
+                    Station = GameRun.CurrentStation,
+                    Rewards = GameRun.CurrentStation.Rewards
+                });
+                UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
+                UiManager.GetPanel<RewardPanel>()._rewardWidgets.Do(rw => rw.Click += () =>
                 {
-                    CanCancel = false,
-                    Source = this
-                };
-                yield return base.GameRun.InteractionViewer.View(rewardInteraction);
+                    Debug.LogError("Clicked");
+                    UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
+                    /*UiManager.GetPanel<RewardPanel>().cardWidget.GetComponent<Button>().onClick.AddListener(delegate
+                    {
+                        Debug.LogError("Cards Added");
+                        UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
+                    });*/
+                    UiManager.GetPanel<RewardPanel>().abandonButton.onClick.AddListener(delegate
+                    {
+                        Debug.LogError("Cards Abandoned");
+                        UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
+                    });
+                    UiManager.GetPanel<RewardPanel>().returnButton.onClick.AddListener(delegate
+                    {
+                        Debug.LogError("Returned");
+                        UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
+                    });
+                });
+                yield return new WaitUntil(() => UiManager.GetPanel<RewardPanel>()._rewardWidgets.Count == 0);
+                Debug.LogError("Hiding Panel");
+                UiManager.Hide<RewardPanel>(true);
+                UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
                 yield break;
             }
             private StationReward GetOrreryReward()
             {
-                return StationReward.CreateCards(base.GameRun.GetRewardCards(GameRun.CurrentStage.EnemyCardOnlyPlayerWeight, GameRun.CurrentStage.EnemyCardWithFriendWeight, GameRun.CurrentStage.EnemyCardNeutralWeight, GameRun.CurrentStage.DrinkTeaAdditionalCardWeight, base.GameRun.RewardCardCount, false));
+                return StationReward.CreateCards(base.GameRun.GetRewardCards(GameRun.CurrentStage.EnemyCardOnlyPlayerWeight, GameRun.CurrentStage.EnemyCardWithFriendWeight, GameRun.CurrentStage.EnemyCardNeutralWeight, GameRun.CurrentStage.EnemyCardWeight, GameRun.RewardCardCount, false));
             }
             private class StSOrreryWeighter : IExhibitWeighter
             {

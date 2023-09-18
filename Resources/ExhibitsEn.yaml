@@ -90,13 +90,17 @@ StSSozu:
   Description: "At the start of {PlayerName}'s turn, gain 1 random mana.\nAll |Tool| cards has |Unplayable|."
   Name: Sozu
   FlavorText: "You notice that magical liquids seem to lose their properties when near this relic."
+StSSsserpentHead:
+  Description: "When acquired, choose {Value1} random |Tool| cards to add to the library."
+  Name: Ssserpent Head
+  FlavorText: "The most fulfilling of lives is that in which you can buy anything!"
 StSThreadandNeedle:
   Description: "At the start of combat, gain {Value1} |Defense Matrix|."
   Name: Thread and Needle
   FlavorText: "Wrapping the magical thread around your body, you feel harder to the touch."
 StSToolbox:
   Description: "At the start of {PlayerName}'s first turn each combat, choose 1 of {Value1} random colorless cards to add to the hand. Mana of any color can be spent to pay their mana costs."
-  Name: Toolbox
+  Name: Spire Toolbox
   FlavorText: "A tool for every job."
 StSTorii:
   Description: "Whenever {PlayerName} would be dealt {Value1} or less unblocked damage, they are dealt {Value2} damage instead."

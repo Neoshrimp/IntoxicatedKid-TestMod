@@ -200,7 +200,7 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardUsing(CardUsingEventArgs args)
             {
-                if (base.Count > 0 && args.Card != card)
+                if (base.Count > 0 && args.Card != card && args.Card.CardType != CardType.Misfortune && args.Card.CardType != CardType.Status)
                 {
                     this.Again = true;
                     card = args.Card;

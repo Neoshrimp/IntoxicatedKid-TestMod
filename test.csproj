@@ -290,6 +290,15 @@
         <Reference Include="LBoL-AddWatermark">
             <HintPath>$(BepInExFolder)\plugins\LBoL-AddWatermark.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.AudioModule">
+            <HintPath>$(GameFolder)\LBoL_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="DOTween">
+            <HintPath>$(GameFolder)\LBoL_Data\Managed\DOTween.dll</HintPath>
+        </Reference>
+        <Reference Include="DOTween.Modules">
+            <HintPath>$(GameFolder)\LBoL_Data\Managed\DOTween.Modules.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 
@@ -384,6 +393,7 @@
       <None Remove="Resources\StSSacredBark.png" />
       <None Remove="Resources\StSSneckoEye.png" />
       <None Remove="Resources\StSSozu.png" />
+      <None Remove="Resources\StSSsserpentHead.png" />
       <None Remove="Resources\StSSwiftStrike.png" />
       <None Remove="Resources\StSTheBomb.png" />
       <None Remove="Resources\StSTheBombSe.png" />

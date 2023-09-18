@@ -191,6 +191,7 @@ namespace test
             List<Exhibit> list = new List<Exhibit>
             {
                 Library.CreateExhibit<TestExhibitDef.TestExhibit>()
+
             };
             if (!GameMaster.Instance.CurrentGameRun.Player.HasExhibit<TestExhibitDef.TestExhibit>())
             {
@@ -237,6 +238,85 @@ namespace test
                 }
             }
         }
+        /*[HarmonyPatch(typeof(BossStation), nameof(BossStation.GenerateBossRewards))]
+        class BossStation_GenerateBossRewards_Patch
+        {
+            static void Postfix(BossStation __instance)
+            {
+                List<Exhibit> list = new List<Exhibit>
+                    {
+                        Library.CreateExhibit<HuiyeBaoxiang>(),
+                        Library.CreateExhibit<HuiyeBaoxiang>(),
+                        Library.CreateExhibit<HuiyeBaoxiang>()
+                    };
+                __instance.BossRewards = list.ToArray();
+            }
+        }*/
+        /*[HarmonyPatch]
+        class _Allowduplicateexhibit1_Patch
+        {
+            static IEnumerable<MethodBase> TargetMethods()
+            {
+                yield return ExtraAccess.InnerMoveNext(typeof(GameRunController), nameof(GameRunController.GainExhibitRunner));
+            }
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+            {
+                CodeInstruction prevprevCi = null;
+                CodeInstruction prevCi = null;
+                foreach (var ci in instructions)
+                {
+                    if (prevprevCi != null && prevCi != null && ci.opcode == OpCodes.Call && prevCi.opcode == OpCodes.Call && prevprevCi.opcode == OpCodes.Callvirt)
+                    {
+                        yield return new CodeInstruction(OpCodes.Pop);
+                    }
+                    else if (prevprevCi != null && prevCi != null && ci.opcode == OpCodes.Ret && prevCi.opcode == OpCodes.Ldc_I4_0 && prevprevCi.opcode == OpCodes.Call)
+                    {
+                        yield return new CodeInstruction(OpCodes.Pop);
+                    }
+                    else if (prevprevCi != null && prevCi != null && ci.opcode == OpCodes.Newobj && prevCi.opcode == OpCodes.Ldstr && prevprevCi.opcode == OpCodes.Ldstr)
+                    {
+                        yield return new CodeInstruction(OpCodes.Pop);
+                    }
+                    else if (prevprevCi != null && prevCi != null && ci.opcode == OpCodes.Throw && prevCi.opcode == OpCodes.Newobj && prevprevCi.opcode == OpCodes.Ldstr)
+                    {
+                        yield return new CodeInstruction(OpCodes.Pop);
+                    }
+                    else
+                    {
+                        yield return ci;
+                    }
+                    prevprevCi = prevCi;
+                    prevCi = ci;
+                }
+            }
+        }
+        [HarmonyPatch(typeof(PlayerUnit), nameof(PlayerUnit.AddExhibit))]
+        class _Allowduplicateexhibit2_Patch
+        {
+
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                CodeInstruction prevprevCi = null;
+                CodeInstruction prevCi = null;
+                foreach (var ci in instructions)
+                {
+                    if (prevprevCi != null && prevCi != null && ci.opcode == OpCodes.Throw && prevCi.opcode == OpCodes.Newobj && prevprevCi.opcode == OpCodes.Ldstr)
+                    {
+                        yield return new CodeInstruction(OpCodes.Pop);
+                    }
+                    else if (prevprevCi != null && prevCi != null && ci.opcode == OpCodes.Newobj && prevCi.opcode == OpCodes.Ldstr && prevprevCi.opcode == OpCodes.Ldstr)
+                    {
+                        yield return new CodeInstruction(OpCodes.Pop);
+                    }
+                    else
+                    {
+                        yield return ci;
+                    }
+                    prevprevCi = prevCi;
+                    prevCi = ci;
+                }
+            }
+        }*/
         /*[HarmonyPatch(typeof(GameMaster), nameof(GameMaster.SetTurboMode))]
         class GameMaster_SetTurboMode_Patch
         {
