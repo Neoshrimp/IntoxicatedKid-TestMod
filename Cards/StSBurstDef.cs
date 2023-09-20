@@ -176,14 +176,11 @@ namespace test
         [EntityLogic(typeof(StSBurstSeDef))]
         public sealed class StSBurstSe : StatusEffect
         {
-            private bool Again;
-            private Card card;
-            private UnitSelector unitSelector;
+            private bool Again = false;
+            private Card card = null;
+            private UnitSelector unitSelector = null;
             protected override void OnAdded(Unit unit)
             {
-                this.Again = false;
-                card = null;
-                unitSelector = null;
                 base.ReactOwnerEvent<CardUsingEventArgs>(base.Battle.CardUsing, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsing));
                 base.ReactOwnerEvent<CardMovingEventArgs>(base.Battle.CardMoving, new EventSequencedReactor<CardMovingEventArgs>(this.OnCardMoving));
                 base.ReactOwnerEvent<CardEventArgs>(base.Battle.CardExiling, new EventSequencedReactor<CardEventArgs>(this.OnCardExiling));
@@ -206,6 +203,8 @@ namespace test
                     this.Again = false;
                     if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
+                        card = null;
+                        unitSelector = null;
                         yield break;
                     }
                     base.NotifyActivating();
@@ -214,6 +213,8 @@ namespace test
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
+                        card = null;
+                        unitSelector = null;
                     }
                     int num = base.Level - 1;
                     base.Level = num;
@@ -231,6 +232,8 @@ namespace test
                     this.Again = false;
                     if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
+                        card = null;
+                        unitSelector = null;
                         yield break;
                     }
                     base.NotifyActivating();
@@ -239,6 +242,8 @@ namespace test
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
+                        card = null;
+                        unitSelector = null;
                     }
                     int num = base.Level - 1;
                     base.Level = num;
@@ -256,6 +261,8 @@ namespace test
                     this.Again = false;
                     if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
+                        card = null;
+                        unitSelector = null;
                         yield break;
                     }
                     base.NotifyActivating();
@@ -264,6 +271,8 @@ namespace test
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
+                        card = null;
+                        unitSelector = null;
                     }
                     int num = base.Level - 1;
                     base.Level = num;

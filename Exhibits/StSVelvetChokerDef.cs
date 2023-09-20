@@ -1,4 +1,4 @@
-﻿/*using LBoL.ConfigData;
+﻿using LBoL.ConfigData;
 using LBoL.Core.Cards;
 using LBoLEntitySideloader;
 using LBoLEntitySideloader.Attributes;
@@ -30,11 +30,11 @@ using LBoL.Core.Units;
 using LBoL.EntityLib.Cards.Character.Cirno.Friend;
 using LBoL.EntityLib.Cards.Character.Reimu;
 using LBoL.EntityLib.Cards.Neutral.MultiColor;
-
 using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 using LBoL.EntityLib.Exhibits;
 using JetBrains.Annotations;
+using Yarn;
 
 namespace test
 {
@@ -65,7 +65,7 @@ namespace test
                 Index: sequenceTable.Next(typeof(ExhibitConfig)),
                 Id: "",
                 Order: 10,
-                IsDebug: true,
+                IsDebug: false,
                 IsPooled: false,
                 IsSentinel: false,
                 Revealable: false,
@@ -73,26 +73,50 @@ namespace test
                 Owner: "",
                 LosableType: ExhibitLosableType.CantLose,
                 Rarity: Rarity.Shining,
-                Value1: 6,
-                Value2: null,
+                Value1: 7,
+                Value2: 1,
                 Value3: null,
                 Mana: null,
                 BaseManaRequirement: null,
                 BaseManaColor: ManaColor.Philosophy,
                 BaseManaAmount: 2,
-                HasCounter: false,
-                InitialCounter: null,
-                Keywords: Keyword.None,
+                HasCounter: true,
+                InitialCounter: 0,
+                Keywords: Keyword.Overdraft,
                 RelativeEffects: new List<string>() { },
-                // example of referring to UniqueId of an entity without calling MakeConfig
                 RelativeCards: new List<string>() { }
             );
             return exhibitConfig;
         }
         [EntityLogic(typeof(StSVelvetChokerDef))]
         [UsedImplicitly]
+        [ExhibitInfo(ExpireStageLevel = 3, ExpireStationLevel = 0)]
         public sealed class StSVelvetChoker : ShiningExhibit
         {
+            protected override void OnEnterBattle()
+            {
+                base.ReactBattleEvent<CardUsingEventArgs>(base.Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsed));
+                base.HandleBattleEvent<UnitEventArgs>(base.Battle.Player.TurnEnding, delegate (UnitEventArgs _)
+                {
+                    base.Counter = 0;
+                });
+            }
+            private IEnumerable<BattleAction> OnCardUsed(CardUsingEventArgs args)
+            {
+                if (!base.Battle.BattleShouldEnd && base.Owner.IsInTurn)
+                {
+                    base.Counter = base.Counter + 1;
+                    if (base.Counter > base.Value1)
+                    {
+                        yield return new LockRandomTurnManaAction(base.Value2);
+                    }
+                }
+                yield break;
+            }
+            protected override void OnLeaveBattle()
+            {
+                base.Counter = 0;
+            }
         }
     }
-}*/
+}

@@ -67,13 +67,13 @@ namespace test
                Cost: new ManaGroup() { Any = 0 },
                UpgradedCost: null,
                MoneyCost: null,
-               Damage: 20,
-               UpgradedDamage: 25,
+               Damage: 22,
+               UpgradedDamage: 26,
                Block: null,
                UpgradedBlock: null,
                Shield: null,
                UpgradedShield: null,
-               Value1: 25,
+               Value1: null,
                UpgradedValue1: null,
                Value2: null,
                UpgradedValue2: null,
@@ -123,7 +123,7 @@ namespace test
             {
                 List<Card> list = base.Battle.DrawZone.Where((Card card) => card is StSDramaticEntrance && card.IsUpgraded).ToList<Card>();
                 yield return new ExileManyCardAction(list);
-                yield return new DamageAction(base.Battle.Player, base.Battle.AllAliveEnemies, DamageInfo.Attack(list.Sum((Card card) => card.Value1)), "StarPasNoAni", GunType.Single);
+                yield return new DamageAction(base.Battle.Player, base.Battle.AllAliveEnemies, DamageInfo.Attack(list.Sum((Card card) => card.Damage.Amount)), "StarPasNoAni", GunType.Single);
             }
             yield break;
         }

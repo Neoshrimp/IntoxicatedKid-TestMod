@@ -308,6 +308,9 @@
 
 
     <ItemGroup>
+      <None Remove="Resources\AyaBreakingNews.png" />
+      <None Remove="Resources\AyaBunbunmaruPrinter.png" />
+      <None Remove="Resources\AyaFastestGun.png" />
       <None Remove="Resources\BlossomingYinYangOrb.png" />
       <None Remove="resources\CardsEn.yaml" />
       <None Remove="Resources\DayuuAbility.png" />
@@ -358,6 +361,7 @@
       <None Remove="Resources\StSEnlightenment.png" />
       <None Remove="Resources\StSEntrench.png" />
       <None Remove="Resources\StSExpertise.png" />
+      <None Remove="Resources\StSFaceOfCleric.png" />
       <None Remove="Resources\StSFinesse.png" />
       <None Remove="Resources\StSFlashOfSteel.png" />
       <None Remove="Resources\StSFootwork.png" />
@@ -394,6 +398,7 @@
       <None Remove="Resources\StSSneckoEye.png" />
       <None Remove="Resources\StSSozu.png" />
       <None Remove="Resources\StSSsserpentHead.png" />
+      <None Remove="Resources\StSStrangeSpoon.png" />
       <None Remove="Resources\StSSwiftStrike.png" />
       <None Remove="Resources\StSTheBomb.png" />
       <None Remove="Resources\StSTheBombSe.png" />
@@ -402,6 +407,7 @@
       <None Remove="Resources\StSTorii.png" />
       <None Remove="Resources\StSTrip.png" />
       <None Remove="Resources\StSVelvetChoker.png" />
+      <None Remove="Resources\StSWristBlade.png" />
       <None Remove="Resources\TASBot.png" />
       <None Remove="Resources\TASBotSe.png" />
       <None Remove="Resources\TestExhibit.png" />

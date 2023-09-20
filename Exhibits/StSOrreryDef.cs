@@ -78,7 +78,7 @@ namespace test
                 Appearance: AppearanceType.ShopOnly,
                 Owner: "",
                 LosableType: ExhibitLosableType.Losable,
-                Rarity: Rarity.Common,
+                Rarity: Rarity.Uncommon,
                 Value1: 5,
                 Value2: null,
                 Value3: null,
@@ -96,12 +96,29 @@ namespace test
         }
         [EntityLogic(typeof(StSOrreryDef))]
         [UsedImplicitly]
-        [ExhibitInfo(WeighterType = typeof(StSOrrery.StSOrreryWeighter))]
         public sealed class StSOrrery : Exhibit
         {
+            /*[HarmonyPatch(typeof(VnPanel), nameof(VnPanel.SetNextButton))]
+            class Orrery_SetNextButton_Patch
+            {
+                static bool Prefix()
+                {
+                    if (GameMaster.Instance.CurrentGameRun.Player.GetExhibit<StSOrrery>().Active)
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+            }*/
             protected override IEnumerator SpecialGain(PlayerUnit player)
             {
                 base.OnGain(player);
+                UiManager.GetPanel<ShopPanel>().Hide();
+                base.HandleGameRunEvent<CardsEventArgs>(base.GameRun.DeckCardsAdded, delegate (CardsEventArgs args)
+                {
+                    GameMaster.Instance.StartCoroutine(this.Wait());
+                });
+                GameRun.CurrentStation.ClearRewards();
                 GameRun.CurrentStation.AddReward(GetOrreryReward());
                 GameRun.CurrentStation.AddReward(GetOrreryReward());
                 GameRun.CurrentStation.AddReward(GetOrreryReward());
@@ -115,40 +132,59 @@ namespace test
                 UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
                 UiManager.GetPanel<RewardPanel>()._rewardWidgets.Do(rw => rw.Click += () =>
                 {
-                    Debug.LogError("Clicked");
                     UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
-                    /*UiManager.GetPanel<RewardPanel>().cardWidget.GetComponent<Button>().onClick.AddListener(delegate
-                    {
-                        Debug.LogError("Cards Added");
-                        UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
-                    });*/
                     UiManager.GetPanel<RewardPanel>().abandonButton.onClick.AddListener(delegate
                     {
-                        Debug.LogError("Cards Abandoned");
                         UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
+                        if (UiManager.GetPanel<RewardPanel>()._rewardWidgets.Count == 0)
+                        {
+                            UiManager.GetPanel<RewardPanel>().Hide();
+                            UiManager.GetPanel<VnPanel>().SetNextButton(true, null, null);
+                        }
                     });
                     UiManager.GetPanel<RewardPanel>().returnButton.onClick.AddListener(delegate
                     {
-                        Debug.LogError("Returned");
                         UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
+                        if (UiManager.GetPanel<RewardPanel>()._rewardWidgets.Count == 0)
+                        {
+                            UiManager.GetPanel<RewardPanel>().Hide();
+                            UiManager.GetPanel<VnPanel>().SetNextButton(true, null, null);
+                        }
                     });
                 });
-                yield return new WaitUntil(() => UiManager.GetPanel<RewardPanel>()._rewardWidgets.Count == 0);
-                Debug.LogError("Hiding Panel");
-                UiManager.Hide<RewardPanel>(true);
-                UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
+                GameMaster.Instance.StartCoroutine(this.WaitMore());
                 yield break;
+            }
+            private IEnumerator Wait()
+            {
+                yield return new WaitForEndOfFrame();
+                UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
+                if (UiManager.GetPanel<RewardPanel>()._rewardWidgets.Count == 0)
+                {
+                    UiManager.GetPanel<RewardPanel>().Hide();
+                    UiManager.GetPanel<VnPanel>().SetNextButton(true, null, null);
+                }
+            }
+            private IEnumerator WaitMore()
+            {
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                UiManager.GetPanel<VnPanel>().SetNextButton(false, null, null);
             }
             private StationReward GetOrreryReward()
             {
                 return StationReward.CreateCards(base.GameRun.GetRewardCards(GameRun.CurrentStage.EnemyCardOnlyPlayerWeight, GameRun.CurrentStage.EnemyCardWithFriendWeight, GameRun.CurrentStage.EnemyCardNeutralWeight, GameRun.CurrentStage.EnemyCardWeight, GameRun.RewardCardCount, false));
-            }
-            private class StSOrreryWeighter : IExhibitWeighter
-            {
-                public float WeightFor(Type type, GameRunController gameRun)
-                {
-                    return (float)(99);
-                }
             }
         }
     }

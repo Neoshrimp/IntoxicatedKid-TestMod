@@ -94,9 +94,9 @@ namespace test
         [UsedImplicitly]
         public sealed class StSNecronomicon : Exhibit
         {
-            private bool Again;
-            private Card card;
-            private UnitSelector unitSelector;
+            private bool Again = false;
+            private Card card = null;
+            private UnitSelector unitSelector = null;
             protected override void OnGain(PlayerUnit player)
             {
                 //base.GameRun.Damage(/*((double)(base.GameRun.Player.Hp * base.Value1) / 100.0).RoundToInt()*/base.Value1, DamageType.HpLose, true, true, null);
@@ -105,9 +105,6 @@ namespace test
             }
             protected override void OnEnterBattle()
             {
-                this.Again = false;
-                card = null;
-                unitSelector = null;
                 base.HandleBattleEvent<UnitEventArgs>(base.Battle.Player.TurnStarting, delegate (UnitEventArgs _)
                 {
                     base.Active = true;
@@ -134,6 +131,8 @@ namespace test
                     this.Again = false;
                     if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
+                        card = null;
+                        unitSelector = null;
                         yield break;
                     }
                     base.NotifyActivating();
@@ -142,6 +141,8 @@ namespace test
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, this.Mana);
+                        card = null;
+                        unitSelector = null;
                     }
                     base.Active = false;
                 }
@@ -154,6 +155,8 @@ namespace test
                     this.Again = false;
                     if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
+                        card = null;
+                        unitSelector = null;
                         yield break;
                     }
                     base.NotifyActivating();
@@ -162,6 +165,8 @@ namespace test
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, this.Mana);
+                        card = null;
+                        unitSelector = null;
                     }
                     base.Active = false;
                 }
@@ -174,6 +179,8 @@ namespace test
                     this.Again = false;
                     if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
+                        card = null;
+                        unitSelector = null;
                         yield break;
                     }
                     base.NotifyActivating();
@@ -182,6 +189,8 @@ namespace test
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, this.Mana);
+                        card = null;
+                        unitSelector = null;
                     }
                     base.Active = false;
                 }
@@ -190,6 +199,9 @@ namespace test
             protected override void OnLeaveBattle()
             {
                 base.Active = false;
+                this.Again = false;
+                this.card = null;
+                this.unitSelector = null;
             }
         }
     }

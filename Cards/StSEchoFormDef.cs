@@ -73,7 +73,7 @@ namespace test
                 TargetType: TargetType.Self,
                 Colors: new List<ManaColor>() { ManaColor.Blue, ManaColor.Red, ManaColor.Green },
                 IsXCost: false,
-                Cost: new ManaGroup() { Blue = 1, Red = 1, Green = 1 },
+                Cost: new ManaGroup() { Any = 2, Blue = 1, Red = 1, Green = 1 },
                 UpgradedCost: null,
                 MoneyCost: null,
                 Damage: null,
@@ -177,15 +177,11 @@ namespace test
         [EntityLogic(typeof(StSEchoFormSeDef))]
         public sealed class StSEchoFormSe : StatusEffect
         {
-            private bool Again;
-            private Card card;
-            private UnitSelector unitSelector;
+            private bool Again = false;
+            private Card card = null;
+            private UnitSelector unitSelector = null;
             protected override void OnAdded(Unit unit)
             {
-                base.Count = 0;
-                this.Again = false;
-                card = null;
-                unitSelector = null;
                 base.ReactOwnerEvent<UnitEventArgs>(base.Owner.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnOwnerStarted));
                 base.ReactOwnerEvent<CardUsingEventArgs>(base.Battle.CardUsing, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsing));
                 base.ReactOwnerEvent<CardMovingEventArgs>(base.Battle.CardMoving, new EventSequencedReactor<CardMovingEventArgs>(this.OnCardMoving));
@@ -215,6 +211,8 @@ namespace test
                     this.Again = false;
                     if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
+                        card = null;
+                        unitSelector = null;
                         yield break;
                     }
                     base.NotifyActivating();
@@ -223,6 +221,8 @@ namespace test
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
+                        card = null;
+                        unitSelector = null;
                     }
                     int num = base.Count - 1;
                     base.Count = num;
@@ -236,6 +236,8 @@ namespace test
                     this.Again = false;
                     if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
+                        card = null;
+                        unitSelector = null;
                         yield break;
                     }
                     base.NotifyActivating();
@@ -244,6 +246,8 @@ namespace test
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
+                        card = null;
+                        unitSelector = null;
                     }
                     int num = base.Count - 1;
                     base.Count = num;
@@ -257,6 +261,8 @@ namespace test
                     this.Again = false;
                     if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                     {
+                        card = null;
+                        unitSelector = null;
                         yield break;
                     }
                     base.NotifyActivating();
@@ -265,6 +271,8 @@ namespace test
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
+                        card = null;
+                        unitSelector = null;
                     }
                     int num = base.Count - 1;
                     base.Count = num;
