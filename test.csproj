@@ -311,6 +311,7 @@
       <None Remove="Resources\AyaBreakingNews.png" />
       <None Remove="Resources\AyaBunbunmaruPrinter.png" />
       <None Remove="Resources\AyaFastestGun.png" />
+      <None Remove="Resources\AyaSuperGraze.png" />
       <None Remove="Resources\BlossomingYinYangOrb.png" />
       <None Remove="resources\CardsEn.yaml" />
       <None Remove="Resources\DayuuAbility.png" />

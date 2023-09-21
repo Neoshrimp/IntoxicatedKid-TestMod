@@ -1,3 +1,15 @@
+AyaBreakingNewsSe:
+    Brief: "Enemies cannot act."
+    Description: "Enemies cannot act for {Duration} turn{Duration:plural one='' other='s'}."
+    Name: Wasted
+AyaBunbunmaruPrinterSe:
+    Brief: "Enemies cannot act."
+    Description: "Enemies cannot act for {Duration} turn{Duration:plural one='' other='s'}."
+    Name: Wasted
+AyaSuperGrazeSe:
+    Brief: "{OwnerName} takes 0 damage from all attacks.\nLose 1 |Super Graze| when attacked or at the start of each turn."
+    Description: "{OwnerName} takes 0 damage from the next {Level:plural one='attack' other='% attacks'}.\nLose 1 |Super Graze| when attacked or when turn starts."
+    Name: Super Graze
 DayuuAbilitySe:
     Brief: "At the start of {PlayerName}'s turn, gain random mana for each |Teammate| cards in the hand.\nFor each |Dayuu, Sparrow of Sobs and Skulls| in the hand, gain more random mana instead."
     Description: "At the start of {OwnerName}'s turn, gain {Count} random mana for each |Teammate| cards in the hand.\nFor each |Dayuu, Sparrow of Sobs and Skulls| in the hand, gain {Level} random mana instead."

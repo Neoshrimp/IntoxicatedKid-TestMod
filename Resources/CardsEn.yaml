@@ -10,6 +10,10 @@ AyaFastestGun:
   Description: "Deal {Damage} damage.\n|When drawn|: If {SelfName} is played in less than {Value1:plural one='% second' other='% seconds'}, apply {Value2} |Lock On|."
   UpgradedDescription: "Deal {Damage} damage.\n|When drawn|: If {SelfName} is played in less than {Value1:plural one='% second' other='% seconds'}, apply {Value2} |Lock On|."
   Name: The Fastest Gun in the East
+AyaSuperGraze:
+  Description: "Gain {Value1} |Super Graze|."
+  UpgradedDescription: "Gain {Value1} |Super Graze|."
+  Name: Authority of Graze
 DayuuAttack:
   Description: "Deal {Damage} damage to a random enemy.\n|When {SelfName} enters or leaves the hand|: Deal {Damage} damage to a random enemy.\n|When discarded|: Return {SelfName} from the discard pile to the top of the draw pile."
   UpgradedDescription: "Deal {Damage} damage to a random enemy.\n|When {SelfName} enters or leaves the hand|: Deal {Damage} damage to a random enemy.\n|When discarded|: Return {SelfName} from the discard pile to the top of the draw pile."

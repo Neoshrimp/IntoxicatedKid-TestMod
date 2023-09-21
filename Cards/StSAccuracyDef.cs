@@ -71,7 +71,7 @@ namespace test
                 TargetType: TargetType.Self,
                 Colors: new List<ManaColor>() { ManaColor.White },
                 IsXCost: false,
-                Cost: new ManaGroup() { White = 2 },
+                Cost: new ManaGroup() { Any = 1, White = 2 },
                 UpgradedCost: null,
                 MoneyCost: null,
                 Damage: null,
