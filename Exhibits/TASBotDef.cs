@@ -39,6 +39,11 @@ using LBoL.Presentation.UI;
 using LBoL.EntityLib.StatusEffects.Cirno;
 using LBoL.EntityLib.StatusEffects.Enemy;
 using LBoL.EntityLib.Cards.Other.Enemy;
+using LBoL.EntityLib.Exhibits.Shining;
+using HarmonyLib;
+using System.Reflection;
+using LBoLEntitySideloader.ReflectionHelpers;
+using System.Reflection.Emit;
 
 namespace test
 {
@@ -91,7 +96,7 @@ namespace test
             );
             return exhibitConfig;
         }
-        [EntityLogic(typeof(TASBotDef))]
+        [EntityLogic(typeof(TASBotDef))]    
         [UsedImplicitly]
         public sealed class TASBot : Exhibit
         {
@@ -153,6 +158,15 @@ namespace test
             );
             return statusEffectConfig;
         }
+
+
+
+
+
+
+
+
+
         [EntityLogic(typeof(TASBotSeDef))]
         public sealed class TASBotSe : StatusEffect
         {
@@ -184,12 +198,57 @@ namespace test
                 base.ReactOwnerEvent<CardEventArgs>(base.Battle.CardDrawn, new EventSequencedReactor<CardEventArgs>(this.OnCardDrawn));
                 base.ReactOwnerEvent<CardMovingEventArgs>(base.Battle.CardMoved, new EventSequencedReactor<CardMovingEventArgs>(this.OnCardMoved));
                 base.ReactOwnerEvent<CardsEventArgs>(base.Battle.CardsAddedToHand, new EventSequencedReactor<CardsEventArgs>(this.OnCardsAddedToHand));
+
                 //base.ReactOwnerEvent<CardUsingEventArgs>(base.Battle.CardUsingCanceled, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsingCanceled));
-                base.HandleOwnerEvent(Battle.CardUsingCanceled, (CardUsingEventArgs args) => {
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                });
+/*                base.HandleOwnerEvent(Battle.CardUsingCanceled, (CardUsingEventArgs args) => {
+
+                    var watch = new System.Diagnostics.Stopwatch();
+                    watch.Start();
+                    var s = "";
+                    for (var i = 0; i < 10e3; i++)
+                    {
+                        var c = (char)(UnityEngine.Random.Range(47, 80));
+                        s += c;
+                    }
+
+*//*                    GC.Collect();
+                    GC.WaitForPendingFinalizers();*//*
+
+                    watch.Stop();
+                    log.LogDebug(watch.ElapsedMilliseconds);
+
+
+                });*/
             }
+
+            private IEnumerable<BattleAction> OnCardUsingCanceled(CardUsingEventArgs args)
+            {
+
+                var watch = new System.Diagnostics.Stopwatch();
+                watch.Start();
+
+                /*yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
+                yield return new WaitForYieldInstructionAction(new WaitForSeconds(0.11f));*/
+
+
+                yield return new WaitForCoroutineAction(Wait());
+                watch.Stop();
+                log.LogDebug(watch.ElapsedMilliseconds);
+
+            }
+
+
+            private IEnumerator Wait()
+            {
+                yield return new WaitForSecondsRealtime(0.08f);
+            }
+
             private void OnPredraw(CardEventArgs args)
             {
                 if (base.Count > 0)
@@ -608,18 +667,7 @@ namespace test
                 }
                 yield break;
             }
-            private IEnumerable<BattleAction> OnCardUsingCanceled(CardUsingEventArgs args)
-            {
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                yield return new WaitForYieldInstructionAction(new WaitForEndOfFrame());
-                //yield return new WaitForYieldInstructionAction(new WaitForSeconds(0.11f));
-                yield break;
-            }
+
         }
     }
 }
