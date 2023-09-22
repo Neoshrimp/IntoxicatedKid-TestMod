@@ -32,6 +32,7 @@ using LBoL.EntityLib.Cards.Character.Sakuya;
 using LBoL.EntityLib.Cards.Other.Enemy;
 using LBoL.EntityLib.StatusEffects.Cirno;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace test
 {
@@ -175,57 +176,62 @@ namespace test
             );
             return statusEffectConfig;
         }
+
+
         [EntityLogic(typeof(AyaSuperGrazeSeDef))]
         public sealed class AyaSuperGrazeSe : StatusEffect
         {
             [HarmonyPatch(typeof(Unit), nameof(Unit.MeasureDamage))]
             class Unit_MeasureDamage_Patch
             {
+
                 static bool Prefix(Unit __instance, ref DamageInfo info, ref DamageInfo __result)
                 {
-                    if (__instance.HasStatusEffect<AyaSuperGrazeSeDef.AyaSuperGrazeSe>())
+                    if (__instance.HasStatusEffect<AyaSuperGrazeSe>() && info.DamageType == DamageType.Attack && info.Damage.Round(MidpointRounding.AwayFromZero) > 0f)
                     {
-                        Debug.LogError(info.DamageType);
-                        if (info.Damage < 0f)
-                        {
-                            info.Damage = 0f;
-                        }
-                        else
-                        {
-                            info.Damage = info.Damage.Round(MidpointRounding.AwayFromZero);
-                        }
-                        if (info.DamageType == DamageType.Attack && info.Damage > 0f && __instance.HasStatusEffect<AyaSuperGrazeSeDef.AyaSuperGrazeSe>() && !info.IsAccuracy)
-                        {
-                            info = new DamageInfo(0f, info.DamageType, true, false).BlockBy(__instance.Block).ShieldBy(__instance.Shield);
-                            __result = info;
-                            return false;
-                        }
-                        else if (info.DamageType == DamageType.Attack && info.Damage > 0f && __instance.HasStatusEffect<AyaSuperGrazeSeDef.AyaSuperGrazeSe>() && info.IsAccuracy)
-                        {
-                            info = new DamageInfo(0f, info.DamageType, true, true).BlockBy(__instance.Block).ShieldBy(__instance.Shield);
-                            __result = info;
-                            return false;
-                        }
-                        if (info.DamageType != DamageType.HpLose)
-                        {
-                            info = info.BlockBy(__instance.Block).ShieldBy(__instance.Shield);
-                            __result = info;
-                            return false;
-                        }
-                        __result = info;
+                        __result = new DamageInfo(0f, info.DamageType, true, info.IsAccuracy).BlockBy(__instance.Block).ShieldBy(__instance.Shield);
                         return false;
                     }
                     return true;
                 }
-            }
+
+
+
+                }
+
             [HarmonyPatch(typeof(Unit), nameof(Unit.TakeDamage))]
             class Unit_TakeDamage_Patch
             {
-                static void Postfix(Unit __instance, ref DamageInfo __result)
+
+                static int CheckGraze(Unit unit)
                 {
-                    if (__result.DamageType == DamageType.Attack && __instance.HasStatusEffect<AyaSuperGrazeSe>())
+                    // cheeky way to check specifically for this situation
+                    return unit.HasStatusEffect<Graze>() ? (int)DamageType.Attack : -1;
+                }
+
+                static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+                {
+                    instructions.Where(i => i.opcode == OpCodes.Ldarga_S).Do(i => log.LogDebug(i.operand.GetType()));
+
+                    return new CodeMatcher(instructions, generator)
+                        // remove error message
+                        .MatchForward(true, new CodeMatch[] { new CodeMatch(OpCodes.Ldstr, "Taking grazed accurary DamageInfo {0}."), OpCodes.Ldarg_1, OpCodes.Box, OpCodes.Call, OpCodes.Call })
+                        .Set(OpCodes.Pop, null)
+                        // check if unit has Graze
+                        .MatchForward(true, new CodeMatch[] { OpCodes.Ldarga_S, new CodeMatch(OpCodes.Call, AccessTools.PropertyGetter(typeof(DamageInfo), nameof(DamageInfo.DamageType))), OpCodes.Ldc_I4_2 })
+                        .Set(OpCodes.Call, AccessTools.Method(typeof(Unit_TakeDamage_Patch), nameof(Unit_TakeDamage_Patch.CheckGraze)))
+                        .Insert(new CodeInstruction(OpCodes.Ldarg_0))
+
+                        .InstructionEnumeration();
+                }
+
+
+
+                static void Postfix(Unit __instance, DamageInfo info)
+                {
+                    if (info.DamageType == DamageType.Attack && __instance.HasStatusEffect<AyaSuperGrazeSe>())
                     {
-                        if (__result.IsGrazed)
+                        if (info.IsGrazed)
                         {
                             __instance.GetStatusEffect<AyaSuperGrazeSe>().Activate();
                         }
@@ -268,6 +274,8 @@ namespace test
                 }
                 this.React(new RemoveStatusEffectAction(this, true));
             }
+
+            // dont need this
             public override string UnitEffectName
             {
                 get
