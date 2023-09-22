@@ -70,7 +70,7 @@ namespace test
                 IsPooled: true,
                 IsSentinel: false,
                 Revealable: false,
-                Appearance: AppearanceType.Anywhere,
+                Appearance: AppearanceType.NonShop,
                 Owner: "",
                 LosableType: ExhibitLosableType.CantLose,
                 Rarity: Rarity.Rare,
@@ -86,7 +86,7 @@ namespace test
                 Keywords: Keyword.None,
                 RelativeEffects: new List<string>() { },
                 // example of referring to UniqueId of an entity without calling MakeConfig
-                RelativeCards: new List<string>() { }
+                RelativeCards: new List<string>() { "StSNecronomicurse" }
             );
             return exhibitConfig;
         }
@@ -95,11 +95,11 @@ namespace test
         public sealed class StSNecronomicon : Exhibit
         {
             private bool Again = false;
-            private UnitSelector unitSelector;
+            private Card card = null;
+            private UnitSelector unitSelector = null;
             protected override void OnGain(PlayerUnit player)
             {
-                base.OnGain(player);
-                base.GameRun.Damage(this.Value1, DamageType.HpLose, true, true, null);
+                //base.GameRun.Damage(/*((double)(base.GameRun.Player.Hp * base.Value1) / 100.0).RoundToInt()*/base.Value1, DamageType.HpLose, true, true, null);
                 List<Card> list = new List<Card> { Library.CreateCard<StSNecronomicurse>() };
                 base.GameRun.AddDeckCards(list, false, null);
             }
@@ -111,35 +111,97 @@ namespace test
                 });
                 base.ReactBattleEvent<CardUsingEventArgs>(base.Battle.CardUsing, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsing));
                 base.ReactBattleEvent<CardMovingEventArgs>(base.Battle.CardMoving, new EventSequencedReactor<CardMovingEventArgs>(this.OnCardMoving));
+                base.ReactBattleEvent<CardEventArgs>(base.Battle.CardExiling, new EventSequencedReactor<CardEventArgs>(this.OnCardExiling));
+                base.ReactBattleEvent<CardEventArgs>(base.Battle.CardRemoving, new EventSequencedReactor<CardEventArgs>(this.OnCardRemoving));
             }
             private IEnumerable<BattleAction> OnCardUsing(CardUsingEventArgs args)
             {
-                if (base.Active && (args.Card.CardType == CardType.Attack) && (args.ConsumingMana.Amount >= base.Value2))
+                if (base.Active && args.Card.CardType == CardType.Attack && args.ConsumingMana.Amount >= base.Value2 && args.Card != card)
                 {
-                    base.NotifyActivating();
-                    base.Active = false;
                     this.Again = true;
+                    card = args.Card;
                     unitSelector = args.Selector;
                 }
                 yield break;
             }
             private IEnumerable<BattleAction> OnCardMoving(CardMovingEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd && this.Again == true)
+                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card && !(args.SourceZone == CardZone.PlayArea && args.DestinationZone == CardZone.Hand))
                 {
                     this.Again = false;
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+                    {
+                        card = null;
+                        unitSelector = null;
+                        yield break;
+                    }
+                    base.NotifyActivating();
                     args.CancelBy(this);
                     yield return new MoveCardAction(args.Card, CardZone.Hand);
                     if (args.Card.Zone == CardZone.Hand)
                     {
                         yield return new UseCardAction(args.Card, unitSelector, this.Mana);
+                        card = null;
+                        unitSelector = null;
                     }
+                    base.Active = false;
+                }
+                yield break;
+            }
+            private IEnumerable<BattleAction> OnCardExiling(CardEventArgs args)
+            {
+                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
+                {
+                    this.Again = false;
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+                    {
+                        card = null;
+                        unitSelector = null;
+                        yield break;
+                    }
+                    base.NotifyActivating();
+                    args.CancelBy(this);
+                    yield return new MoveCardAction(args.Card, CardZone.Hand);
+                    if (args.Card.Zone == CardZone.Hand)
+                    {
+                        yield return new UseCardAction(args.Card, unitSelector, this.Mana);
+                        card = null;
+                        unitSelector = null;
+                    }
+                    base.Active = false;
+                }
+                yield break;
+            }
+            private IEnumerable<BattleAction> OnCardRemoving(CardEventArgs args)
+            {
+                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
+                {
+                    this.Again = false;
+                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+                    {
+                        card = null;
+                        unitSelector = null;
+                        yield break;
+                    }
+                    base.NotifyActivating();
+                    args.CancelBy(this);
+                    yield return new MoveCardAction(args.Card, CardZone.Hand);
+                    if (args.Card.Zone == CardZone.Hand)
+                    {
+                        yield return new UseCardAction(args.Card, unitSelector, this.Mana);
+                        card = null;
+                        unitSelector = null;
+                    }
+                    base.Active = false;
                 }
                 yield break;
             }
             protected override void OnLeaveBattle()
             {
                 base.Active = false;
+                this.Again = false;
+                this.card = null;
+                this.unitSelector = null;
             }
         }
     }

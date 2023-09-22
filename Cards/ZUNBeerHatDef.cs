@@ -178,7 +178,7 @@ namespace test
         {
             protected override void OnAdded(Unit unit)
             {
-                base.ReactOwnerEvent<GameEventArgs>(base.Battle.RoundStarted, new EventSequencedReactor<GameEventArgs>(this.OnRoundStarted));
+                base.ReactOwnerEvent<UnitEventArgs>(base.Battle.Player.TurnEnded, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnEnded));
                 foreach (var enemy in base.Battle.AllAliveEnemies)
                 {
                     enemy._turnMoves.Clear();
@@ -190,7 +190,7 @@ namespace test
                     enemy.NotifyIntentionsChanged();
                 }
             }
-            private IEnumerable<BattleAction> OnRoundStarted(GameEventArgs args)
+            private IEnumerable<BattleAction> OnPlayerTurnEnded(UnitEventArgs args)
             {
                 foreach (var enemy in base.Battle.AllAliveEnemies)
                 {

@@ -4,6 +4,7 @@ using LBoL.Core;
 using LBoL.Core.Battle.BattleActions;
 using LBoL.Core.Cards;
 using LBoL.Core.Stations;
+using LBoL.Core.Units;
 using LBoL.EntityLib.Adventures;
 using LBoL.Presentation;
 using LBoL.Presentation.Effect;
@@ -17,6 +18,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 
@@ -47,7 +49,6 @@ namespace test.JadeBoxes
     {
         protected override void OnGain(GameRunController gameRun)
         {
-            gameRun.LoseExhibit(base.GameRun.Player.Exhibits[0], false, true);
             GameMaster.Instance.StartCoroutine(GainExhibits(gameRun));
         }
         private IEnumerator GainExhibits(GameRunController gameRun)

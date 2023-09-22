@@ -193,25 +193,6 @@ namespace test
                         args.AddModifier(this);
                     }
                 });
-                base.HandleOwnerEvent<BlockShieldEventArgs>(base.Owner.BlockShieldCasting, delegate (BlockShieldEventArgs args)
-                {
-                    if (args.Type == BlockShieldType.Direct)
-                    {
-                        return;
-                    }
-                    if (args.Cause == ActionCause.EnemyAction)
-                    {
-                        if (args.Block != 0f)
-                        {
-                            args.Block = Math.Max(args.Block * (float)0, 0f);
-                        }
-                        if (args.Shield != 0f)
-                        {
-                            args.Shield = Math.Max(args.Shield * (float)0, 0f);
-                        }
-                        args.AddModifier(this);
-                    }
-                });
             }
         }
     }

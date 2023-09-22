@@ -183,13 +183,28 @@ namespace test
             {
                 if (!base.Battle.BattleShouldEnd)
                 {
-                    List<Card> list = base.Battle.HandZone.Where((Card card) => (card.CardType == CardType.Friend) &&  !(card is DayuuFriend)).ToList<Card>();
+                    List<Card> list = base.Battle.HandZone.Where((Card card) => (card.CardType == CardType.Friend) && !(card is DayuuFriend)).ToList<Card>();
                     List<Card> list2 = base.Battle.HandZone.Where((Card card) => card is DayuuFriend).ToList<Card>();
-                    if (list.Count > 0 || list2.Count > 0)
+                    if (list.Count > 0)
+                    {
                         base.NotifyActivating();
-                    ManaGroup manaGroup = ManaGroup.Single(ManaColors.Colors.Sample(base.GameRun.BattleRng));
-                    yield return new GainManaAction(manaGroup * (base.Count * list.Count));
-                    yield return new GainManaAction(manaGroup * (base.Level * list2.Count));
+                        ManaGroup manaGroup = ManaGroup.Empty;
+                        for (int i = 0; i < base.Count * list.Count; i++)
+                        {
+                            manaGroup += ManaGroup.Single(ManaColors.Colors.Sample(base.GameRun.BattleRng));
+                        }
+                        yield return new GainManaAction(manaGroup);
+                    }
+                    if (list2.Count > 0)
+                    {
+                        base.NotifyActivating();
+                        ManaGroup manaGroup2 = ManaGroup.Empty;
+                        for (int i = 0; i < base.Level * list2.Count; i++)
+                        {
+                            manaGroup2 += ManaGroup.Single(ManaColors.Colors.Sample(base.GameRun.BattleRng));
+                        }
+                        yield return new GainManaAction(manaGroup2);
+                    }
                 }
                 yield break;
             }

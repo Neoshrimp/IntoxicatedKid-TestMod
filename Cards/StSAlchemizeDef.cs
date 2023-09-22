@@ -113,7 +113,7 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            this.toolCards = base.GameRun.RollCards(base.GameRun.AdventureRng, new CardWeightTable(RarityWeightTable.ShopCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyTool), base.Value1, false, null);
+            this.toolCards = base.GameRun.RollCards(base.GameRun.GameRunEventRng, new CardWeightTable(RarityWeightTable.ShopCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyTool), base.Value1, false, null);
             base.GameRun.AddDeckCards(this.toolCards, false, null);
             yield break;
         }

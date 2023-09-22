@@ -67,14 +67,14 @@ namespace test
                Cost: new ManaGroup() { Any = 0 },
                UpgradedCost: null,
                MoneyCost: null,
-               Damage: 0,
-               UpgradedDamage: null,
+               Damage: 22,
+               UpgradedDamage: 26,
                Block: null,
                UpgradedBlock: null,
                Shield: null,
                UpgradedShield: null,
-               Value1: 22,
-               UpgradedValue1: 24,
+               Value1: null,
+               UpgradedValue1: null,
                Value2: null,
                UpgradedValue2: null,
                Mana: null,
@@ -91,8 +91,8 @@ namespace test
                UltimateCost: null,
                UpgradedUltimateCost: null,
 
-               Keywords: Keyword.Exile | Keyword.Initial,
-               UpgradedKeywords: Keyword.Forbidden,
+               Keywords: Keyword.Accuracy | Keyword.Exile | Keyword.Initial,
+               UpgradedKeywords: Keyword.Accuracy | Keyword.Exile | Keyword.Initial,
                EmptyDescription: false,
                RelativeKeyword: Keyword.Exile,
                UpgradedRelativeKeyword: Keyword.Exile,
@@ -113,29 +113,17 @@ namespace test
     [EntityLogic(typeof(StSDramaticEntranceDef))]
     public sealed class StSDramaticEntrance : Card
     {
-        public override int AdditionalDamage
-        {
-            get
-            {
-                if (base.Battle != null && this.IsUpgraded)
-                {
-                    List<Card> list = base.GameRun.BaseDeck.Where((Card card) => card is StSDramaticEntrance && card.IsUpgraded).ToList<Card>();
-                    return list.Sum((Card card) => card.Value1);
-                }
-                return Value1;
-            }
-        }
         protected override void OnEnterBattle(BattleController battle)
         {
             base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(this.OnBattleStarted));
         }
         private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
         {
-            if (this == base.Battle.EnumerateAllCards().First((Card card) => card is StSDramaticEntrance && card.IsUpgraded))
+            if (this == base.Battle.EnumerateAllCards().FirstOrDefault((Card card) => card is StSDramaticEntrance && card.IsUpgraded))
             {
                 List<Card> list = base.Battle.DrawZone.Where((Card card) => card is StSDramaticEntrance && card.IsUpgraded).ToList<Card>();
                 yield return new ExileManyCardAction(list);
-                yield return base.AttackAction(base.Battle.AllAliveEnemies, "StarPasNoAni");
+                yield return new DamageAction(base.Battle.Player, base.Battle.AllAliveEnemies, DamageInfo.Attack(list.Sum((Card card) => card.Damage.Amount)), "StarPasNoAni", GunType.Single);
             }
             yield break;
         }

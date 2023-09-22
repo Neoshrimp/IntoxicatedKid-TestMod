@@ -114,7 +114,14 @@ namespace test
     {
         public override IEnumerable<BattleAction> OnExile(CardZone srcZone)
         {
-            yield return new MoveCardAction(this, CardZone.Hand);
+            if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+            {
+                yield return new MoveCardAction(this, CardZone.Discard);
+            }
+            else
+            {
+                yield return new MoveCardAction(this, CardZone.Hand);
+            }
         }
     }
 }
