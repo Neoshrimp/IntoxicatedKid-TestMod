@@ -285,7 +285,7 @@
             <HintPath>$(GameFolder)\LBoL_Data\Managed\YarnSpinner.dll</HintPath>
         </Reference>
         <Reference Include="LBoL-Entity-Sideloader">
-            <HintPath>$(BepInExFolder)\plugins\LBoL-Entity-Sideloader\LBoL-Entity-Sideloader.dll</HintPath>
+            <HintPath>$(BepInExFolder)\plugins\LBoL-Entity-Sideloader.dll</HintPath>
         </Reference>
         <Reference Include="LBoL-AddWatermark">
             <HintPath>$(BepInExFolder)\plugins\LBoL-AddWatermark.dll</HintPath>
@@ -299,6 +299,19 @@
         <Reference Include="DOTween.Modules">
             <HintPath>$(GameFolder)\LBoL_Data\Managed\DOTween.Modules.dll</HintPath>
         </Reference>
+        <Reference Include="spine-csharp">
+            <HintPath>$(GameFolder)\LBoL_Data\Managed\spine-csharp.dll</HintPath>
+        </Reference>
+        <Reference Include="spine-unity">
+            <HintPath>$(GameFolder)\LBoL_Data\Managed\spine-unity.dll</HintPath>
+        </Reference>
+        <Reference Include="UniTask">
+            <HintPath>$(GameFolder)\LBoL_Data\Managed\UniTask.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>$(GameFolder)\LBoL_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        
     </ItemGroup>
 
 
@@ -308,12 +321,26 @@
 
 
     <ItemGroup>
+      <None Remove="Resources\AyaAttackG.png" />
+      <None Remove="Resources\AyaAttackGMy_Computer.png" />
+      <None Remove="Resources\AyaAttackR.png" />
+      <None Remove="Resources\AyaAttackRMy_Computer.png" />
+      <None Remove="Resources\AyaBlockG.png" />
+      <None Remove="Resources\AyaBlockGMy_Computer.png" />
+      <None Remove="Resources\AyaBlockR.png" />
+      <None Remove="Resources\AyaBlockRMy_Computer.png" />
       <None Remove="Resources\AyaBreakingNews.png" />
       <None Remove="Resources\AyaBunbunmaruPrinter.png" />
+      <None Remove="Resources\AyaEvasionSe.png" />
       <None Remove="Resources\AyaFastestGun.png" />
-      <None Remove="Resources\AyaSuperGraze.png" />
+      <None Remove="Resources\AyaFma.png" />
+      <None Remove="Resources\AyaPassiveSe.png" />
+      <None Remove="Resources\AyaPerfectEvasion.png" />
+      <None Remove="Resources\AyaPerfectEvasionSe.png" />
       <None Remove="Resources\BlossomingYinYangOrb.png" />
+      <None Remove="Resources\BossIconAya.png" />
       <None Remove="resources\CardsEn.yaml" />
+      <None Remove="Resources\CirnoSpellingTest.png" />
       <None Remove="Resources\DayuuAbility.png" />
       <None Remove="Resources\DayuuAbilityMIO.png" />
       <None Remove="Resources\DayuuAbilitySe.png" />
@@ -334,6 +361,17 @@
       <None Remove="Resources\DayuuSmallSparrow.png" />
       <None Remove="resources\ExhibitsEn.yaml" />
       <None Remove="resources\KeywordsEn.yaml" />
+      <None Remove="Resources\NitoriBackpack.png" />
+      <None Remove="Resources\NitoriBlueprint.png" />
+      <None Remove="Resources\NitoriCraftAdvanced.png" />
+      <None Remove="Resources\NitoriCraftSimple.png" />
+      <None Remove="Resources\NitoriInventory.png" />
+      <None Remove="Resources\NitoriMaterialMetalC.png" />
+      <None Remove="Resources\NitoriMaterialMetalR.png" />
+      <None Remove="Resources\NitoriMaterialMetalU.png" />
+      <None Remove="Resources\PlayerUnitsEn.yaml" />
+      <None Remove="Resources\ReimuFantasyNature.png" />
+      <None Remove="Resources\ReimuFantasySealSpread.png" />
       <None Remove="Resources\StatusEffectsEn.yaml" />
       <None Remove="Resources\StSAccuracy.png" />
       <None Remove="Resources\StSAccuracySe.png" />
@@ -348,6 +386,8 @@
       <None Remove="Resources\StSBustedCrown.png" />
       <None Remove="Resources\StSCaltrops.png" />
       <None Remove="Resources\StSCauldron.png" />
+      <None Remove="Resources\StSChargeBattery.png" />
+      <None Remove="Resources\StSClash.png" />
       <None Remove="Resources\StSCoffeeDripper.png" />
       <None Remove="Resources\StSCultistHeadpiece.png" />
       <None Remove="Resources\StSCursedKey.png" />
@@ -369,8 +409,12 @@
       <None Remove="Resources\StSFrozenEye.png" />
       <None Remove="Resources\StSFusionHammer.png" />
       <None Remove="Resources\StSGoodInstincts.png" />
+      <None Remove="Resources\StSimpatience.png" />
+      <None Remove="Resources\StSJackofAllTrades.png" />
       <None Remove="Resources\StSLimitBreak.png" />
       <None Remove="Resources\StSMadness.png" />
+      <None Remove="Resources\StSMagnetism.png" />
+      <None Remove="Resources\StSMagnetismSe.png" />
       <None Remove="Resources\StSMasterofStrategy.png" />
       <None Remove="Resources\StSMayhem.png" />
       <None Remove="Resources\StSMayhemSe.png" />
@@ -384,6 +428,7 @@
       <None Remove="Resources\StSNlothsGift.png" />
       <None Remove="Resources\StSOrangePellets.png" />
       <None Remove="Resources\StSOrrery.png" />
+      <None Remove="Resources\StSOverclock.png" />
       <None Remove="Resources\StSPanacea.png" />
       <None Remove="Resources\StSPanache.png" />
       <None Remove="Resources\StSPanacheSe.png" />
@@ -393,9 +438,12 @@
       <None Remove="Resources\StSPerfectedStrike.png" />
       <None Remove="Resources\StSPhilosophersStone.png" />
       <None Remove="Resources\StSPurity.png" />
+      <None Remove="Resources\StSRecycle.png" />
+      <None Remove="Resources\StSReinforcedBody.png" />
       <None Remove="Resources\StSRunicDome.png" />
       <None Remove="Resources\StSRunicPyramid.png" />
       <None Remove="Resources\StSSacredBark.png" />
+      <None Remove="Resources\StSSentinel.png" />
       <None Remove="Resources\StSSneckoEye.png" />
       <None Remove="Resources\StSSozu.png" />
       <None Remove="Resources\StSSsserpentHead.png" />
@@ -407,6 +455,7 @@
       <None Remove="Resources\StSToolbox.png" />
       <None Remove="Resources\StSTorii.png" />
       <None Remove="Resources\StSTrip.png" />
+      <None Remove="Resources\StSTURBO.png" />
       <None Remove="Resources\StSVelvetChoker.png" />
       <None Remove="Resources\StSWristBlade.png" />
       <None Remove="Resources\TASBot.png" />
@@ -415,6 +464,7 @@
       <None Remove="Resources\Th18BlankCard.png" />
       <None Remove="Resources\UnitedWeStand.png" />
       <None Remove="Resources\UnitedWeStandSe.png" />
+      <None Remove="resources\UnitModelsEn.yaml" />
       <None Remove="Resources\YuGiOhBlueEyesWhiteDragon.png" />
       <None Remove="Resources\ZunBeerHat.png" />
       <None Remove="Resources\ZunBeerHatSe.png" />
@@ -422,7 +472,7 @@
 
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;$(BepInExFolder)\scripts&quot;&#xD;&#xA;copy /Y &quot;$(TargetPath)&quot; &quot;$(ProjectDir)&quot;" />
+        <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;$(ProjectDir)&quot;&#xD;&#xA;IF exist &quot;$(BepInExFolder)\scripts\$(AssemblyName)&quot; goto skipDir&#xD;&#xA;mkdir &quot;$(BepInExFolder)\scripts\$(AssemblyName)&quot;&#xD;&#xA;:skipDir&#xD;&#xA;copy /Y &quot;$(TargetPath)&quot; &quot;$(BepInExFolder)\scripts\$(AssemblyName)&quot;&#xD;&#xA;xcopy /Y /E &quot;$(ProjectDir)DirResources\*&quot; &quot;$(BepInExFolder)\scripts\$(AssemblyName)&quot; &#xD;&#xA;powershell -command &quot;Compress-Archive -Path '$(TargetPath)', '$(ProjectDir)DirResources\*', '$(ProjectDir)manifest.json', '$(ProjectDir)icon.png', '$(ProjectDir)README.md'   -DestinationPath  '$(ProjectDir)$(AssemblyName)-thunderstore.zip' -Force&quot;" />
     </Target>
 
 

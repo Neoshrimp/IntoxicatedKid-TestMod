@@ -26,11 +26,10 @@ using Mono.Cecil;
 using JetBrains.Annotations;
 using System.Linq;
 using LBoL.EntityLib.StatusEffects.Neutral.Black;
-using test;
-using static test.StSPanacheDef;
+using static test.Cards.StSPanacheDef;
 using LBoL.EntityLib.StatusEffects.Basic;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSCaltropsDef : CardTemplate
     {
@@ -122,7 +121,7 @@ namespace test
         {
             protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
             {
-                yield return base.BuffAction<Electric>(base.Value1, 0, 0, 0, 0.2f);
+                yield return BuffAction<Electric>(Value1, 0, 0, 0, 0.2f);
                 yield break;
             }
         }

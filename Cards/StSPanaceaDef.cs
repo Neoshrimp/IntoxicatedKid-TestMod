@@ -20,7 +20,7 @@ using LBoL.Core.Randoms;
 using static test.BepinexPlugin;
 using LBoL.EntityLib.StatusEffects.Basic;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSPanaceaDef : CardTemplate
     {
@@ -114,9 +114,9 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            yield return base.DefenseAction(true);
-            yield return new RemoveAllNegativeStatusEffectAction(base.Battle.Player);
-            yield return base.BuffAction<Amulet>(base.Value1, 0, 0, 0, 0.2f);
+            yield return DefenseAction(true);
+            yield return new RemoveAllNegativeStatusEffectAction(Battle.Player);
+            yield return BuffAction<Amulet>(Value1, 0, 0, 0, 0.2f);
             yield break;
         }
     }

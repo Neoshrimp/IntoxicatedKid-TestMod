@@ -25,7 +25,7 @@ using LBoL.Base.Extensions;
 using System.Linq;
 using UnityEngine;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSGoodInstinctsDef : CardTemplate
     {
@@ -119,7 +119,7 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            yield return base.DefenseAction(true);
+            yield return DefenseAction(true);
             yield break;
         }
     }

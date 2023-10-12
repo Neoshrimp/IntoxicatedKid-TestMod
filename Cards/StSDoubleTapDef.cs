@@ -26,12 +26,11 @@ using Mono.Cecil;
 using JetBrains.Annotations;
 using System.Linq;
 using LBoL.EntityLib.StatusEffects.Neutral.Black;
-using test;
 using LBoL.EntityLib.PlayerUnits;
 using LBoL.EntityLib.Cards.Character.Sakuya;
 using LBoL.EntityLib.StatusEffects.Reimu;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSDoubleTapDef : CardTemplate
     {
@@ -123,7 +122,7 @@ namespace test
         {
             protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
             {
-                yield return base.BuffAction<StSDoubleTapSeDef.StSDoubleTapSe>(base.Value1, 0, 0, 0, 0.2f);
+                yield return BuffAction<StSDoubleTapSeDef.StSDoubleTapSe>(Value1, 0, 0, 0, 0.2f);
                 yield break;
             }
         }
@@ -181,16 +180,16 @@ namespace test
             private UnitSelector unitSelector = null;
             protected override void OnAdded(Unit unit)
             {
-                base.ReactOwnerEvent<CardUsingEventArgs>(base.Battle.CardUsing, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsing));
-                base.ReactOwnerEvent<CardMovingEventArgs>(base.Battle.CardMoving, new EventSequencedReactor<CardMovingEventArgs>(this.OnCardMoving));
-                base.ReactOwnerEvent<CardEventArgs>(base.Battle.CardExiling, new EventSequencedReactor<CardEventArgs>(this.OnCardExiling));
-                base.ReactOwnerEvent<CardEventArgs>(base.Battle.CardRemoving, new EventSequencedReactor<CardEventArgs>(this.OnCardRemoving));
+                ReactOwnerEvent(Battle.CardUsing, new EventSequencedReactor<CardUsingEventArgs>(OnCardUsing));
+                ReactOwnerEvent(Battle.CardMoving, new EventSequencedReactor<CardMovingEventArgs>(OnCardMoving));
+                ReactOwnerEvent(Battle.CardExiling, new EventSequencedReactor<CardEventArgs>(OnCardExiling));
+                ReactOwnerEvent(Battle.CardRemoving, new EventSequencedReactor<CardEventArgs>(OnCardRemoving));
             }
             private IEnumerable<BattleAction> OnCardUsing(CardUsingEventArgs args)
             {
                 if (args.Card.CardType == CardType.Attack && args.Card != card)
                 {
-                    this.Again = true;
+                    Again = true;
                     card = args.Card;
                     unitSelector = args.Selector;
                 }
@@ -198,27 +197,28 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardMoving(CardMovingEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card && !(args.SourceZone == CardZone.PlayArea && args.DestinationZone == CardZone.Hand))
+                if (!Battle.BattleShouldEnd && Again && args.Card == card && !(args.SourceZone == CardZone.PlayArea && args.DestinationZone == CardZone.Hand))
                 {
-                    this.Again = false;
-                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+                    Again = false;
+                    if (Battle.HandZone.Count >= Battle.MaxHand)
                     {
                         card = null;
                         unitSelector = null;
                         yield break;
                     }
-                    base.NotifyActivating();
+                    NotifyActivating();
                     args.CancelBy(this);
                     yield return new MoveCardAction(args.Card, CardZone.Hand);
                     if (args.Card.Zone == CardZone.Hand)
                     {
+                        Helpers.FakeQueueConsumingMana(new ManaGroup() { Any = 0 });
                         yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
                         card = null;
                         unitSelector = null;
                     }
-                    int num = base.Level - 1;
-                    base.Level = num;
-                    if (base.Level <= 0)
+                    int num = Level - 1;
+                    Level = num;
+                    if (Level <= 0)
                     {
                         yield return new RemoveStatusEffectAction(this, true);
                     }
@@ -227,27 +227,28 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardExiling(CardEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
+                if (!Battle.BattleShouldEnd && Again && args.Card == card)
                 {
-                    this.Again = false;
-                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+                    Again = false;
+                    if (Battle.HandZone.Count >= Battle.MaxHand)
                     {
                         card = null;
                         unitSelector = null;
                         yield break;
                     }
-                    base.NotifyActivating();
+                    NotifyActivating();
                     args.CancelBy(this);
                     yield return new MoveCardAction(args.Card, CardZone.Hand);
                     if (args.Card.Zone == CardZone.Hand)
                     {
+                        Helpers.FakeQueueConsumingMana(new ManaGroup() { Any = 0 });
                         yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
                         card = null;
                         unitSelector = null;
                     }
-                    int num = base.Level - 1;
-                    base.Level = num;
-                    if (base.Level <= 0)
+                    int num = Level - 1;
+                    Level = num;
+                    if (Level <= 0)
                     {
                         yield return new RemoveStatusEffectAction(this, true);
                     }
@@ -256,27 +257,28 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardRemoving(CardEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
+                if (!Battle.BattleShouldEnd && Again && args.Card == card)
                 {
-                    this.Again = false;
-                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+                    Again = false;
+                    if (Battle.HandZone.Count >= Battle.MaxHand)
                     {
                         card = null;
                         unitSelector = null;
                         yield break;
                     }
-                    base.NotifyActivating();
+                    NotifyActivating();
                     args.CancelBy(this);
                     yield return new MoveCardAction(args.Card, CardZone.Hand);
                     if (args.Card.Zone == CardZone.Hand)
                     {
+                        Helpers.FakeQueueConsumingMana(new ManaGroup() { Any = 0 });
                         yield return new UseCardAction(args.Card, unitSelector, new ManaGroup() { Any = 0 });
                         card = null;
                         unitSelector = null;
                     }
-                    int num = base.Level - 1;
-                    base.Level = num;
-                    if (base.Level <= 0)
+                    int num = Level - 1;
+                    Level = num;
+                    if (Level <= 0)
                     {
                         yield return new RemoveStatusEffectAction(this, true);
                     }

@@ -25,7 +25,7 @@ using LBoL.Base.Extensions;
 using System.Linq;
 using UnityEngine;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSSwiftStrikeDef : CardTemplate
     {

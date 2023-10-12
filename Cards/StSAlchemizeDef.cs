@@ -19,7 +19,7 @@ using LBoL.Core.StatusEffects;
 using LBoL.Core.Randoms;
 using static test.BepinexPlugin;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSAlchemizeDef : CardTemplate
     {
@@ -59,7 +59,7 @@ namespace test
                IsUpgradable: true,
                Rarity: Rarity.Rare,
                Type: CardType.Skill,
-               TargetType: TargetType.Self,
+               TargetType: TargetType.Nobody,
                Colors: new List<ManaColor>() { ManaColor.Colorless },
                IsXCost: false,
                Cost: new ManaGroup() { Any = 1, Colorless = 1 },
@@ -113,10 +113,9 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            this.toolCards = base.GameRun.RollCards(base.GameRun.GameRunEventRng, new CardWeightTable(RarityWeightTable.ShopCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyTool), base.Value1, false, null);
-            base.GameRun.AddDeckCards(this.toolCards, false, null);
+            Card[] cards = GameRun.RollCards(GameRun.GameRunEventRng, new CardWeightTable(RarityWeightTable.ShopCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyTool), Value1, false, null);
+            GameRun.AddDeckCards(cards, false, null);
             yield break;
         }
-        private Card[] toolCards;
     }
 }

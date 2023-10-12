@@ -6,6 +6,10 @@ DayuuSmallSparrow:
   Description: "When acquired, choose 1 of {Value1} |Remnant| cards to add to the library.\nWhenever a |Remnant| card is drawn, gain mana equal to that card's colored mana cost."
   Name: Small Sparrow
   FlavorText: "People have been committing sins since long ago. Why do they commit sins, knowing it's wrong?"
+NitoriBackpack:
+  Description: "|p:Click this exhibit to open Backpack menu.| In Backpack menu, you can craft a card or an exhibit(If conditions are met), store/retrieve cards in your inventory, check |Materials|, or examine youe |Blueprints|.\nWhenever an enemy is defeated, has chance to gain a |Material| card as an additional reward. Each enemy has corresponding |Materials| to drop."
+  Name: Nitori's Backpack
+  FlavorText: "Make your destiny"
 StSBlueCandle:
   Description: "All |Misfortune| cards |costs| {Mana}, has |Exile|, and loses |Unplayable|.\nWhenever a |Misfortune| card is played, lose {Value1} life."
   Name: Blue Candle
@@ -31,7 +35,7 @@ StSCursedKey:
   Name: Cursed Key
   FlavorText: "You can feel the malicious energy emanating from the key. Power comes at a price."
 StSEctoplasm:
-  Description: "Adds {BaseMana} to the mana base.\n{PlayerName} can no longer gain <sprite=\"Point\" name=\"Gold\">.\n{SelfName} can't be found after act 3."
+  Description: "Adds {BaseMana} to the mana base.\n{PlayerName} can no longer gain <sprite=\"Point\" name=\"Gold\">. |Upgrading| at a Gap will always cost {Value1} <sprite=\"Point\" name=\"Gold\">.\n{SelfName} can't be found after act 3."
   Name: Ectoplasm
   FlavorText: "This blob of slime and energy seems to pulse with life."
 StSEnchiridion:
@@ -99,9 +103,13 @@ StSSozu:
   Name: Sozu
   FlavorText: "You notice that magical liquids seem to lose their properties when near this relic."
 StSSsserpentHead:
-  Description: "When acquired, choose {Value1} random |Tool| cards to add to the library."
+  Description: "Whenever {PlayerName} visits Event, gain {Value1} <sprite=\"Point\" name=\"Gold\">."
   Name: Ssserpent Head
   FlavorText: "The most fulfilling of lives is that in which you can buy anything!"
+StSStrangeSpoon:
+  Description: "Whenever a non-|Misfortune| and non-Status |Exile| card is played, has 50% chance to return to the discard pile."
+  Name: Strange Spoon
+  FlavorText: "Staring at the spoon, it appears to bend and twist around before your eyes."
 StSThreadandNeedle:
   Description: "At the start of combat, gain {Value1} |Defense Matrix|."
   Name: Thread and Needle

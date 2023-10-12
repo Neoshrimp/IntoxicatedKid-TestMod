@@ -35,7 +35,7 @@ using JetBrains.Annotations;
 using LBoL.EntityLib.Cards.Character.Marisa;
 using LBoL.EntityLib.EnemyUnits.Character;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSToolboxDef : ExhibitTemplate
     {
@@ -54,7 +54,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -93,14 +93,14 @@ namespace test
         {
             protected override void OnEnterBattle()
             {
-                base.ReactBattleEvent<UnitEventArgs>(base.Battle.Player.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnStarted));
+                ReactBattleEvent(Battle.Player.TurnStarted, new EventSequencedReactor<UnitEventArgs>(OnPlayerTurnStarted));
             }
             private IEnumerable<BattleAction> OnPlayerTurnStarted(UnitEventArgs args)
             {
-                if (base.Battle.Player.TurnCounter == 1)
+                if (Battle.Player.TurnCounter == 1)
                 {
-                    base.NotifyActivating();
-                    Card[] array = base.Battle.RollCardsWithoutManaLimit(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.AllOnes, CardTypeWeightTable.AllOnes), base.Value1, (CardConfig config) => config.Colors.Contains(ManaColor.Colorless));
+                    NotifyActivating();
+                    Card[] array = Battle.RollCardsWithoutManaLimit(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), Value1, (config) => config.Colors.Contains(ManaColor.Colorless));
                     foreach (Card card in array)
                     {
                         card.SetBaseCost(ManaGroup.Anys(card.ConfigCost.Amount));
@@ -111,7 +111,7 @@ namespace test
                     };
                     yield return new InteractionAction(interaction, false);
                     Card selectedCard = interaction.SelectedCard;
-                    if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+                    if (Battle.HandZone.Count >= Battle.MaxHand)
                     {
                         yield return new AddCardsToDiscardAction(new Card[] { selectedCard });
                     }

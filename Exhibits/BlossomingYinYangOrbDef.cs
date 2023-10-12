@@ -39,7 +39,7 @@ using LBoL.EntityLib.StatusEffects.Neutral.TwoColor;
 using LBoL.Core.Stations;
 using LBoL.EntityLib.Exhibits.Common;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class BlossomingYinYangOrbDef : ExhibitTemplate
     {
@@ -58,7 +58,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -93,50 +93,50 @@ namespace test
         }
         [EntityLogic(typeof(BlossomingYinYangOrbDef))]
         [UsedImplicitly]
-        [ExhibitInfo(WeighterType = typeof(BlossomingYinYangOrb.BlossomingYinYangOrbWeighter))]
+        [ExhibitInfo(WeighterType = typeof(BlossomingYinYangOrbWeighter))]
         public sealed class BlossomingYinYangOrb : ShiningExhibit
         {
             protected override void OnAdded(PlayerUnit player)
             {
-                if (base.GameRun.Player.HasExhibit<ReimuR>())
+                if (GameRun.Player.HasExhibit<ReimuR>())
                 {
-                    base.GameRun.LoseExhibit(base.GameRun.Player.GetExhibit<ReimuR>(), false, true);
+                    GameRun.LoseExhibit(GameRun.Player.GetExhibit<ReimuR>(), false, true);
                 }
-                player.GameRun.GainBaseMana(this.Mana, false);
+                player.GameRun.GainBaseMana(Mana, false);
             }
             protected override void OnRemoved(PlayerUnit player)
             {
-                if (!base.GameRun.Player.HasExhibit<ReimuR>())
+                if (!GameRun.Player.HasExhibit<ReimuR>())
                 {
-                    base.GameRun.GainExhibitRunner(base.GameRun.Player.GetExhibit<ReimuR>(), false, null);
+                    GameRun.GainExhibitRunner(GameRun.Player.GetExhibit<ReimuR>(), false, null);
                 }
-                player.GameRun.TryLoseBaseMana(this.Mana, false);
+                player.GameRun.TryLoseBaseMana(Mana, false);
             }
             protected override void OnEnterBattle()
             {
-                base.Active = true;
-                base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(this.OnBattleStarted));
-                base.ReactBattleEvent<DieEventArgs>(base.Battle.EnemyDied, new EventSequencedReactor<DieEventArgs>(this.OnEnemyDied));
+                Active = true;
+                ReactBattleEvent(Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(OnBattleStarted));
+                ReactBattleEvent(Battle.EnemyDied, new EventSequencedReactor<DieEventArgs>(OnEnemyDied));
                 //base.HandleBattleEvent<DamageEventArgs>(base.Battle.Player.DamageTaking, new GameEventHandler<DamageEventArgs>(this.OnPlayerDamageTaking));
-                base.ReactBattleEvent<DamageEventArgs>(base.Battle.Player.DamageReceived, new EventSequencedReactor<DamageEventArgs>(this.OnPlayerDamageReceived));
+                ReactBattleEvent(Battle.Player.DamageReceived, new EventSequencedReactor<DamageEventArgs>(OnPlayerDamageReceived));
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
             {
-                base.NotifyActivating();
-                yield return new ApplyStatusEffectAction<Firepower>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
+                NotifyActivating();
+                yield return new ApplyStatusEffectAction<Firepower>(Owner, new int?(Value1), null, null, null, 0.1f, true);
                 //yield return new ApplyStatusEffectAction<Spirit>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
-                yield return new HealAction(base.Owner, base.Owner, base.Value2, HealType.Base, 0.1f);
+                yield return new HealAction(Owner, Owner, Value2, HealType.Base, 0.1f);
                 yield break;
             }
             private IEnumerable<BattleAction> OnEnemyDied(DieEventArgs arg)
             {
-                base.NotifyActivating();
-                if (!base.Battle.BattleShouldEnd)
+                NotifyActivating();
+                if (!Battle.BattleShouldEnd)
                 {
-                    yield return new ApplyStatusEffectAction<Firepower>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
+                    yield return new ApplyStatusEffectAction<Firepower>(Owner, new int?(Value1), null, null, null, 0.1f, true);
                     //yield return new ApplyStatusEffectAction<Spirit>(base.Owner, new int?(base.Value1), null, null, null, 0.1f, true);
                 }
-                yield return new HealAction(base.Owner, base.Owner, base.Value2, HealType.Base, 0.1f);
+                yield return new HealAction(Owner, Owner, Value2, HealType.Base, 0.1f);
                 yield break;
             }
             /*private void OnPlayerDamageTaking(DamageEventArgs args)
@@ -153,10 +153,10 @@ namespace test
             private IEnumerable<BattleAction> OnPlayerDamageReceived(DamageEventArgs args)
             {
                 Unit source = args.Source;
-                if (source is EnemyUnit && source.IsAlive && this.Active)
+                if (source is EnemyUnit && source.IsAlive && Active)
                 {
-                    base.NotifyActivating();
-                    base.Active = false;
+                    NotifyActivating();
+                    Active = false;
                     Card card = Library.CreateCard<YinyangCard>();
                     yield return new AddCardsToHandAction(card);
                     EnemyUnit attacker = (EnemyUnit)args.Source;
@@ -167,13 +167,13 @@ namespace test
             }
             protected override void OnLeaveBattle()
             {
-                base.Active = false;
+                Active = false;
             }
             private class BlossomingYinYangOrbWeighter : IExhibitWeighter
             {
                 public float WeightFor(Type type, GameRunController gameRun)
                 {
-                    return (float)(gameRun.Player.HasExhibit<ReimuR>() ? 1 : 0);
+                    return gameRun.Player.HasExhibit<ReimuR>() ? 1 : 0;
                 }
             }
         }

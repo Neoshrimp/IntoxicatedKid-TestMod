@@ -52,7 +52,7 @@ using LBoL.EntityLib.Exhibits.Adventure;
 using static System.Collections.Specialized.BitVector32;
 using static UnityEngine.UI.GridLayoutGroup;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSWristBladeDef : ExhibitTemplate
     {
@@ -71,7 +71,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -110,16 +110,16 @@ namespace test
         {
             protected override void OnEnterBattle()
             {
-                base.HandleBattleEvent<DamageDealingEventArgs>(base.Owner.DamageDealing, delegate (DamageDealingEventArgs args)
+                HandleBattleEvent(Owner.DamageDealing, delegate (DamageDealingEventArgs args)
                 {
                     Card card = args.ActionSource as Card;
-                    if (args.ActionSource == card && card.CardType == CardType.Attack && card.Cost.Amount <= base.Value1)
+                    if (args.ActionSource == card && card.CardType == CardType.Attack && card.Cost.Amount <= Value1)
                     {
-                        args.DamageInfo = args.DamageInfo.IncreaseBy(base.Value2);
+                        args.DamageInfo = args.DamageInfo.IncreaseBy(Value2);
                         args.AddModifier(this);
                         if (args.Cause != ActionCause.OnlyCalculate)
                         {
-                            base.NotifyActivating();
+                            NotifyActivating();
                         }
                     }
                 });

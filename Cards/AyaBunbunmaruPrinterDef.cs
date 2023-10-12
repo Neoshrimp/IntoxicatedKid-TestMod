@@ -26,9 +26,10 @@ using Mono.Cecil;
 using JetBrains.Annotations;
 using System.Linq;
 using LBoL.EntityLib.StatusEffects.Neutral.Black;
-using test;
+using LBoL.EntityLib.Cards.Character.Sakuya;
+using LBoL.EntityLib.Cards.Other.Enemy;
 
-namespace test
+namespace test.Cards
 {
     public sealed class AyaBunbunmaruPrinterDef : CardTemplate
     {
@@ -80,8 +81,8 @@ namespace test
                UpgradedShield: null,
                Value1: 1,
                UpgradedValue1: null,
-               Value2: null,
-               UpgradedValue2: null,
+               Value2: 0,
+               UpgradedValue2: 1,
                Mana: null,
                UpgradedMana: null,
                Scry: null,
@@ -106,9 +107,9 @@ namespace test
                UpgradedRelativeEffects: new List<string>() { },
                RelativeCards: new List<string>() { "AyaNews", "HatateNews" },
                UpgradedRelativeCards: new List<string>() { "AyaNews", "HatateNews" },
-               Owner: null,
+               Owner: "AyaPlayerUnit",
                Unfinished: false,
-               Illustrator: "",
+               Illustrator: "torque",
                SubIllustrator: new List<string>() { }
             );
 
@@ -120,7 +121,11 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            yield return base.BuffAction<AyaBunbunmaruPrinterSeDef.AyaBunbunmaruPrinterSe>(base.Value1, 0, 0, 0, 0.2f);
+            yield return BuffAction<AyaBunbunmaruPrinterSeDef.AyaBunbunmaruPrinterSe>(Value1, 0, 0, 0, 0.2f);
+            if (Value2 > 0)
+            {
+                yield return new AddCardsToHandAction(Library.CreateCards<Knife>(Value2, false));
+            }
             yield break;
         }
     }
@@ -156,13 +161,13 @@ namespace test
                 HasDuration: false,
                 DurationStackType: StackType.Add,
                 DurationDecreaseTiming: DurationDecreaseTiming.Custom,
-                HasCount: true,
-                CountStackType: StackType.Add,
+                HasCount: false,
+                CountStackType: StackType.Keep,
                 LimitStackType: StackType.Keep,
                 ShowPlusByLimit: false,
                 Keywords: Keyword.None,
                 RelativeEffects: new List<string>() { },
-                VFX: "Default",
+                VFX: "BuffGreen",
                 VFXloop: "Default",
                 SFX: "Default"
             );
@@ -173,35 +178,16 @@ namespace test
         {
             protected override void OnAdded(Unit unit)
             {
-                base.ReactOwnerEvent<UnitEventArgs>(base.Battle.Player.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnTurnStarted));
+                ReactOwnerEvent(Owner.TurnStarted, new EventSequencedReactor<UnitEventArgs>(OnOwnerTurnStarted));
             }
-            private IEnumerable<BattleAction> OnTurnStarted(UnitEventArgs args)
+            private IEnumerable<BattleAction> OnOwnerTurnStarted(UnitEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd)
+                if (Battle.BattleShouldEnd)
                 {
-                    List<Card> list = base.Battle.HandZone.Where((Card card) => (card.CardType == CardType.Friend) && !(card is DayuuFriend)).ToList<Card>();
-                    List<Card> list2 = base.Battle.HandZone.Where((Card card) => card is DayuuFriend).ToList<Card>();
-                    if (list.Count > 0)
-                    {
-                        base.NotifyActivating();
-                        ManaGroup manaGroup = ManaGroup.Empty;
-                        for (int i = 0; i < base.Count * list.Count; i++)
-                        {
-                            manaGroup += ManaGroup.Single(ManaColors.Colors.Sample(base.GameRun.BattleRng));
-                        }
-                        yield return new GainManaAction(manaGroup);
-                    }
-                    if (list2.Count > 0)
-                    {
-                        base.NotifyActivating();
-                        ManaGroup manaGroup2 = ManaGroup.Empty;
-                        for (int i = 0; i < base.Level * list2.Count; i++)
-                        {
-                            manaGroup2 += ManaGroup.Single(ManaColors.Colors.Sample(base.GameRun.BattleRng));
-                        }
-                        yield return new GainManaAction(manaGroup2);
-                    }
+                    yield break;
                 }
+                NotifyActivating();
+                yield return new AddCardsToHandAction(Library.CreateCards<AyaNews>(Level, false));
                 yield break;
             }
         }

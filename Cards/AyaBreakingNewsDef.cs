@@ -26,13 +26,12 @@ using Mono.Cecil;
 using JetBrains.Annotations;
 using System.Linq;
 using LBoL.EntityLib.StatusEffects.Neutral.Black;
-using test;
 using LBoL.EntityLib.PlayerUnits;
 using LBoL.EntityLib.Cards.Character.Sakuya;
 using LBoL.EntityLib.Cards.Other.Enemy;
 using LBoL.EntityLib.StatusEffects.Cirno;
 
-namespace test
+namespace test.Cards
 {
     public sealed class AyaBreakingNewsDef : CardTemplate
     {
@@ -111,9 +110,9 @@ namespace test
                 UpgradedRelativeEffects: new List<string>() { },
                 RelativeCards: new List<string>() { "AyaNews" },
                 UpgradedRelativeCards: new List<string>() { "AyaNews" },
-                Owner: null,
+                Owner: "AyaPlayerUnit",
                 Unfinished: false,
-                Illustrator: "",
+                Illustrator: "Masakichi",
                 SubIllustrator: new List<string>() { }
              );
 
@@ -124,7 +123,7 @@ namespace test
         {
             protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
             {
-                yield return base.BuffAction<AyaBreakingNewsSeDef.AyaBreakingNewsSe>(base.Value1, 0, 0, 0, 0.2f);
+                yield return BuffAction<AyaBreakingNewsSeDef.AyaBreakingNewsSe>(Value1, 0, 0, 0, 0.2f);
                 yield break;
             }
         }
@@ -179,18 +178,18 @@ namespace test
         {
             protected override void OnAdded(Unit unit)
             {
-                foreach (Card card in base.Battle.EnumerateAllCards())
+                foreach (Card card in Battle.EnumerateAllCards())
                 {
                     if (card is AyaNews)
                     {
-                        card.DeltaDamage = base.Level;
+                        card.DeltaDamage = Level;
                     }
                 }
-                base.HandleOwnerEvent<CardsEventArgs>(base.Battle.CardsAddedToDiscard, new GameEventHandler<CardsEventArgs>(this.OnAddCard));
-                base.HandleOwnerEvent<CardsEventArgs>(base.Battle.CardsAddedToHand, new GameEventHandler<CardsEventArgs>(this.OnAddCard));
-                base.HandleOwnerEvent<CardsEventArgs>(base.Battle.CardsAddedToExile, new GameEventHandler<CardsEventArgs>(this.OnAddCard));
-                base.HandleOwnerEvent<CardsAddingToDrawZoneEventArgs>(base.Battle.CardsAddedToDrawZone, new GameEventHandler<CardsAddingToDrawZoneEventArgs>(this.OnAddCardToDraw));
-                base.HandleOwnerEvent<DamageDealingEventArgs>(base.Owner.DamageDealing, new GameEventHandler<DamageDealingEventArgs>(this.OnDamageDealing));
+                HandleOwnerEvent(Battle.CardsAddedToDiscard, new GameEventHandler<CardsEventArgs>(OnAddCard));
+                HandleOwnerEvent(Battle.CardsAddedToHand, new GameEventHandler<CardsEventArgs>(OnAddCard));
+                HandleOwnerEvent(Battle.CardsAddedToExile, new GameEventHandler<CardsEventArgs>(OnAddCard));
+                HandleOwnerEvent(Battle.CardsAddedToDrawZone, new GameEventHandler<CardsAddingToDrawZoneEventArgs>(OnAddCardToDraw));
+                HandleOwnerEvent(Owner.DamageDealing, new GameEventHandler<DamageDealingEventArgs>(OnDamageDealing));
             }
             private void OnAddCard(CardsEventArgs args)
             {
@@ -198,7 +197,7 @@ namespace test
                 {
                     if (card is AyaNews)
                     {
-                        card.DeltaDamage = base.Level;
+                        card.DeltaDamage = Level;
                     }
                 }
             }
@@ -208,20 +207,20 @@ namespace test
                 {
                     if (card is AyaNews)
                     {
-                        card.DeltaDamage = base.Level;
+                        card.DeltaDamage = Level;
                     }
                 }
             }
             private void OnDamageDealing(DamageDealingEventArgs args)
             {
                 Card card = args.ActionSource as Card;
-                if (args.ActionSource == card && card is AyaNews && args.Targets.Any((Unit target) => target.Block > 0 || target.Shield > 0))
+                if (args.ActionSource == card && card is AyaNews && args.Targets.Any((target) => target.Block > 0 || target.Shield > 0))
                 {
                     args.DamageInfo = args.DamageInfo.IncreaseBy((int)args.DamageInfo.Amount);
                     args.AddModifier(this);
                     if (args.Cause != ActionCause.OnlyCalculate)
                     {
-                        base.NotifyActivating();
+                        NotifyActivating();
                     }
                 }
             }

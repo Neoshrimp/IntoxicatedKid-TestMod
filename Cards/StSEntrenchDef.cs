@@ -17,7 +17,7 @@ using System.Threading;
 using LBoL.Core.StatusEffects;
 using static test.BepinexPlugin;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSEntrenchDef : CardTemplate
     {
@@ -111,20 +111,20 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-			int block = base.Battle.Player.Block;
-            int Shield = base.Battle.Player.Shield;
+            int block = Battle.Player.Block;
+            int Shield = Battle.Player.Shield;
             if (block > 0)
             {
-                yield return new CastBlockShieldAction(base.Battle.Player, block, 0, BlockShieldType.Direct, false);
+                yield return new CastBlockShieldAction(Battle.Player, block, 0, BlockShieldType.Direct, false);
             }
-            if (this.IsUpgraded)
+            if (IsUpgraded)
             {
                 if (Shield > 0)
                 {
-                    yield return new CastBlockShieldAction(base.Battle.Player, 0, Shield, BlockShieldType.Direct, false);
+                    yield return new CastBlockShieldAction(Battle.Player, 0, Shield, BlockShieldType.Direct, false);
                 }
             }
             yield break;
-		}
+        }
     }
 }

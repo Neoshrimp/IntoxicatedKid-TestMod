@@ -36,7 +36,7 @@ using UnityEngine.InputSystem.Controls;
 using LBoL.EntityLib.Exhibits;
 using JetBrains.Annotations;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSRunicDomeDef : ExhibitTemplate
     {
@@ -55,7 +55,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -95,11 +95,11 @@ namespace test
         {
             protected override void OnEnterBattle()
             {
-                base.ReactBattleEvent<GameEventArgs>(base.Battle.RoundStarted, new EventSequencedReactor<GameEventArgs>(this.OnRoundStarted));
+                ReactBattleEvent(Battle.RoundStarted, new EventSequencedReactor<GameEventArgs>(OnRoundStarted));
             }
             private IEnumerable<BattleAction> OnRoundStarted(GameEventArgs args)
             {
-                foreach (var enemy in base.Battle.AllAliveEnemies)
+                foreach (var enemy in Battle.AllAliveEnemies)
                 {
                     enemy.ClearIntentions();
                 }

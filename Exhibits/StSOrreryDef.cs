@@ -39,11 +39,10 @@ using LBoL.EntityLib.Exhibits.Shining;
 using static System.Collections.Specialized.BitVector32;
 using HarmonyLib;
 using LBoL.Presentation.UI.Widgets;
-using DG.Tweening;
 using LBoL.EntityLib.Cards.Neutral.Green;
 using UnityEngine.UI;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSOrreryDef : ExhibitTemplate
     {
@@ -61,7 +60,7 @@ namespace test
         {
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -112,11 +111,11 @@ namespace test
             }*/
             protected override IEnumerator SpecialGain(PlayerUnit player)
             {
-                base.OnGain(player);
+                OnGain(player);
                 UiManager.GetPanel<ShopPanel>().Hide();
-                base.HandleGameRunEvent<CardsEventArgs>(base.GameRun.DeckCardsAdded, delegate (CardsEventArgs args)
+                HandleGameRunEvent(GameRun.DeckCardsAdded, delegate (CardsEventArgs args)
                 {
-                    GameMaster.Instance.StartCoroutine(this.Wait());
+                    GameMaster.Instance.StartCoroutine(Wait());
                 });
                 GameRun.CurrentStation.ClearRewards();
                 GameRun.CurrentStation.AddReward(GetOrreryReward());
@@ -152,7 +151,7 @@ namespace test
                         }
                     });
                 });
-                GameMaster.Instance.StartCoroutine(this.WaitMore());
+                GameMaster.Instance.StartCoroutine(WaitMore());
                 yield break;
             }
             private IEnumerator Wait()
@@ -184,7 +183,7 @@ namespace test
             }
             private StationReward GetOrreryReward()
             {
-                return StationReward.CreateCards(base.GameRun.GetRewardCards(GameRun.CurrentStage.EnemyCardOnlyPlayerWeight, GameRun.CurrentStage.EnemyCardWithFriendWeight, GameRun.CurrentStage.EnemyCardNeutralWeight, GameRun.CurrentStage.EnemyCardWeight, GameRun.RewardCardCount, false));
+                return StationReward.CreateCards(GameRun.GetRewardCards(GameRun.CurrentStage.EnemyCardOnlyPlayerWeight, GameRun.CurrentStage.EnemyCardWithFriendWeight, GameRun.CurrentStage.EnemyCardNeutralWeight, GameRun.CurrentStage.EnemyCardWeight, GameRun.RewardCardCount, false));
             }
         }
     }

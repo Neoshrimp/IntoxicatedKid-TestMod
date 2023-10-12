@@ -26,11 +26,10 @@ using Mono.Cecil;
 using JetBrains.Annotations;
 using System.Linq;
 using LBoL.EntityLib.StatusEffects.Neutral.Black;
-using test;
 using LBoL.EntityLib.PlayerUnits;
 using LBoL.EntityLib.Cards.Character.Sakuya;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSAccuracyDef : CardTemplate
     {
@@ -122,7 +121,7 @@ namespace test
         {
             protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
             {
-                yield return base.BuffAction<StSAccuracySeDef.StSAccuracySe>(base.Value1, 0, 0, 0, 0.2f);
+                yield return BuffAction<StSAccuracySeDef.StSAccuracySe>(Value1, 0, 0, 0, 0.2f);
                 yield break;
             }
         }
@@ -177,18 +176,18 @@ namespace test
         {
             protected override void OnAdded(Unit unit)
             {
-                foreach (Card card in base.Battle.EnumerateAllCards())
+                foreach (Card card in Battle.EnumerateAllCards())
                 {
                     if (card is Knife)
                     {
-                        card.DeltaDamage = base.Level;
-                        card.DeltaValue1 = base.Level;
+                        card.DeltaDamage = Level;
+                        card.DeltaValue1 = Level;
                     }
                 }
-                base.HandleOwnerEvent<CardsEventArgs>(base.Battle.CardsAddedToDiscard, new GameEventHandler<CardsEventArgs>(this.OnAddCard));
-                base.HandleOwnerEvent<CardsEventArgs>(base.Battle.CardsAddedToHand, new GameEventHandler<CardsEventArgs>(this.OnAddCard));
-                base.HandleOwnerEvent<CardsEventArgs>(base.Battle.CardsAddedToExile, new GameEventHandler<CardsEventArgs>(this.OnAddCard));
-                base.HandleOwnerEvent<CardsAddingToDrawZoneEventArgs>(base.Battle.CardsAddedToDrawZone, new GameEventHandler<CardsAddingToDrawZoneEventArgs>(this.OnAddCardToDraw));
+                HandleOwnerEvent(Battle.CardsAddedToDiscard, new GameEventHandler<CardsEventArgs>(OnAddCard));
+                HandleOwnerEvent(Battle.CardsAddedToHand, new GameEventHandler<CardsEventArgs>(OnAddCard));
+                HandleOwnerEvent(Battle.CardsAddedToExile, new GameEventHandler<CardsEventArgs>(OnAddCard));
+                HandleOwnerEvent(Battle.CardsAddedToDrawZone, new GameEventHandler<CardsAddingToDrawZoneEventArgs>(OnAddCardToDraw));
             }
             private void OnAddCard(CardsEventArgs args)
             {
@@ -196,8 +195,8 @@ namespace test
                 {
                     if (card is Knife)
                     {
-                        card.DeltaDamage = base.Level;
-                        card.DeltaValue1 = base.Level;
+                        card.DeltaDamage = Level;
+                        card.DeltaValue1 = Level;
                     }
                 }
             }
@@ -207,8 +206,8 @@ namespace test
                 {
                     if (card is Knife)
                     {
-                        card.DeltaDamage = base.Level;
-                        card.DeltaValue1 = base.Level;
+                        card.DeltaDamage = Level;
+                        card.DeltaValue1 = Level;
                     }
                 }
             }

@@ -28,7 +28,7 @@ using LBoL.EntityLib.Cards.Other.Misfortune;
 using static UnityEngine.TouchScreenKeyboard;
 using JetBrains.Annotations;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class Th18BlankCardDef : ExhibitTemplate
     {
@@ -47,7 +47,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -76,7 +76,7 @@ namespace test
                 InitialCounter: 0,
                 Keywords: Keyword.None,
                 RelativeEffects: new List<string>() { },
-                // example of referring to UniqueId of an entity without calling MakeConfig
+
                 RelativeCards: new List<string>() { }
             );
             return exhibitConfig;
@@ -87,13 +87,13 @@ namespace test
         {
             protected override void OnEnterBattle()
             {
-                base.ReactBattleEvent<UnitEventArgs>(base.Battle.Player.TurnStarted, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnStarted));
+                ReactBattleEvent(Battle.Player.TurnStarted, new EventSequencedReactor<UnitEventArgs>(OnPlayerTurnStarted));
             }
             private IEnumerable<BattleAction> OnPlayerTurnStarted(GameEventArgs args)
             {
-                if (base.Battle.Player.TurnCounter == 1)
+                if (Battle.Player.TurnCounter == 1)
                 {
-                    base.NotifyActivating();
+                    NotifyActivating();
                     List<Card> attackc = null;
                     List<Card> attacku = null;
                     List<Card> attackr = null;
@@ -115,24 +115,24 @@ namespace test
                     //List<Card> misfortunec = null;
                     //List<Card> misfortuneu = null;
                     //List<Card> misfortuner = null;
-                    List<Card> hand = base.Battle.HandZone.ToList<Card>();
+                    List<Card> hand = Battle.HandZone.ToList();
                     if (hand.Count > 0)
                     {
-                        attackc = hand.Where((Card card) => (card.CardType == CardType.Attack) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
-                        attacku = hand.Where((Card card) => (card.CardType == CardType.Attack) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
-                        attackr = hand.Where((Card card) => (card.CardType == CardType.Attack) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
-                        defensec = hand.Where((Card card) => (card.CardType == CardType.Defense) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
-                        defenseu = hand.Where((Card card) => (card.CardType == CardType.Defense) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
-                        defenser = hand.Where((Card card) => (card.CardType == CardType.Defense) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
-                        skillc = hand.Where((Card card) => (card.CardType == CardType.Skill) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
-                        skillu = hand.Where((Card card) => (card.CardType == CardType.Skill) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
-                        skillr = hand.Where((Card card) => (card.CardType == CardType.Skill) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
-                        abilityc = hand.Where((Card card) => (card.CardType == CardType.Ability) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
-                        abilityu = hand.Where((Card card) => (card.CardType == CardType.Ability) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
-                        abilityr = hand.Where((Card card) => (card.CardType == CardType.Ability) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
-                        friendc = hand.Where((Card card) => (card.CardType == CardType.Friend) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
-                        friendu = hand.Where((Card card) => (card.CardType == CardType.Friend) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
-                        friendr = hand.Where((Card card) => (card.CardType == CardType.Friend) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
+                        attackc = hand.Where((card) => card.CardType == CardType.Attack && card.Config.Rarity == Rarity.Common).ToList();
+                        attacku = hand.Where((card) => card.CardType == CardType.Attack && card.Config.Rarity == Rarity.Uncommon).ToList();
+                        attackr = hand.Where((card) => card.CardType == CardType.Attack && card.Config.Rarity == Rarity.Rare).ToList();
+                        defensec = hand.Where((card) => card.CardType == CardType.Defense && card.Config.Rarity == Rarity.Common).ToList();
+                        defenseu = hand.Where((card) => card.CardType == CardType.Defense && card.Config.Rarity == Rarity.Uncommon).ToList();
+                        defenser = hand.Where((card) => card.CardType == CardType.Defense && card.Config.Rarity == Rarity.Rare).ToList();
+                        skillc = hand.Where((card) => card.CardType == CardType.Skill && card.Config.Rarity == Rarity.Common).ToList();
+                        skillu = hand.Where((card) => card.CardType == CardType.Skill && card.Config.Rarity == Rarity.Uncommon).ToList();
+                        skillr = hand.Where((card) => card.CardType == CardType.Skill && card.Config.Rarity == Rarity.Rare).ToList();
+                        abilityc = hand.Where((card) => card.CardType == CardType.Ability && card.Config.Rarity == Rarity.Common).ToList();
+                        abilityu = hand.Where((card) => card.CardType == CardType.Ability && card.Config.Rarity == Rarity.Uncommon).ToList();
+                        abilityr = hand.Where((card) => card.CardType == CardType.Ability && card.Config.Rarity == Rarity.Rare).ToList();
+                        friendc = hand.Where((card) => card.CardType == CardType.Friend && card.Config.Rarity == Rarity.Common).ToList();
+                        friendu = hand.Where((card) => card.CardType == CardType.Friend && card.Config.Rarity == Rarity.Uncommon).ToList();
+                        friendr = hand.Where((card) => card.CardType == CardType.Friend && card.Config.Rarity == Rarity.Rare).ToList();
                         //statusc = hand.Where((Card card) => (card.CardType == CardType.Status) && (card.Config.Rarity == Rarity.Common)).ToList<Card>();
                         //statusu = hand.Where((Card card) => (card.CardType == CardType.Status) && (card.Config.Rarity == Rarity.Uncommon)).ToList<Card>();
                         //statusr = hand.Where((Card card) => (card.CardType == CardType.Status) && (card.Config.Rarity == Rarity.Rare)).ToList<Card>();
@@ -143,7 +143,7 @@ namespace test
                         yield return new ExileManyCardAction(hand);
                         foreach (Card card in attackc)
                         {
-                            Card[] attackC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Attack);
+                            Card[] attackC = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Attack);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(attackC);
@@ -152,7 +152,7 @@ namespace test
                         }
                         foreach (Card card in attacku)
                         {
-                            Card[] attackU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Attack);
+                            Card[] attackU = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Attack);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(attackU);
@@ -161,7 +161,7 @@ namespace test
                         }
                         foreach (Card card in attackr)
                         {
-                            Card[] attackR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Attack);
+                            Card[] attackR = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Attack);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(attackR);
@@ -170,7 +170,7 @@ namespace test
                         }
                         foreach (Card card in defensec)
                         {
-                            Card[] defenseC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Defense);
+                            Card[] defenseC = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Defense);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(defenseC);
@@ -179,7 +179,7 @@ namespace test
                         }
                         foreach (Card card in defenseu)
                         {
-                            Card[] defenseU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Defense);
+                            Card[] defenseU = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Defense);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(defenseU);
@@ -188,7 +188,7 @@ namespace test
                         }
                         foreach (Card card in defenser)
                         {
-                            Card[] defenseR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Defense);
+                            Card[] defenseR = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Defense);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(defenseR);
@@ -197,7 +197,7 @@ namespace test
                         }
                         foreach (Card card in skillc)
                         {
-                            Card[] skillC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Skill);
+                            Card[] skillC = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Skill);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(skillC);
@@ -206,7 +206,7 @@ namespace test
                         }
                         foreach (Card card in skillu)
                         {
-                            Card[] skillU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Skill);
+                            Card[] skillU = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Skill);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(skillU);
@@ -215,7 +215,7 @@ namespace test
                         }
                         foreach (Card card in skillr)
                         {
-                            Card[] skillR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Skill);
+                            Card[] skillR = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Skill);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(skillR);
@@ -224,7 +224,7 @@ namespace test
                         }
                         foreach (Card card in abilityc)
                         {
-                            Card[] abilityC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Ability);
+                            Card[] abilityC = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Ability);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(abilityC);
@@ -233,7 +233,7 @@ namespace test
                         }
                         foreach (Card card in abilityu)
                         {
-                            Card[] abilityU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Ability);
+                            Card[] abilityU = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Ability);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(abilityU);
@@ -242,7 +242,7 @@ namespace test
                         }
                         foreach (Card card in abilityr)
                         {
-                            Card[] abilityR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Ability);
+                            Card[] abilityR = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Ability);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(abilityR);
@@ -251,7 +251,7 @@ namespace test
                         }
                         foreach (Card card in friendc)
                         {
-                            Card[] friendC = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Friend);
+                            Card[] friendC = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyCommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Friend);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(friendC);
@@ -260,7 +260,7 @@ namespace test
                         }
                         foreach (Card card in friendu)
                         {
-                            Card[] friendU = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Friend);
+                            Card[] friendU = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyUncommon, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Friend);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(friendU);
@@ -269,7 +269,7 @@ namespace test
                         }
                         foreach (Card card in friendr)
                         {
-                            Card[] friendR = base.Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (CardConfig config) => config.Type == CardType.Friend);
+                            Card[] friendR = Battle.RollCards(new CardWeightTable(RarityWeightTable.OnlyRare, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), 1, (config) => config.Type == CardType.Friend);
                             if (card.IsUpgraded)
                             {
                                 yield return new UpgradeCardsAction(friendR);

@@ -36,7 +36,7 @@ using LBoL.EntityLib.Exhibits;
 using JetBrains.Annotations;
 using Yarn;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSVelvetChokerDef : ExhibitTemplate
     {
@@ -55,7 +55,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -73,7 +73,7 @@ namespace test
                 Owner: "",
                 LosableType: ExhibitLosableType.CantLose,
                 Rarity: Rarity.Shining,
-                Value1: 7,
+                Value1: 6,
                 Value2: 1,
                 Value3: null,
                 Mana: null,
@@ -95,27 +95,27 @@ namespace test
         {
             protected override void OnEnterBattle()
             {
-                base.ReactBattleEvent<CardUsingEventArgs>(base.Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsed));
-                base.HandleBattleEvent<UnitEventArgs>(base.Battle.Player.TurnEnding, delegate (UnitEventArgs _)
+                ReactBattleEvent(Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(OnCardUsed));
+                HandleBattleEvent(Battle.Player.TurnEnding, delegate (UnitEventArgs _)
                 {
-                    base.Counter = 0;
+                    Counter = 0;
                 });
             }
             private IEnumerable<BattleAction> OnCardUsed(CardUsingEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd && base.Owner.IsInTurn)
+                if (!Battle.BattleShouldEnd && Owner.IsInTurn)
                 {
-                    base.Counter = base.Counter + 1;
-                    if (base.Counter > base.Value1)
+                    Counter = Counter + 1;
+                    if (Counter > Value1)
                     {
-                        yield return new LockRandomTurnManaAction(base.Value2);
+                        yield return new LockRandomTurnManaAction(Value2);
                     }
                 }
                 yield break;
             }
             protected override void OnLeaveBattle()
             {
-                base.Counter = 0;
+                Counter = 0;
             }
         }
     }

@@ -27,7 +27,7 @@ using LBoL.EntityLib.StatusEffects.Basic;
 using LBoL.EntityLib.StatusEffects.Others;
 using UnityEngine;
 
-namespace test
+namespace test.Cards
 {
     public sealed class UnitedWeStandDef : CardTemplate
     {
@@ -70,7 +70,7 @@ namespace test
                TargetType: TargetType.SingleEnemy,
                Colors: new List<ManaColor>() { ManaColor.White, ManaColor.Blue, ManaColor.Black, ManaColor.Red, ManaColor.Green },
                IsXCost: false,
-               Cost: new ManaGroup() { White = 1, Blue = 1, Black = 1, Red = 1, Green = 1},
+               Cost: new ManaGroup() { White = 1, Blue = 1, Black = 1, Red = 1, Green = 1 },
                UpgradedCost: null,
                MoneyCost: null,
                Damage: null,
@@ -100,8 +100,8 @@ namespace test
                Keywords: Keyword.Exile,
                UpgradedKeywords: Keyword.None,
                EmptyDescription: false,
-               RelativeKeyword: Keyword.None,
-               UpgradedRelativeKeyword: Keyword.None,
+               RelativeKeyword: Keyword.Friend,
+               UpgradedRelativeKeyword: Keyword.Friend,
 
                RelativeEffects: new List<string>() { },
                UpgradedRelativeEffects: new List<string>() { },
@@ -121,72 +121,72 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            _maxhand = base.Battle.MaxHand;
-            base.Battle.MaxHand = 10;
-            int num = base.Battle.MaxHand - base.Battle.HandZone.Count;
+            _maxhand = Battle.MaxHand;
+            Battle.MaxHand = 10;
+            int num = Battle.MaxHand - Battle.HandZone.Count;
             if (num > 0)
             {
                 yield return new DrawManyCardAction(num);
             }
-            if (!base.Battle.Player.HasStatusEffect<UnitedWeStandSeDef.UnitedWeStandSe>())
+            if (!Battle.Player.HasStatusEffect<UnitedWeStandSeDef.UnitedWeStandSe>())
             {
-                yield return new ApplyStatusEffectAction<UnitedWeStandSeDef.UnitedWeStandSe>(base.Battle.Player, null, null, null, null, 0.0f, true);
+                yield return new ApplyStatusEffectAction<UnitedWeStandSeDef.UnitedWeStandSe>(Battle.Player, null, null, null, null, 0.0f, true);
             }
-            base.GameRun.SynergyAdditionalCount += 1;
+            GameRun.SynergyAdditionalCount += 1;
             EnemyUnit target = selector.SelectedEnemy;
-            List<Card> list = base.Battle.HandZone.ToList<Card>();
+            List<Card> list = Battle.HandZone.ToList();
             foreach (Card card in list)
             {
                 if (!target.IsAlive)
                 {
-                    if (base.Battle.BattleShouldEnd)
+                    if (Battle.BattleShouldEnd)
                     {
-                        base.GameRun.SynergyAdditionalCount -= 1;
+                        GameRun.SynergyAdditionalCount -= 1;
                         yield break;
                     }
-                    target = base.Battle.AllAliveEnemies.Sample(base.GameRun.BattleRng);
+                    target = Battle.AllAliveEnemies.Sample(GameRun.BattleRng);
                 }
-                if ((card.CardType == CardType.Misfortune) || (card.CardType == CardType.Status))
+                if (card.CardType == CardType.Misfortune || card.CardType == CardType.Status)
                 {
                     yield return new ExileCardAction(card);
                 }
-                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Nobody) && !card.IsForbidden)
+                else if (card.Zone == CardZone.Hand && card.Config.TargetType == TargetType.Nobody && !card.IsForbidden)
                 {
-                    yield return new UseCardAction(card, UnitSelector.Nobody, this.Mana);
+                    yield return new UseCardAction(card, UnitSelector.Nobody, Mana);
                 }
-                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.SingleEnemy) && !card.IsForbidden)
+                else if (card.Zone == CardZone.Hand && card.Config.TargetType == TargetType.SingleEnemy && !card.IsForbidden)
                 {
                     UnitSelector unitSelector = new UnitSelector(target);
-                    yield return new UseCardAction(card, unitSelector, this.Mana);
+                    yield return new UseCardAction(card, unitSelector, Mana);
                 }
-                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.AllEnemies) && !card.IsForbidden)
+                else if (card.Zone == CardZone.Hand && card.Config.TargetType == TargetType.AllEnemies && !card.IsForbidden)
                 {
-                    yield return new UseCardAction(card, UnitSelector.AllEnemies, this.Mana);
+                    yield return new UseCardAction(card, UnitSelector.AllEnemies, Mana);
                 }
-                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.RandomEnemy) && !card.IsForbidden)
+                else if (card.Zone == CardZone.Hand && card.Config.TargetType == TargetType.RandomEnemy && !card.IsForbidden)
                 {
-                    yield return new UseCardAction(card, UnitSelector.RandomEnemy, this.Mana);
+                    yield return new UseCardAction(card, UnitSelector.RandomEnemy, Mana);
                 }
-                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.Self) && !card.IsForbidden)
+                else if (card.Zone == CardZone.Hand && card.Config.TargetType == TargetType.Self && !card.IsForbidden)
                 {
-                    yield return new UseCardAction(card, UnitSelector.Self, this.Mana);
+                    yield return new UseCardAction(card, UnitSelector.Self, Mana);
                 }
-                else if ((card.Zone == CardZone.Hand) && (card.Config.TargetType == TargetType.All) && !card.IsForbidden)
+                else if (card.Zone == CardZone.Hand && card.Config.TargetType == TargetType.All && !card.IsForbidden)
                 {
-                    yield return new UseCardAction(card, UnitSelector.All, this.Mana);
+                    yield return new UseCardAction(card, UnitSelector.All, Mana);
                 }
-                if ((card.CardType == CardType.Friend) && (card.Zone == CardZone.PlayArea) && (card.Loyalty <= 0))
+                if (card.CardType == CardType.Friend && card.Zone == CardZone.PlayArea && card.Loyalty <= 0)
                 {
                     yield return new RemoveCardAction(card);
                 }
-                base.Battle.MaxHand = 10;
+                Battle.MaxHand = 10;
             }
-            if (base.Battle.Player.HasStatusEffect<UnitedWeStandSeDef.UnitedWeStandSe>())
+            if (Battle.Player.HasStatusEffect<UnitedWeStandSeDef.UnitedWeStandSe>())
             {
-                yield return new RemoveStatusEffectAction(base.Battle.Player.GetStatusEffect<UnitedWeStandSeDef.UnitedWeStandSe>(), true);
+                yield return new RemoveStatusEffectAction(Battle.Player.GetStatusEffect<UnitedWeStandSeDef.UnitedWeStandSe>(), true);
             }
-            base.Battle.MaxHand = _maxhand;
-            base.GameRun.SynergyAdditionalCount -= 1;
+            Battle.MaxHand = _maxhand;
+            GameRun.SynergyAdditionalCount -= 1;
             yield break;
         }
         private int _maxhand;
@@ -240,15 +240,15 @@ namespace test
         {
             protected override void OnAdded(Unit unit)
             {
-                base.HandleOwnerEvent<DamageEventArgs>(unit.DamageTaking, new GameEventHandler<DamageEventArgs>(this.OnDamageTaking));
-                base.ReactOwnerEvent<UnitEventArgs>(base.Owner.TurnEnded, new EventSequencedReactor<UnitEventArgs>(this.OnTurnEnded));
+                HandleOwnerEvent(unit.DamageTaking, new GameEventHandler<DamageEventArgs>(OnDamageTaking));
+                ReactOwnerEvent(Owner.TurnEnded, new EventSequencedReactor<UnitEventArgs>(OnTurnEnded));
             }
             private void OnDamageTaking(DamageEventArgs args)
             {
                 int num = args.DamageInfo.Damage.RoundToInt();
                 if (num > 0)
                 {
-                    base.NotifyActivating();
+                    NotifyActivating();
                     args.DamageInfo = args.DamageInfo.ReduceActualDamageBy(num);
                     args.AddModifier(this);
                 }

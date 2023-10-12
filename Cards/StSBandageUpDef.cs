@@ -20,7 +20,7 @@ using LBoL.Core.Randoms;
 using static test.BepinexPlugin;
 using LBoL.EntityLib.StatusEffects.Basic;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSBandageUpDef : CardTemplate
     {
@@ -58,7 +58,7 @@ namespace test
                IsPooled: true,
                HideMesuem: false,
                IsUpgradable: true,
-               Rarity: Rarity.Uncommon,
+               Rarity: Rarity.Common,
                Type: CardType.Skill,
                TargetType: TargetType.Self,
                Colors: new List<ManaColor>() { ManaColor.Colorless },
@@ -73,7 +73,7 @@ namespace test
                Shield: null,
                UpgradedShield: null,
                Value1: 4,
-               UpgradedValue1: 8,
+               UpgradedValue1: 6,
                Value2: null,
                UpgradedValue2: null,
                Mana: null,
@@ -114,8 +114,7 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            yield return base.DefenseAction(true);
-            yield return base.HealAction(base.Value1);
+            yield return HealAction(Value1);
             yield break;
         }
     }

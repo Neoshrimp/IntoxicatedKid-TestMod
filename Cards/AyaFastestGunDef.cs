@@ -28,8 +28,9 @@ using LBoL.Presentation.UI;
 using System.Collections;
 using LBoL.Core.Units;
 using LBoL.EntityLib.StatusEffects.Enemy;
+using LBoL.EntityLib.StatusEffects.Basic;
 
-namespace test
+namespace test.Cards
 {
     public sealed class AyaFastestGunDef : CardTemplate
     {
@@ -67,23 +68,23 @@ namespace test
                IsPooled: true,
                HideMesuem: false,
                IsUpgradable: true,
-               Rarity: Rarity.Common,
+               Rarity: Rarity.Uncommon,
                Type: CardType.Attack,
                TargetType: TargetType.SingleEnemy,
                Colors: new List<ManaColor>() { ManaColor.Red },
                IsXCost: false,
-               Cost: new ManaGroup() { Red = 2 },
+               Cost: new ManaGroup() { Any = 1, Red = 1 },
                UpgradedCost: null,
                MoneyCost: null,
                Damage: 12,
-               UpgradedDamage: 15,
+               UpgradedDamage: 18,
                Block: null,
                UpgradedBlock: null,
                Shield: null,
                UpgradedShield: null,
-               Value1: 2,
-               UpgradedValue1: 3,
-               Value2: 3,
+               Value1: 3,
+               UpgradedValue1: null,
+               Value2: 2,
                UpgradedValue2: 3,
                Mana: null,
                UpgradedMana: null,
@@ -105,13 +106,13 @@ namespace test
                RelativeKeyword: Keyword.None,
                UpgradedRelativeKeyword: Keyword.None,
 
-               RelativeEffects: new List<string>() { "LockedOn" },
-               UpgradedRelativeEffects: new List<string>() { "LockedOn" },
+               RelativeEffects: new List<string>() { "LockedOn", "FastAttack" },
+               UpgradedRelativeEffects: new List<string>() { "LockedOn", "FastAttack" },
                RelativeCards: new List<string>() { },
                UpgradedRelativeCards: new List<string>() { },
-               Owner: null,
+               Owner: "AyaPlayerUnit",
                Unfinished: false,
-               Illustrator: "",
+               Illustrator: "たいちょん",
                SubIllustrator: new List<string>() { }
             );
 
@@ -121,18 +122,6 @@ namespace test
     [EntityLogic(typeof(AyaFastestGunDef))]
     public sealed class AyaFastestGun : Card
     {
-        private bool trigger;
-        public override bool Triggered
-        {
-            get
-            {
-                if (base.Battle != null)
-                {
-                    return this.trigger;
-                }
-                return false;
-            }
-        }
         public override IEnumerable<BattleAction> OnDraw()
         {
             GameMaster.Instance.StartCoroutine(Trigger());
@@ -140,22 +129,21 @@ namespace test
         }
         private IEnumerator Trigger()
         {
-            this.trigger = true;
-            yield return new WaitForSeconds(base.Value1);
-            this.trigger = false;
-            base.NotifyChanged();
+            PlayInTriggered = true;
+            yield return new WaitForSecondsRealtime(Value1);
+            PlayInTriggered = false;
         }
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            yield return base.AttackAction(selector);
+            yield return AttackAction(selector);
             EnemyUnit selectedEnemy = selector.SelectedEnemy;
-            if (selectedEnemy.IsAlive && base.PlayInTriggered)
+            if (selectedEnemy.IsAlive && PlayInTriggered)
             {
-                if (selectedEnemy.HasStatusEffect<FastAttack>())
+                yield return DebuffAction<LockedOn>(selectedEnemy, Value2, 0, 0, 0, true, 0.2f);
+                if (selectedEnemy.IsAlive && selectedEnemy.HasStatusEffect<FastAttack>())
                 {
                     yield return new RemoveStatusEffectAction(selectedEnemy.GetStatusEffect<FastAttack>(), true);
                 }
-                yield return base.DebuffAction<LockedOn>(selectedEnemy, base.Value2, 0, 0, 0, true, 0.2f);
             }
             yield break;
         }

@@ -35,7 +35,7 @@ using LBoL.EntityLib.Cards.Neutral.MultiColor;
 using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class TestExhibitDef : ExhibitTemplate
     {
@@ -54,7 +54,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -83,7 +83,6 @@ namespace test
                 InitialCounter: 0,
                 Keywords: Keyword.None,
                 RelativeEffects: new List<string>() { },
-                // example of referring to UniqueId of an entity without calling MakeConfig
                 RelativeCards: new List<string>() { }
             );
             return exhibitConfig;
@@ -94,32 +93,32 @@ namespace test
         {
             protected override void OnAdded(PlayerUnit player)
             {
-                base.GameRun.AddMapModeOverrider(this);
+                GameRun.AddMapModeOverrider(this);
             }
             protected override void OnRemoved(PlayerUnit player)
             {
-                base.GameRun.RemoveMapModeOverrider(this);
+                GameRun.RemoveMapModeOverrider(this);
             }
             public GameRunMapMode? MapMode
             {
                 get
                 {
-                    return new GameRunMapMode?(GameRunMapMode.Free);
+                    return new GameRunMapMode?(GameRunMapMode.Free | GameRunMapMode.Crossing | GameRunMapMode.TeleportBoss);
                 }
             }
             public void OnEnteredWithMode()
             {
-                base.NotifyActivating();
+                NotifyActivating();
             }
             protected override void OnEnterBattle()
             {
-                base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(this.OnBattleStarted));
+                ReactBattleEvent(Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(OnBattleStarted));
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
             {
-                base.NotifyActivating();
-                yield return new ApplyStatusEffectAction<Firepower>(base.Owner, new int?(base.Value1), null, null, null, 0f, true);
-                yield return new ApplyStatusEffectAction<Spirit>(base.Owner, new int?(base.Value1), null, null, null, 0f, true);
+                NotifyActivating();
+                yield return new ApplyStatusEffectAction<Firepower>(Owner, new int?(Value1), null, null, null, 0f, true);
+                yield return new ApplyStatusEffectAction<Spirit>(Owner, new int?(Value1), null, null, null, 0f, true);
                 yield break;
             }
         }

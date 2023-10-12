@@ -27,7 +27,7 @@ using LBoL.Core.Units;
 using UnityEngine;
 using LBoL.EntityLib.StatusEffects.Cirno;
 
-namespace test
+namespace test.Cards
 {
     public sealed class ZUNBeerHatDef : CardTemplate
     {
@@ -81,7 +81,7 @@ namespace test
                UpgradedShield: null,
                Value1: 1,
                UpgradedValue1: null,
-               Value2: 3,
+               Value2: 2,
                UpgradedValue2: null,
                Mana: null,
                UpgradedMana: null,
@@ -121,11 +121,11 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            if (!this.IsUpgraded)
+            if (!IsUpgraded)
             {
-                yield return new AddCardsToHandAction(Library.CreateCards<Drunk>(base.Value1, false));
+                yield return new AddCardsToHandAction(Library.CreateCards<Drunk>(Value1, false));
             }
-            yield return base.BuffAction<ZUNBeerHatSeDef.ZUNBeerHatSe>(0, base.Value2, 0, 0, 0.2f);
+            yield return BuffAction<ZUNBeerHatSeDef.ZUNBeerHatSe>(0, Value2, 0, 0, 0.2f);
             yield break;
         }
     }
@@ -178,8 +178,9 @@ namespace test
         {
             protected override void OnAdded(Unit unit)
             {
-                base.ReactOwnerEvent<UnitEventArgs>(base.Battle.Player.TurnEnded, new EventSequencedReactor<UnitEventArgs>(this.OnPlayerTurnEnded));
-                foreach (var enemy in base.Battle.AllAliveEnemies)
+                ReactOwnerEvent(Battle.RoundStarted, new EventSequencedReactor<GameEventArgs>(OnRoundStarted));
+                ReactOwnerEvent(Battle.Player.TurnEnded, new EventSequencedReactor<UnitEventArgs>(OnPlayerTurnEnded));
+                foreach (var enemy in Battle.AllAliveEnemies)
                 {
                     enemy._turnMoves.Clear();
                     enemy.ClearIntentions();
@@ -190,9 +191,23 @@ namespace test
                     enemy.NotifyIntentionsChanged();
                 }
             }
+            private IEnumerable<BattleAction> OnRoundStarted(GameEventArgs args)
+            {
+                foreach (var enemy in Battle.AllAliveEnemies)
+                {
+                    enemy._turnMoves.Clear();
+                    enemy.ClearIntentions();
+                    var stun = Intention.Stun();
+                    stun.Source = enemy;
+                    enemy._turnMoves.Add(new SimpleEnemyMove(stun, new EnemyMoveAction[] { new EnemyMoveAction(enemy, "Wasted", true) }));
+                    enemy.Intentions.Add(stun);
+                    enemy.NotifyIntentionsChanged();
+                }
+                yield break;
+            }
             private IEnumerable<BattleAction> OnPlayerTurnEnded(UnitEventArgs args)
             {
-                foreach (var enemy in base.Battle.AllAliveEnemies)
+                foreach (var enemy in Battle.AllAliveEnemies)
                 {
                     enemy._turnMoves.Clear();
                     enemy.ClearIntentions();

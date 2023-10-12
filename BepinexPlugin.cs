@@ -112,6 +112,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using test.Exhibits;
 using UnityEngine;
 using Untitled;
 using Untitled.ConfigDataBuilder;
@@ -236,6 +237,16 @@ namespace test
                 {
                     GameMaster.Instance.CurrentGameRun.LoseExhibit(GameMaster.Instance.CurrentGameRun.Player.GetExhibit<TASBotDef.TASBot>(), false, true);
                 }
+            }
+        }
+        public static class Helpers
+        {
+            public static void FakeQueueConsumingMana(ManaGroup manaGroup)
+            {
+                // should not be changed
+                var cost = manaGroup;
+                var manaPanel = UiManager.GetPanel<BattleManaPanel>();
+                manaPanel._consumingDeque.Insert(0, new BattleManaPanel.ConsumingManaWidgets(new ConsumingMana(cost, cost), manaPanel._unpooledCollection.Prepay(), manaPanel._pooledCollection.Prepay()));
             }
         }
         /*[HarmonyPatch(typeof(BossStation), nameof(BossStation.GenerateBossRewards))]

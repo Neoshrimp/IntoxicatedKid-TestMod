@@ -36,7 +36,7 @@ using JetBrains.Annotations;
 using LBoL.EntityLib.Exhibits.Shining;
 using LBoL.EntityLib.Exhibits.Common;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSPandorasBoxDef : ExhibitTemplate
     {
@@ -55,7 +55,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -84,41 +84,41 @@ namespace test
                 InitialCounter: 0,
                 Keywords: Keyword.None,
                 RelativeEffects: new List<string>() { },
-                // example of referring to UniqueId of an entity without calling MakeConfig
+
                 RelativeCards: new List<string>() { }
             );
             return exhibitConfig;
         }
         [EntityLogic(typeof(StSPandorasBoxDef))]
         [UsedImplicitly]
-        [ExhibitInfo(WeighterType = typeof(StSPandorasBox.StSPandorasBoxWeighter))]
+        [ExhibitInfo(WeighterType = typeof(StSPandorasBoxWeighter))]
         public sealed class StSPandorasBox : Exhibit
         {
             protected override void OnGain(PlayerUnit player)
             {
-                List<Card> list = base.GameRun.BaseDeckWithOutUnremovable.Where((Card card) => card.IsBasic).ToList<Card>();
+                List<Card> list = GameRun.BaseDeckWithOutUnremovable.Where((card) => card.IsBasic).ToList();
                 if (list.Count > 0)
                 {
                     List<Card> list2 = new List<Card>();
                     foreach (Card card in list)
                     {
                         Card card2;
-                        card2 = base.GameRun.RollCard(base.GameRun.GameRunEventRng, new CardWeightTable(RarityWeightTable.AllOnes, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), false, null);
+                        card2 = GameRun.RollCard(GameRun.GameRunEventRng, new CardWeightTable(RarityWeightTable.AllOnes, OwnerWeightTable.Valid, CardTypeWeightTable.CanBeLoot), false, null);
                         if (card.IsUpgraded)
                         {
                             card2.Upgrade();
                         }
                         list2.Add(card2);
                     }
-                    base.GameRun.RemoveDeckCards(list, false);
-                    base.GameRun.AddDeckCards(list2, true, null);
+                    GameRun.RemoveDeckCards(list, false);
+                    GameRun.AddDeckCards(list2, true, null);
                 }
             }
             private class StSPandorasBoxWeighter : IExhibitWeighter
             {
                 public float WeightFor(Type type, GameRunController gameRun)
                 {
-                    return (float)((gameRun.BaseDeck.Count((Card c) => c.IsBasic) > 0) ? 1 : 0);
+                    return gameRun.BaseDeck.Count((c) => c.IsBasic) > 0 ? 1 : 0;
                 }
             }
         }

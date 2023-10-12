@@ -36,7 +36,7 @@ using LBoL.EntityLib.Cards.Character.Marisa;
 using LBoL.EntityLib.EnemyUnits.Character;
 using LBoL.EntityLib.Cards.Character.Cirno;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSOrangePelletsDef : ExhibitTemplate
     {
@@ -55,7 +55,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -103,100 +103,100 @@ namespace test
             private bool misfortune = false;
             protected override void OnEnterBattle()
             {
-                base.ReactBattleEvent<CardUsingEventArgs>(base.Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(this.OnCardUsed));
-                base.HandleBattleEvent<UnitEventArgs>(base.Battle.Player.TurnEnding, delegate (UnitEventArgs _)
+                ReactBattleEvent(Battle.CardUsed, new EventSequencedReactor<CardUsingEventArgs>(OnCardUsed));
+                HandleBattleEvent(Battle.Player.TurnEnding, delegate (UnitEventArgs _)
                 {
-                    base.Counter = 0;
-                    this.unknown = false;
-                    this.attack = false;
-                    this.defense = false;
-                    this.skill = false;
-                    this.ability = false;
-                    this.friend = false;
-                    this.tool = false;
-                    this.status = false;
-                    this.misfortune = false;
+                    Counter = 0;
+                    unknown = false;
+                    attack = false;
+                    defense = false;
+                    skill = false;
+                    ability = false;
+                    friend = false;
+                    tool = false;
+                    status = false;
+                    misfortune = false;
                 });
             }
             private IEnumerable<BattleAction> OnCardUsed(CardUsingEventArgs args)
             {
-                if (base.Owner.IsInTurn)
+                if (Owner.IsInTurn)
                 {
-                    if (args.Card.CardType == CardType.Unknown && !this.unknown)
+                    if (args.Card.CardType == CardType.Unknown && !unknown)
                     {
-                        this.unknown = true;
-                        base.Counter += 1;
+                        unknown = true;
+                        Counter += 1;
                     }
-                    else if (args.Card.CardType == CardType.Attack && !this.attack)
+                    else if (args.Card.CardType == CardType.Attack && !attack)
                     {
-                        this.attack = true;
-                        base.Counter += 1;
+                        attack = true;
+                        Counter += 1;
                     }
-                    else if (args.Card.CardType == CardType.Defense && !this.defense)
+                    else if (args.Card.CardType == CardType.Defense && !defense)
                     {
-                        this.defense = true;
-                        base.Counter += 1;
+                        defense = true;
+                        Counter += 1;
                     }
-                    else if (args.Card.CardType == CardType.Skill && !this.skill)
+                    else if (args.Card.CardType == CardType.Skill && !skill)
                     {
-                        this.skill = true;
-                        base.Counter += 1;
+                        skill = true;
+                        Counter += 1;
                     }
-                    else if (args.Card.CardType == CardType.Ability && !this.ability)
+                    else if (args.Card.CardType == CardType.Ability && !ability)
                     {
-                        this.ability = true;
-                        base.Counter += 1;
+                        ability = true;
+                        Counter += 1;
                     }
-                    else if (args.Card.CardType == CardType.Friend && !this.friend)
+                    else if (args.Card.CardType == CardType.Friend && !friend)
                     {
-                        this.friend = true;
-                        base.Counter += 1;
+                        friend = true;
+                        Counter += 1;
                     }
-                    else if (args.Card.CardType == CardType.Tool && !this.tool)
+                    else if (args.Card.CardType == CardType.Tool && !tool)
                     {
-                        this.tool = true;
-                        base.Counter += 1;
+                        tool = true;
+                        Counter += 1;
                     }
-                    else if (args.Card.CardType == CardType.Status && !this.status)
+                    else if (args.Card.CardType == CardType.Status && !status)
                     {
-                        this.status = true;
-                        base.Counter += 1;
+                        status = true;
+                        Counter += 1;
                     }
-                    else if (args.Card.CardType == CardType.Misfortune && !this.misfortune)
+                    else if (args.Card.CardType == CardType.Misfortune && !misfortune)
                     {
-                        this.misfortune = true;
-                        base.Counter += 1;
+                        misfortune = true;
+                        Counter += 1;
                     }
-                    if (this.Counter >= base.Value1)
+                    if (Counter >= Value1)
                     {
-                        base.NotifyActivating();
-                        base.Counter = 0;
-                        this.unknown = false;
-                        this.attack = false;
-                        this.defense = false;
-                        this.skill = false;
-                        this.ability = false;
-                        this.friend = false;
-                        this.tool = false;
-                        this.status = false;
-                        this.misfortune = false;
-                        yield return new RemoveAllNegativeStatusEffectAction(base.Battle.Player);
+                        NotifyActivating();
+                        Counter = 0;
+                        unknown = false;
+                        attack = false;
+                        defense = false;
+                        skill = false;
+                        ability = false;
+                        friend = false;
+                        tool = false;
+                        status = false;
+                        misfortune = false;
+                        yield return new RemoveAllNegativeStatusEffectAction(Battle.Player);
                     }
                 }
                 yield break;
             }
             protected override void OnLeaveBattle()
             {
-                base.Counter = 0;
-                this.unknown = false;
-                this.attack = false;
-                this.defense = false;
-                this.skill = false;
-                this.ability = false;
-                this.friend = false;
-                this.tool = false;
-                this.status = false;
-                this.misfortune = false;
+                Counter = 0;
+                unknown = false;
+                attack = false;
+                defense = false;
+                skill = false;
+                ability = false;
+                friend = false;
+                tool = false;
+                status = false;
+                misfortune = false;
             }
         }
     }
