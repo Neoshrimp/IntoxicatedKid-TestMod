@@ -119,6 +119,10 @@ ReimuFantasySealSpread:
   Description: "Deal {Value1} ~ {Value2} damage to each enemy {Value3} times."
   UpgradedDescription: "Deal {Value1} ~ {Value2} damage to each enemy {Value3} times."
   Name: Fantasy Seal -Spread-
+SpawnAllyActionCard:
+  Description: "Summon |Terminator| as an |Ally|."
+  UpgradedDescription: "Summon |Terminator| as an |Ally|."
+  Name: Ally Test Card
 StSAccuracy:
   Description: "Increase the damage of |Throwing Knives| by {Value1}."
   UpgradedDescription: "Increase the damage of |Throwing Knives| by {Value1}."
