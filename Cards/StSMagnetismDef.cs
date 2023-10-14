@@ -194,6 +194,7 @@ namespace test.Cards
                 {
                     foreach (Card card in array)
                     {
+                        //card.SetBaseCost(ManaGroup.Anys(card.ConfigCost.Amount));
                         card.IsEthereal = true;
                         card.IsExile = true;
                     }
