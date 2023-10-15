@@ -14,7 +14,7 @@ namespace LBoL.Core.Battle.BattleActions
         public float FadeInDelay { get; }
         public SpawnAllyAction(PlayerUnit spawner, Type allyType, int rootIndex, float occupationTime = 0f, float fadeInDelay = 0.3f, bool isServant = true)
         {
-            base.Args = new UnitEventArgs();
+            Args = new UnitEventArgs();
             this._spawner = spawner;
             this._allyType = allyType;
             this._rootIndex = rootIndex;
@@ -26,20 +26,20 @@ namespace LBoL.Core.Battle.BattleActions
         // Token: 0x06000DAC RID: 3500 RVA: 0x00024474 File Offset: 0x00022674
         public override void PreEventPhase()
         {
-            base.Trigger(base.Battle.EnemySpawning);
+            Trigger(Battle.EnemySpawning);
         }
 
         // Token: 0x06000DAD RID: 3501 RVA: 0x00024487 File Offset: 0x00022687
         public void MainPhase(BattleControllerAlly battleControllerAlly)
         {
-            base.Args.Unit = battleControllerAlly.SpawnAlly(this._spawner, this._allyType, this._rootIndex, this._isServant);
-            base.Args.IsModified = true;
+            Args.Unit = battleControllerAlly.SpawnAlly(this._spawner, this._allyType, this._rootIndex, this._isServant);
+            Args.IsModified = true;
         }
 
         // Token: 0x06000DAE RID: 3502 RVA: 0x000244C3 File Offset: 0x000226C3
         public override void PostEventPhase()
         {
-            base.Trigger(base.Battle.EnemySpawned);
+            Trigger(Battle.EnemySpawned);
         }
 
         // Token: 0x0400060D RID: 1549

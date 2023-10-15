@@ -83,9 +83,9 @@ namespace test.Cards
                UpgradedBlock: null,
                Shield: null,
                UpgradedShield: null,
-               Value1: 9,
-               UpgradedValue1: 12,
-               Value2: 18,
+               Value1: 12,
+               UpgradedValue1: 16,
+               Value2: 20,
                UpgradedValue2: 24,
                Mana: null,
                UpgradedMana: null,
@@ -133,15 +133,14 @@ namespace test.Cards
         }
         protected override void SetGuns()
         {
-            base.CardGuns = new Guns(base.GunName, base.Value1, true);
+            CardGuns = new Guns(GunName, Value1, true);
         }
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
             for (int i = 0; i < Value3; i++)
             {
-                yield return new DamageAction(base.Battle.Player, Battle.EnemyGroup.Alives, DamageInfo.Attack(random.Next(base.Value1, base.Value2 + 1)), "扩散结界", GunType.Single);
+                yield return new DamageAction(Battle.Player, Battle.EnemyGroup.Alives, DamageInfo.Attack(GameRun.BattleCardRng.NextInt(Value1, Value2)), "扩散结界", GunType.Single);
             }
         }
-        private System.Random random = new System.Random();
     }
 }

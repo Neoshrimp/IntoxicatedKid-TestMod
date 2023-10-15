@@ -79,7 +79,7 @@ namespace LBoL.ConfigData
         public static IReadOnlyList<AllyGroupConfig> AllConfig()
         {
             ConfigDataManager.Initialize();
-            return Array.AsReadOnly<AllyGroupConfig>(AllyGroupConfig._data);
+            return Array.AsReadOnly<AllyGroupConfig>(_data);
         }
 
         // Token: 0x060000E5 RID: 229 RVA: 0x00004738 File Offset: 0x00002938
@@ -87,7 +87,7 @@ namespace LBoL.ConfigData
         {
             ConfigDataManager.Initialize();
             AllyGroupConfig AllyGroupConfig;
-            return (!AllyGroupConfig._IdTable.TryGetValue(Id, out AllyGroupConfig)) ? null : AllyGroupConfig;
+            return (!_IdTable.TryGetValue(Id, out AllyGroupConfig)) ? null : AllyGroupConfig;
         }
 
         // Token: 0x060000E6 RID: 230 RVA: 0x00004764 File Offset: 0x00002964
@@ -128,8 +128,8 @@ namespace LBoL.ConfigData
                 {
                     array[i] = new AllyGroupConfig(ConfigDataManager.System_String.ReadFrom(binaryReader), ConfigDataManager.System_String.ReadFrom(binaryReader), ConfigDataManager.System_String.ReadFrom(binaryReader), ConfigDataManager.ReadList<string>(binaryReader, (BinaryReader r1) => ConfigDataManager.System_String.ReadFrom(r1)), (EnemyType)binaryReader.ReadInt32(), ConfigDataManager.System_Single.ReadFrom(binaryReader), ConfigDataManager.System_Boolean.ReadFrom(binaryReader), ConfigDataManager.UnityEngine_Vector2.ReadFrom(binaryReader), ConfigDataManager.System_String.ReadFrom(binaryReader), ConfigDataManager.System_String.ReadFrom(binaryReader));
                 }
-                AllyGroupConfig._data = array;
-                AllyGroupConfig._IdTable = AllyGroupConfig._data.ToDictionary((AllyGroupConfig elem) => elem.Id);
+                _data = array;
+                _IdTable = _data.ToDictionary((AllyGroupConfig elem) => elem.Id);
             }
         }
 
@@ -141,7 +141,7 @@ namespace LBoL.ConfigData
             {
                 try
                 {
-                    AllyGroupConfig.Load(textAsset.bytes);
+                    Load(textAsset.bytes);
                 }
                 catch (Exception ex)
                 {
@@ -165,6 +165,6 @@ namespace LBoL.ConfigData
         private static AllyGroupConfig[] _data = Array.Empty<AllyGroupConfig>();
 
         // Token: 0x0400006F RID: 111
-        private static Dictionary<string, AllyGroupConfig> _IdTable = AllyGroupConfig._data.ToDictionary((AllyGroupConfig elem) => elem.Id);
+        private static Dictionary<string, AllyGroupConfig> _IdTable = _data.ToDictionary((AllyGroupConfig elem) => elem.Id);
     }
 }

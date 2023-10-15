@@ -1,4 +1,4 @@
-﻿using LBoL.Base;
+﻿/*using LBoL.Base;
 using LBoL.ConfigData;
 using LBoL.Core.Battle;
 using LBoL.Core.Battle.BattleActions;
@@ -267,4 +267,4 @@ namespace test.Cards
             }
         }
     }
-}
+}*/

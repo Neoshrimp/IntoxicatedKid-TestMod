@@ -73,9 +73,9 @@ namespace LBoL.Core.Intentions
                 int num = 1;
                 if (!((times.GetValueOrDefault() > num) & (times != null)))
                 {
-                    return base.CalculateDamage(this.Damage).ToString();
+                    return CalculateDamage(this.Damage).ToString();
                 }
-                return base.CalculateDamage(this.Damage).ToString() + "x" + this.Times.ToString();
+                return CalculateDamage(this.Damage).ToString() + "x" + this.Times.ToString();
             }
         }
 
@@ -88,7 +88,7 @@ namespace LBoL.Core.Intentions
                 int num2 = 1;
                 if (!((num.GetValueOrDefault() > num2) & (num != null)))
                 {
-                    return base.BaseDescription;
+                    return BaseDescription;
                 }
                 return this.MultiDamageDescription;
             }

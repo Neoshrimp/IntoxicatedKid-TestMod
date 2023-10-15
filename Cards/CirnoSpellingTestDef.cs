@@ -1,4 +1,4 @@
-﻿using LBoL.Base;
+﻿/*using LBoL.Base;
 using LBoL.ConfigData;
 using LBoL.Core.Adventures;
 using LBoL.Core.Battle;
@@ -183,4 +183,4 @@ namespace test.Cards
         [SerializeField]
         private TMP_InputField inputField = null;
     }
-}
+}*/

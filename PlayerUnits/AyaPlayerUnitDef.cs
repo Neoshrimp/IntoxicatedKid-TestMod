@@ -97,7 +97,7 @@ namespace test.PlayerUnits
         {
             protected override void OnEnterBattle(BattleController battle)
             {
-                base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new Func<GameEventArgs, IEnumerable<BattleAction>>(this.OnBattleStarted));
+                ReactBattleEvent(Battle.BattleStarted, new Func<GameEventArgs, IEnumerable<BattleAction>>(this.OnBattleStarted));
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs arg)
             {

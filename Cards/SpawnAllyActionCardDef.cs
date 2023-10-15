@@ -57,7 +57,7 @@ namespace test.Cards
                GunNameBurst: "Simple1",
                DebugLevel: 0,
                Revealable: false,
-               IsPooled: true,
+               IsPooled: false,
                HideMesuem: false,
                IsUpgradable: true,
                Rarity: Rarity.Rare,
