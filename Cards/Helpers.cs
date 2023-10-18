@@ -15,7 +15,10 @@ namespace test.Cards
             // should not be changed
             var cost = new ManaGroup() { Any =  0 };
             var manaPanel = UiManager.GetPanel<BattleManaPanel>();
-            manaPanel._consumingDeque.Insert(0, new BattleManaPanel.ConsumingManaWidgets(new ConsumingMana(cost, cost), manaPanel._unpooledCollection.Prepay(), manaPanel._pooledCollection.Prepay()));
+            //manaPanel._consumingDeque.Insert(0, new BattleManaPanel.ConsumingManaWidgets(new ConsumingMana(cost, cost), manaPanel._unpooledCollection.Prepay(), manaPanel._pooledCollection.Prepay()));
+
+            manaPanel._consumingDeque.Insert(0, new BattleManaPanel.ConsumingManaWidgets(new ConsumingMana(cost, cost), new List<LBoL.Presentation.UI.Widgets.BattleManaWidget>(){} , new List<LBoL.Presentation.UI.Widgets.BattleManaWidget>(){}));
+
         }
     }
 }
