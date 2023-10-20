@@ -211,7 +211,6 @@ namespace test
 
                 static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
                 {
-                    instructions.Where(i => i.opcode == OpCodes.Ldarga_S).Do(i => log.LogDebug(i.operand.GetType()));
 
                     return new CodeMatcher(instructions, generator)
                         // remove error message

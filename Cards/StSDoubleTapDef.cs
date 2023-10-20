@@ -32,7 +32,7 @@ using LBoL.EntityLib.Cards.Character.Sakuya;
 using LBoL.EntityLib.StatusEffects.Reimu;
 using LBoL.Presentation.UI;
 using LBoL.Presentation.UI.Panels;
-using test.Cards;
+using LBoLEntitySideloader.ExtraFunc;
 
 namespace test
 {
@@ -180,8 +180,9 @@ namespace test
         public sealed class StSDoubleTapSe : StatusEffect
         {
             private bool Again = false;
-            private Card card = null;
+            private Card Card = null;
             private UnitSelector unitSelector = null;
+            ManaGroup manaConsumed = new ManaGroup();
 
 
 
@@ -194,11 +195,12 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardUsing(CardUsingEventArgs args)
             {
-                if (args.Card.CardType == CardType.Attack && args.Card != card)
+                if (args.Card.CardType == CardType.Attack && args.Card != Card)
                 {
                     this.Again = true;
-                    card = args.Card;
+                    Card = args.Card;
                     unitSelector = args.Selector;
+                    manaConsumed = args.ConsumingMana;
                 }
                 yield break;
             }
@@ -208,7 +210,7 @@ namespace test
                 this.Again = false;
                 if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
                 {
-                    this.card = null;
+                    this.Card = null;
                     unitSelector = null;
                     yield break;
                 }
@@ -217,9 +219,8 @@ namespace test
                 yield return new MoveCardAction(card, CardZone.Hand);
                 if (card.Zone == CardZone.Hand)
                 {
-                    Helpers.FakeQueueConsumingMana();
-                    yield return new UseCardAction(card, unitSelector, new ManaGroup() { Any = 0 });
-                    this.card = null;
+                    yield return CardHelper.AutoCastAction(card, unitSelector, manaConsumed);
+                    this.Card = null;
                     unitSelector = null;
                 }
                 int num = base.Level - 1;
@@ -232,7 +233,7 @@ namespace test
 
             private IEnumerable<BattleAction> OnCardMoving(CardMovingEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card && !(args.SourceZone == CardZone.PlayArea && args.DestinationZone == CardZone.Hand))
+                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == Card && !(args.SourceZone == CardZone.PlayArea && args.DestinationZone == CardZone.Hand))
                 {
                     foreach (var a in DoublePlay(args.Card, args))
                         yield return a;
@@ -240,7 +241,7 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardExiling(CardEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
+                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == Card)
                 {
                     foreach (var a in DoublePlay(args.Card, args))
                         yield return a;
@@ -248,7 +249,7 @@ namespace test
             }
             private IEnumerable<BattleAction> OnCardRemoving(CardEventArgs args)
             {
-                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == card)
+                if (!base.Battle.BattleShouldEnd && this.Again && args.Card == Card)
                 {
                     foreach (var a in DoublePlay(args.Card, args))
                         yield return a;
