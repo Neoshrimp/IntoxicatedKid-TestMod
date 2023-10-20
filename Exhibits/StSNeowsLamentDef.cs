@@ -52,7 +52,7 @@ using LBoL.EntityLib.Exhibits.Adventure;
 using static System.Collections.Specialized.BitVector32;
 using static UnityEngine.UI.GridLayoutGroup;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSNeowsLamentDef : ExhibitTemplate
     {
@@ -71,7 +71,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -111,37 +111,29 @@ namespace test
         {
             protected override void OnEnterBattle()
             {
-                base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(this.OnBattleStarted));
+                ReactBattleEvent(Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(OnBattleStarted));
+                ReactBattleEvent(Battle.BattleEnded, new EventSequencedReactor<GameEventArgs>(OnBattleEnded));
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
             {
-                if (base.Counter > 0)
+                if (Counter > 0)
                 {
-                    int num = base.Counter - 1;
-                    base.Counter = num;
-                    base.NotifyActivating();
-                    yield return PerformAction.Effect(base.Battle.Player, "JunkoPurify", 0f, "Junko3", 0f, PerformAction.EffectBehavior.PlayOneShot, 0f);
-                    foreach (EnemyUnit enemyUnit in base.Battle.AllAliveEnemies)
+                    int num = Counter - 1;
+                    Counter = num;
+                    NotifyActivating();
+                    yield return PerformAction.Effect(Battle.Player, "JunkoPurify", 0f, "Junko3", 0f, PerformAction.EffectBehavior.Add, 0f);
+                    foreach (EnemyUnit enemyUnit in Battle.AllAliveEnemies)
                     {
-                        base.GameRun.SetEnemyHpAndMaxHp(base.Value2, enemyUnit.MaxHp, enemyUnit, false);
+                        GameRun.SetEnemyHpAndMaxHp(Value2, enemyUnit.MaxHp, enemyUnit, false);
                     }
                 }
                 yield break;
             }
-            /*[HarmonyPatch(typeof(Debut), nameof(Debut.RollBonus))]
-            class Debut_RollBonus_Patch
+            private IEnumerable<BattleAction> OnBattleEnded(GameEventArgs args)
             {
-                bool Prefix(IVariableStorage storage)
-                {
-                    if (GameMaster.Instance.CurrentGameRun.HasClearBonus == false)
-                    {
-                        Exhibit exhibit = LBoL.Core.Library.CreateExhibit<StSNeowsLament>();
-                        storage.SetValue("$money", exhibit.Id);
-                        return true;
-                    }
-                    return true;
-                }
-            }*/
+                yield return PerformAction.Effect(Battle.Player, "JunkoPurify", 0f, null, 0f, PerformAction.EffectBehavior.Remove, 0f);
+                yield break;
+            }
         }
     }
 }

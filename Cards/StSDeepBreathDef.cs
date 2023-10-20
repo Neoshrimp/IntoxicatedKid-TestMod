@@ -20,7 +20,7 @@ using LBoL.Core.Randoms;
 using static test.BepinexPlugin;
 using LBoL.EntityLib.StatusEffects.Basic;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSDeepBreathDef : CardTemplate
     {
@@ -115,7 +115,7 @@ namespace test
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
             yield return new ReshuffleAction();
-            yield return new DrawManyCardAction(base.Value1);
+            yield return new DrawManyCardAction(Value1);
             yield break;
         }
     }

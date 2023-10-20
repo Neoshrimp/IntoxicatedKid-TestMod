@@ -35,7 +35,7 @@ using JetBrains.Annotations;
 using LBoL.EntityLib.Cards.Character.Marisa;
 using LBoL.EntityLib.EnemyUnits.Character;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSEnchiridionDef : ExhibitTemplate
     {
@@ -54,7 +54,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -93,14 +93,14 @@ namespace test
         {
             protected override void OnEnterBattle()
             {
-                base.ReactBattleEvent<GameEventArgs>(base.Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(this.OnBattleStarted));
+                ReactBattleEvent(Battle.BattleStarted, new EventSequencedReactor<GameEventArgs>(OnBattleStarted));
             }
             private IEnumerable<BattleAction> OnBattleStarted(GameEventArgs args)
             {
-                base.NotifyActivating();
-                Card card = base.Battle.RollCard(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyAbility));
-                card.SetTurnCost(this.Mana);
-                if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+                NotifyActivating();
+                Card card = Battle.RollCard(new CardWeightTable(RarityWeightTable.BattleCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyAbility));
+                card.SetTurnCost(Mana);
+                if (Battle.HandZone.Count >= Battle.MaxHand)
                 {
                     yield return new AddCardsToDiscardAction(card);
                 }

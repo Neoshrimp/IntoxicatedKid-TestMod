@@ -17,7 +17,7 @@ using System.Threading;
 using LBoL.Core.StatusEffects;
 using static test.BepinexPlugin;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSLimitBreakDef : CardTemplate
     {
@@ -111,15 +111,15 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            Firepower statusEffect = base.Battle.Player.GetStatusEffect<Firepower>();
+            Firepower statusEffect = Battle.Player.GetStatusEffect<Firepower>();
             if (statusEffect != null)
             {
-                yield return base.BuffAction<Firepower>(statusEffect.Level, 0, 0, 0, 0.2f);
+                yield return BuffAction<Firepower>(statusEffect.Level, 0, 0, 0, 0.2f);
             }
-            TempFirepower statusEffect2 = base.Battle.Player.GetStatusEffect<TempFirepower>();
+            TempFirepower statusEffect2 = Battle.Player.GetStatusEffect<TempFirepower>();
             if (statusEffect2 != null)
             {
-                yield return base.BuffAction<TempFirepower>(statusEffect2.Level, 0, 0, 0, 0.2f);
+                yield return BuffAction<TempFirepower>(statusEffect2.Level, 0, 0, 0, 0.2f);
             }
             yield break;
         }

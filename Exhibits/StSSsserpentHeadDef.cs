@@ -40,7 +40,7 @@ using LBoL.Presentation.UI;
 using LBoL.EntityLib.Exhibits.Adventure;
 using System.Reflection;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSSsserpentHeadDef : ExhibitTemplate
     {
@@ -59,7 +59,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -99,16 +99,16 @@ namespace test
         {
             protected override void OnAdded(PlayerUnit player)
             {
-                base.HandleGameRunEvent<StationEventArgs>(base.GameRun.StationEntered, delegate (StationEventArgs args)
+                HandleGameRunEvent(GameRun.StationEntered, delegate (StationEventArgs args)
                 {
                     if (args.Station.Type == StationType.Adventure)
                     {
-                        base.GameRun.GainMoney(base.Value1, true, new VisualSourceData
+                        NotifyActivating();
+                        GameRun.GainMoney(Value1, true, new VisualSourceData
                         {
                             SourceType = VisualSourceType.Entity,
                             Source = this
                         });
-                        base.NotifyActivating();
                     }
                 });
             }

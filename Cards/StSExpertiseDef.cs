@@ -20,7 +20,7 @@ using LBoL.Core.Randoms;
 using static test.BepinexPlugin;
 using LBoL.EntityLib.StatusEffects.Basic;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSExpertiseDef : CardTemplate
     {
@@ -114,7 +114,7 @@ namespace test
     {
         protected override IEnumerable<BattleAction> Actions(UnitSelector selector, ManaGroup consumingMana, Interaction precondition)
         {
-            int num = base.Value1 - base.Battle.HandZone.Count;
+            int num = Value1 - Battle.HandZone.Count;
             if (num > 0)
             {
                 yield return new DrawManyCardAction(num);

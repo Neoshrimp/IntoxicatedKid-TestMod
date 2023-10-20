@@ -20,7 +20,7 @@ using LBoL.Core.Randoms;
 using static test.BepinexPlugin;
 using LBoL.EntityLib.StatusEffects.Basic;
 
-namespace test
+namespace test.Cards
 {
     public sealed class StSNecronomicurseDef : CardTemplate
     {
@@ -114,7 +114,7 @@ namespace test
     {
         public override IEnumerable<BattleAction> OnExile(CardZone srcZone)
         {
-            if (base.Battle.HandZone.Count >= base.Battle.MaxHand)
+            if (Battle.HandZone.Count >= Battle.MaxHand)
             {
                 yield return new MoveCardAction(this, CardZone.Discard);
             }

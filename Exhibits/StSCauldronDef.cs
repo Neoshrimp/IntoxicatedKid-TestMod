@@ -34,7 +34,7 @@ using LBoL.Presentation.UI.Panels;
 using UnityEngine.InputSystem.Controls;
 using JetBrains.Annotations;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSCauldronDef : ExhibitTemplate
     {
@@ -53,7 +53,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -82,7 +82,7 @@ namespace test
                 InitialCounter: 0,
                 Keywords: Keyword.None,
                 RelativeEffects: new List<string>() { },
-                // example of referring to UniqueId of an entity without calling MakeConfig
+
                 RelativeCards: new List<string>() { }
             );
             return exhibitConfig;
@@ -93,20 +93,20 @@ namespace test
         {
             protected override IEnumerator SpecialGain(PlayerUnit player)
             {
-                base.OnGain(player);
-                Card[] cards = base.GameRun.RollCards(base.GameRun.GameRunEventRng, new CardWeightTable(RarityWeightTable.ShopCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyTool), base.Value1, false, null);
-                SelectCardInteraction interaction = new SelectCardInteraction(0, base.Value1, cards, SelectedCardHandling.DoNothing)
+                OnGain(player);
+                Card[] cards = GameRun.RollCards(GameRun.GameRunEventRng, new CardWeightTable(RarityWeightTable.ShopCard, OwnerWeightTable.Valid, CardTypeWeightTable.OnlyTool), Value1, false, null);
+                SelectCardInteraction interaction = new SelectCardInteraction(0, Value1, cards, SelectedCardHandling.DoNothing)
                 {
                     Source = this,
                     CanCancel = false
                 };
-                yield return base.GameRun.InteractionViewer.View(interaction);
+                yield return GameRun.InteractionViewer.View(interaction);
                 IReadOnlyList<Card> selectedCards = interaction.SelectedCards;
                 if (selectedCards.Count == 0)
                 {
                     yield break;
                 }
-                base.GameRun.AddDeckCards(selectedCards, true, null);
+                GameRun.AddDeckCards(selectedCards, true, null);
                 yield break;
             }
         }

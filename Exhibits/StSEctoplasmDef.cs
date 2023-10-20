@@ -42,7 +42,7 @@ using System.Runtime.CompilerServices;
 using LBoL.Core.GapOptions;
 using System.Reflection.Emit;
 
-namespace test
+namespace test.Exhibits
 {
     public sealed class StSEctoplasmDef : ExhibitTemplate
     {
@@ -61,7 +61,7 @@ namespace test
             // embedded resource folders are separated by a dot
             var folder = "";
             var exhibitSprites = new ExhibitSprites();
-            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite((folder + GetId() + s + ".png"), embeddedSource);
+            Func<string, Sprite> wrap = (s) => ResourceLoader.LoadSprite(folder + GetId() + s + ".png", embeddedSource);
             exhibitSprites.main = wrap("");
             return exhibitSprites;
         }
@@ -79,7 +79,7 @@ namespace test
                 Owner: "",
                 LosableType: ExhibitLosableType.CantLose,
                 Rarity: Rarity.Shining,
-                Value1: null,
+                Value1: 0,
                 Value2: null,
                 Value3: null,
                 Mana: null,
@@ -90,7 +90,7 @@ namespace test
                 InitialCounter: null,
                 Keywords: Keyword.None,
                 RelativeEffects: new List<string>() { },
-                // example of referring to UniqueId of an entity without calling MakeConfig
+
                 RelativeCards: new List<string>() { }
             );
             return exhibitConfig;
@@ -117,19 +117,20 @@ namespace test
             {
                 static void Postfix(GapStation __instance)
                 {
-                    if (GameMaster.Instance.CurrentGameRun.Player.HasExhibit<StSEctoplasm>() && !GameMaster.Instance.CurrentGameRun.Player.HasExhibit<StSFusionHammerDef.StSFusionHammer>())
+                    if (GameMaster.Instance.CurrentGameRun.Player.HasExhibit<StSEctoplasm>())
                     {
-                        __instance.GapOptions.RemoveAll(o => o.Type == GapOptionType.UpgradeCard);
-                        UpgradeCard upgradeCard = Library.CreateGapOption<UpgradeCard>();
-                        __instance.GapOptions.Add(upgradeCard);
+                        if (__instance.GapOptions.FirstOrDefault((gapOption) => gapOption.Type == GapOptionType.UpgradeCard) is UpgradeCard upgradeOption)
+                        {
+                            upgradeOption.Price = 0;
+                        }
                     }
                 }
             }
             protected override void OnAdded(PlayerUnit player)
             {
-                base.HandleGameRunEvent<GameEventArgs>(base.GameRun.MoneyGained, delegate (GameEventArgs _)
+                HandleGameRunEvent(GameRun.MoneyGained, delegate (GameEventArgs _)
                 {
-                    base.NotifyActivating();
+                    NotifyActivating();
                 });
             }
         }
